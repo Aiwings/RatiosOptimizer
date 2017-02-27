@@ -1,0 +1,54 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Voiture
+    </ion-title>
+     <ion-buttons start>
+      <button ion-button (click)="carModalOpen()">
+        <ion-icon name="ios-build" color="danger"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+      <form [formGroup]="carForm">
+      <ion-item>
+        <ion-label>Marque</ion-label>
+        <ion-input type="text" formControlName="brand" name="brand"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>Type</ion-label>
+        <ion-input type="text" formControlName="type" name="type"></ion-input>
+      </ion-item>
+       <ion-item>
+        <ion-label>FIA</ion-label>
+        <ion-input type="text" formControlName="fia_category" name="type"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>Poids(Kg)</ion-label>
+        <ion-input type="text" formControlName="weight" name="type"></ion-input>
+      </ion-item>
+       <ion-item>
+         <ion-label>Vitesses</ion-label>
+        
+         <ion-range min="3" max="6" step="1" snaps="true" color="secondary" formControlName="nb_speed">
+            <ion-label range-left>3</ion-label>
+            <ion-label range-right>6</ion-label>
+         </ion-range>
+      </ion-item>
+      <ion-item>
+        <ion-label>Couple Conique</ion-label>
+        <ion-input type="text" formControlName="bevel_gear1" name="bevel_gear1"></ion-input> /
+        <ion-input type="text" formControlName="bevel_gear2" name="bevel_gear2"></ion-input> 
+      </ion-item>
+      <ion-item>
+        <ion-label>Régime Max(tr/min)</ion-label>
+        <ion-input type="text" formControlName="max_engine_speed" name="max_engine_speed"></ion-input>
+      </ion-item>
+      <div *ngIf="car">
+        <button   [disabled]="!carForm.valid" color="danger" (click)="onSave(carForm)" *ngIf="car.id !=0"  ion-button block>Sauvegarder</button>
+        <button   [disabled]="!carForm.valid" color="danger" (click)="onCreate(carForm)" *ngIf="car.id ==0"  ion-button block>Ajouter</button>
+      </div>
+    </form>
+</ion-content>

@@ -1,0 +1,22 @@
+<ion-header  >
+  <ion-navbar  >
+    <ion-title >Ratios Optimizer</ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content padding>
+<div class="logo">
+  <img  class="logo" src="assets/img/logo.png"/>
+</div>
+<ion-grid class="choice">
+  <ion-row>
+    <ion-col class="car" (click)="toCar()">
+        <ion-icon name="ios-car"></ion-icon>
+        <h2>Selectionner un véhicule</h2>
+    </ion-col>
+    <ion-col class="circuit" (click)="circuitModalOpen()">
+        <ion-icon name="ios-map"></ion-icon>
+        <h2>Selectionner un circuit</h2>
+    </ion-col>
+  </ion-row>
+</ion-grid >
+</ion-content>

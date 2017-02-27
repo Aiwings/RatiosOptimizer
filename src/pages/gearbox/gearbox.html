@@ -1,0 +1,31 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Boîte de Vitesse
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="gearForm" *ngIf="carProv.getSelectedCar()" (ngSubmit)="save(gearForm.value)" >
+    <ion-item > 
+      <ion-label>Voiture</ion-label>
+      <ion-input type="text"  formControlName="car" value="{{carProv.getSelectedCar().brand}} - {{carProv.getSelectedCar().type}} "  name="car"></ion-input>
+    </ion-item>
+    <ion-item>
+        <ion-label>Marque</ion-label>
+        <ion-input type="text"  name="brand" formControlName="brand"></ion-input>
+    </ion-item>
+    <ion-item>
+        <ion-label>N° Série</ion-label>
+        <ion-input type="text"  name="serial" formControlName="serial"></ion-input>
+    </ion-item>
+      <ion-item>
+        <ion-label>Type de boîte</ion-label>
+          <ion-select formControlName="type">
+             <ion-option *ngFor="let type of types" value="{{type}}">{{type}}</ion-option>
+         </ion-select>
+      </ion-item>
+       <button type="submit"  [disabled]="!gearForm.valid" color="danger" ion-button block>Sauvegarder</button>
+  </form>
+</ion-content>
