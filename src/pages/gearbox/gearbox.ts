@@ -51,4 +51,10 @@ export class GearboxPage implements OnInit {
     save(gear: Gearbox) :void{
 
     } 
+
+    addRatio() :void {
+
+    }
+
+    deleteRatio():void {}
 }

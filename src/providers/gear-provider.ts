@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import {Gearbox} from '../app/gearbox';
+import {Ratio} from '../app/ratio';
 import 'rxjs/add/operator/map';
 
 /*
@@ -15,5 +16,25 @@ export class GearProvider {
   constructor(public http: Http) {
     console.log('Hello GearProvider Provider');
   }
+
+  private gearBox : Gearbox;
+
+
+  saveGB( gb: Gearbox) : void {
+
+  }
+
+  getGB() : Promise <Gearbox>{
+    return Promise.resolve(this.gearBox);
+  }
+  addRatio(ratio: Ratio){
+
+  }
+  deleteRatio(ratio:Ratio){
+    
+  }
+
+
+
 
 }

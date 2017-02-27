@@ -28,4 +28,10 @@
       </ion-item>
        <button type="submit"  [disabled]="!gearForm.valid" color="danger" ion-button block>Sauvegarder</button>
   </form>
+  <ion-list *ngIf="ratios">
+    <ion-item  *ngFor="let ratio of ratios">  
+      {{ratio.speedtype}} : {{ratio.a}} / {{ratio.b}}
+      <ion-icon (click)="deleteRatio(ratio);" name="ios-close-circle" item-right> </ion-icon>
+    </ion-item>
+  </ion-list> 
 </ion-content>

@@ -1,3 +1,4 @@
+import {Ratio} from './ratio';
 export class Gearbox {
 	id: number;
     carid:number;
@@ -5,9 +6,5 @@ export class Gearbox {
     brand: string;
     type:string;
     serial:number;
-    ratio : {
-        speedtype:string,
-        a:number,
-        b:number
-    }[];
+    ratios: Ratio [] ;
 }
