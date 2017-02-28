@@ -1,7 +1,7 @@
 export class Ratio {
     id:number;
     gearid:number;
-    speedtype : string;
+    type : string;
     a:number;
     b:number; 
 }

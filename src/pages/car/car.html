@@ -12,6 +12,7 @@
 </ion-header>
 
 <ion-content padding>
+  <ion-list>
       <form [formGroup]="carForm">
       <ion-item>
         <ion-label>Marque</ion-label>
@@ -51,4 +52,5 @@
         <button   [disabled]="!carForm.valid" color="danger" (click)="onCreate(carForm)" *ngIf="car.id ==0"  ion-button block>Ajouter</button>
       </div>
     </form>
+    </ion-list>
 </ion-content>

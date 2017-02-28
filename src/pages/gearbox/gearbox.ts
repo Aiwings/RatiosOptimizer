@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl,Validators} from '@angular/forms';
-import { NavController, AlertController} from 'ionic-angular';
+import { NavController, AlertController,ModalController} from 'ionic-angular';
 import {CarProvider} from '../../providers/car-provider';
+import { RatioModalComponent} from '../../components/ratio-modal/ratio-modal';
 import {Car} from '../../app/car';
 import {Gearbox} from '../../app/gearbox';
 @Component({
@@ -16,7 +17,8 @@ export class GearboxPage implements OnInit {
   constructor(
     public navCtrl: NavController,
     private carProv : CarProvider,
-    public alertCtrl : AlertController) {
+    public alertCtrl : AlertController,
+    public modalCtrl :ModalController) {
 
   }
   private gearForm = new FormGroup({
@@ -52,9 +54,9 @@ export class GearboxPage implements OnInit {
 
     } 
 
-    addRatio() :void {
+  ratios() : void {
+    let modal = this.modalCtrl.create(RatioModalComponent,{});
+    modal.present();
+  }
 
-    }
-
-    deleteRatio():void {}
 }

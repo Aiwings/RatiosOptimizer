@@ -4,9 +4,9 @@ import {  ViewController, NavParams } from 'ionic-angular';
 
 @Component({
   selector: 'car-modal',
-  templateUrl: 'carmodal.html'
+  templateUrl: 'car-modal.html'
 })
-export class CarModal {
+export class CarModalComponent {
   
   cars = this.params.get('cars');
   constructor(

@@ -1,0 +1,13 @@
+ratio-alert ion-icon{
+    float:right;
+}
+
+ratio-alert {
+    padding: 20% 0;
+}
+ion-input[name="a"]::after{
+    content: "/";
+    position: absolute;
+    top: 13px;
+
+}

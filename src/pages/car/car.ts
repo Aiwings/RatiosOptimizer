@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl,Validators} from '@angular/forms';
-import { CarModal} from '../carmodal/carmodal';
+import { CarModalComponent} from '../../components/car-modal/car-modal';
 import { NavController, ModalController } from 'ionic-angular';
 import {CarProvider} from '../../providers/car-provider';
 import {Car} from '../../app/car';
@@ -46,7 +46,7 @@ export class CarPage implements OnInit{
     carModalOpen():void{
          
       this.carProvider.getCars().then((cars)=>{    
-          let modal = this.modalCtrl.create(CarModal,{cars:cars});
+          let modal = this.modalCtrl.create(CarModalComponent,{cars:cars});
           modal.present();
           modal.onDidDismiss(data => {
           if(data.car)

@@ -1,0 +1,28 @@
+<ion-card>
+    <ion-card-header>
+      Ajouter un rapport
+      <ion-icon name="md-close" (click)="dismiss()"  ></ion-icon>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+      <form [formGroup]="ratioForm">
+        <ion-item>
+          <ion-label>Type de vitesse</ion-label>
+          <ion-select formControlName="type">
+            <ion-option value="1re">1re</ion-option>
+            <ion-option value="2e">2e</ion-option>
+            <ion-option value="Std">Std</ion-option>
+          </ion-select>
+        </ion-item>
+        <ion-item>
+          <ion-label>Rapport de boite</ion-label>
+          <ion-input type="text" formControlName="a" name="a"></ion-input> 
+         
+          <ion-input type="text" formControlName="b" name="b"></ion-input>
+        </ion-item>
+          <button   [disabled]="!ratioForm.valid" color="danger" (click)="onSave(ratioForm.value)"   ion-button block>Sauvegarder</button>
+      </form>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+

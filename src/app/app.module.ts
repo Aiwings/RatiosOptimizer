@@ -14,8 +14,10 @@ import { AbacusPage } from '../pages/abacus/abacus';
 import { GearboxPage } from '../pages/gearbox/gearbox';
 import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
-import { CarModal } from '../pages/carmodal/carmodal';
 
+import { CarModalComponent } from '../components/car-modal/car-modal';
+import {RatioModalComponent } from '../components/ratio-modal/ratio-modal';
+import {RatioAlertComponent } from '../components/ratio-alert/ratio-alert';
 const cloudSettings: CloudSettings = {
   'core': {
     'app_id': '2085da6d'
@@ -30,7 +32,9 @@ const cloudSettings: CloudSettings = {
     HomePage,
     GearboxPage,
     TabsPage,
-    CarModal
+    CarModalComponent,
+    RatioModalComponent,
+    RatioAlertComponent
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -45,7 +49,9 @@ const cloudSettings: CloudSettings = {
     HomePage,
     GearboxPage,
     TabsPage,
-    CarModal
+    CarModalComponent,
+    RatioModalComponent,
+    RatioAlertComponent
   ],
   providers: [{provide: ErrorHandler, useClass: IonicErrorHandler},CarProvider,GearProvider,DBProvider, Storage],
 })
