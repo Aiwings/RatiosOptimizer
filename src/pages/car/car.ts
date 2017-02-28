@@ -44,15 +44,11 @@ export class CarPage implements OnInit{
     
     ;
     carModalOpen():void{
-
-        this.carProvider.getCars().then((cars) => {       
-      
-    
-        console.log(cars);
-
-        let modal = this.modalCtrl.create(CarModal,{cars:cars});
-        modal.present();
-        modal.onDidDismiss(data => {
+         
+      this.carProvider.getCars().then((cars)=>{    
+          let modal = this.modalCtrl.create(CarModal,{cars:cars});
+          modal.present();
+          modal.onDidDismiss(data => {
           if(data.car)
           {
             this.car = data.car;
@@ -62,28 +58,25 @@ export class CarPage implements OnInit{
             console.log(this.carProvider.getSelectedCar());
           }
           else
-          {
-            this.car = {
-                
-                  id: 0,
-                  date_config:new Date(),
-                  brand:"",
-                  type:"",
-                  fia_category:"",
-                  weight:0,
-                  nb_speed:3,
-                  bevel_gear1: 0,
-                  bevel_gear2: 0,
-                  max_engine_speed:0,
-            };
-            this.carForm.setValue(this.car,{onlySelf:true});
-           
-          }
-
-       });
-      }    
-    );
-  }
+            {
+              this.car = {
+                id: 0,
+                date_config:new Date(),
+                brand:"",
+                type:"",
+                fia_category:"",
+                weight:0,
+                nb_speed:3,
+                bevel_gear1: 0,
+                bevel_gear2: 0,
+                max_engine_speed:0,
+              };
+              this.carForm.setValue(this.car,{onlySelf:true});
+            }
+        });  
+      });
+    }    
+  
   ngOnInit():void{
     console.log("## Cars On Init ###");
     this.carModalOpen();

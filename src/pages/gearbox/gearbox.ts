@@ -11,7 +11,7 @@ import {Gearbox} from '../../app/gearbox';
 export class GearboxPage implements OnInit {
 
  
-  private types = ["DG","DGB","FG400","FGA","FT1","FT200","LD","LG400","LG500","MK5","MK6","MK8"];
+  types = ["DG","DGB","FG400","FGA","FT1","FT200","LD","LG400","LG500","MK5","MK6","MK8"];
   
   constructor(
     public navCtrl: NavController,
