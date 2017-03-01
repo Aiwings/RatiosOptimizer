@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import {Gearbox} from '../app/gearbox';
-import {Ratio} from '../app/ratio';
+import {DBProvider} from'./db-provider'
 import 'rxjs/add/operator/map';
 
 /*
@@ -13,28 +13,45 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class GearProvider {
 
-  constructor(public http: Http) {
-    console.log('Hello GearProvider Provider');
+  constructor(
+    public http: Http,
+    private db : DBProvider) {
+    console.log('Calling, GearProvider Provider');
   }
 
   private gearBox : Gearbox;
 
-
-  saveGB( gb: Gearbox) : void {
-
+  setGB( gb: Gearbox) : void {
+    this.gearBox = gb;
   }
 
-  getGB() : Promise <Gearbox>{
-    return Promise.resolve(this.gearBox);
-  }
-  addRatio(ratio: Ratio){
+  getGB(carid : number) : Promise <any>{
 
-  }
-  deleteRatio(ratio:Ratio){
-    
-  }
+      return new Promise((resolve,reject)=>{
+         if(this.gearBox && this.gearBox.carid == carid) 
+             {
+               resolve(this.gearBox)
+             }
+             else
+             {
+               reject({});
+             }
+      });
+    }
 
+    saveGB(gb:Gearbox) : Promise<any>{
+      this.gearBox = gb;
 
-
-
+      return new Promise((resolve,reject)=>{
+        this.db.saveGear(gb).then((data)=>{
+          if(data.id)
+          {
+            this.gearBox.id = data.id;
+          }
+          resolve(this.gearBox);
+        }).catch((error)=>{
+            reject(error);
+        });
+      });
+    }
 }

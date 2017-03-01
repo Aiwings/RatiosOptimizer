@@ -1,62 +1,99 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl,Validators} from '@angular/forms';
-import { NavController, AlertController,ModalController} from 'ionic-angular';
-import {CarProvider} from '../../providers/car-provider';
-import { RatioModalComponent} from '../../components/ratio-modal/ratio-modal';
-import {Car} from '../../app/car';
-import {Gearbox} from '../../app/gearbox';
+import { NavController, AlertController, ModalController,ToastController } from 'ionic-angular';
+import { CarProvider } from '../../providers/car-provider';
+import { GearProvider } from '../../providers/gear-provider';
+import { RatioModalComponent } from '../../components/ratio-modal/ratio-modal';
+import { Gearbox } from '../../app/gearbox';
 @Component({
   selector: 'page-gearbox',
   templateUrl: 'gearbox.html'
 })
 export class GearboxPage implements OnInit {
 
- 
-  types = ["DG","DGB","FG400","FGA","FT1","FT200","LD","LG400","LG500","MK5","MK6","MK8"];
-  
+
+  types = ["DG", "DGB", "FG400", "FGA", "FT1", "FT200", "LD", "LG400", "LG500", "MK5", "MK6", "MK8"];
+
   constructor(
     public navCtrl: NavController,
-    private carProv : CarProvider,
-    public alertCtrl : AlertController,
-    public modalCtrl :ModalController) {
+    private carProv: CarProvider,
+    public alertCtrl: AlertController,
+    public modalCtrl: ModalController,
+    public gearProv: GearProvider,
+    private toastCtrl: ToastController) {
 
   }
-  private gearForm = new FormGroup({
-    id: new FormControl(0),
-    car: new FormControl({value: '', disabled: true},Validators.required),
-    carid : new FormControl(0),
-    brand : new FormControl("",Validators.required),
-    serial: new FormControl(0,Validators.required),
-    type:new FormControl("DGB")
-  });
 
-   private  selectedCar :Car ;
-  
-  ngOnInit():void {
-  
-    this.selectedCar = this.carProv.getSelectedCar();
-      if(!this.selectedCar)
-      {
-        let alert = this.alertCtrl.create({
-          title: 'Attention!',
-          subTitle: 'Veuillez Selectionner une voiture!',
-          buttons: ['OK']
+  public gb: Gearbox;
+
+    toastsuccess = this.toastCtrl.create({
+        message :'',
+        position:'bottom',
+        duration:3000
+      });
+
+      toasterror = this.toastCtrl.create({
+        message :'',
+        position:'bottom',
+       showCloseButton:true,
+       closeButtonText:'ok'
+      });
+
+  ngOnInit(): void {
+
+    if (!this.carProv.getSelectedCar()) {
+      let alert = this.alertCtrl.create({
+        title: 'Attention!',
+        subTitle: 'Veuillez Selectionner une voiture!',
+        buttons: ['OK']
+      });
+      alert.present();
+    }
+    else {
+      this.gb = {
+        id: 0,
+        carid: this.carProv.getSelectedCar().id,
+        type: "",
+        brand: "",
+        serial: 0,
+        ratios:[]
+      };
+      this.gearProv.setGB(this.gb);
+    }
+  }
+
+  save(): void {
+    this.gearProv.saveGB(this.gb).then((data)=>
+    {
+        this.gearProv.getGB(this.carProv.getSelectedCar().id).then((gb)=>{
+          this.gb =gb;
+        }).catch((error)=>{
+           this.toasterror.setMessage("Il y a eu une erreur lors de la sauvegarde \n "+error.message);
+           this.toasterror.present();
         });
-        alert.present();
-      }
-      else
-      {
-        this.gearForm.patchValue({car:this.selectedCar.brand + ' | '+this.selectedCar.type ,carid:this.selectedCar.id });
-      }
+      this.toastsuccess.setMessage("Succès de la sauvegarde");
+      this.toastsuccess.present();
+      
+    }).catch((error)=>{
+           this.toasterror.setMessage("Il y a eu une erreur lors de la sauvegarde \n "+error.message);
+           this.toasterror.present();
+    })
   }
 
-    save(gear: Gearbox) :void{
-
-    } 
-
-  ratios() : void {
-    let modal = this.modalCtrl.create(RatioModalComponent,{});
+  ratios(): void {
+    
+    let modal = this.modalCtrl.create(RatioModalComponent,{ratios:this.gb.ratios});
     modal.present();
+    modal.onDidDismiss((data)=>{
+      if(data.ratios)
+      {
+        this.gb.ratios = data.ratios;
+        this.gearProv.setGB(this.gb);
+      }
+    })
   }
+  gearModalOpen():void{
+    
+
+  } 
 
 }

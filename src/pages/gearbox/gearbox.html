@@ -3,32 +3,39 @@
     <ion-title>
       Boîte de Vitesse
     </ion-title>
+    <ion-buttons start>
+      <button ion-button (click)="save()">
+        <ion-icon name="md-archive" ></ion-icon>
+      </button>
+      <button ion-button (click)="gearModalOpen()">
+        <ion-icon name="ios-arrow-dropdown" ></ion-icon>
+      </button>
+      </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content>
   <ion-list>
-  <form [formGroup]="gearForm" *ngIf="carProv.getSelectedCar()" (ngSubmit)="save(gearForm.value)" >
+  <form #f="ngForm" novalidate *ngIf="carProv.getSelectedCar()" >
     <ion-item > 
       <ion-label>Voiture</ion-label>
-      <ion-input type="text"  formControlName="car" value="{{carProv.getSelectedCar().brand}} - {{carProv.getSelectedCar().type}} "  name="car"></ion-input>
+      <ion-input type="text"   value="{{carProv.getSelectedCar().brand}} - {{carProv.getSelectedCar().type}} "  name="car"></ion-input>
     </ion-item>
     <ion-item>
         <ion-label>Marque</ion-label>
-        <ion-input type="text"  name="brand" formControlName="brand"></ion-input>
+        <ion-input type="text"  name="brand" [(ngModel)]="gb.brand" #name="ngModel" required></ion-input>
     </ion-item>
     <ion-item>
         <ion-label>N° Série</ion-label>
-        <ion-input type="text"  name="serial" formControlName="serial"></ion-input>
+        <ion-input type="text"  name="serial" [(ngModel)]="gb.serial" #serial="ngModel"  required></ion-input>
     </ion-item>
       <ion-item>
         <ion-label>Type de boîte</ion-label>
-          <ion-select formControlName="type">
+          <ion-select [(ngModel)]="gb.type" name="type" #type="ngModel" >
              <ion-option *ngFor="let type of types" value="{{type}}">{{type}}</ion-option>
          </ion-select>
       </ion-item>
-       <button type="submit"  [disabled]="!gearForm.valid" color="danger" ion-button block>Sauvegarder</button>
-       <button ion-button block [disabled]="!gearForm.valid" (click)="ratios();" color="danger" icon-left >
+       <button ion-button block [disabled]="!f.valid" (click)="ratios();" color="danger" icon-left >
          <ion-icon name="arrow-dropup" ></ion-icon>
           Rapports de boîte
         </button>

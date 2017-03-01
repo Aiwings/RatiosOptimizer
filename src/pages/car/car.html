@@ -5,7 +5,7 @@
     </ion-title>
      <ion-buttons start>
       <button ion-button (click)="carModalOpen()">
-        <ion-icon name="ios-build" color="danger"></ion-icon>
+        <ion-icon name="ios-arrow-dropdown" ></ion-icon>
       </button>
     </ion-buttons>
   </ion-navbar>
@@ -28,7 +28,7 @@
       </ion-item>
       <ion-item>
         <ion-label>Poids(Kg)</ion-label>
-        <ion-input type="text" formControlName="weight" name="type"></ion-input>
+        <ion-input type="number" formControlName="weight" name="type"></ion-input>
       </ion-item>
        <ion-item>
          <ion-label>Vitesses</ion-label>
@@ -40,12 +40,12 @@
       </ion-item>
       <ion-item>
         <ion-label>Couple Conique</ion-label>
-        <ion-input type="text" formControlName="bevel_gear1" name="bevel_gear1"></ion-input> /
-        <ion-input type="text" formControlName="bevel_gear2" name="bevel_gear2"></ion-input> 
+        <ion-input type="number" formControlName="bevel_gear1" name="bevel_gear1"></ion-input> 
+        <ion-input type="number" formControlName="bevel_gear2" name="bevel_gear2"></ion-input> 
       </ion-item>
       <ion-item>
         <ion-label>Régime Max(tr/min)</ion-label>
-        <ion-input type="text" formControlName="max_engine_speed" name="max_engine_speed"></ion-input>
+        <ion-input type="number" formControlName="max_engine_speed" name="max_engine_speed"></ion-input>
       </ion-item>
       <div *ngIf="car">
         <button   [disabled]="!carForm.valid" color="danger" (click)="onSave(carForm)" *ngIf="car.id !=0"  ion-button block>Sauvegarder</button>

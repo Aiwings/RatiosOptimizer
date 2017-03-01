@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl,Validators} from '@angular/forms';
 import { CarModalComponent} from '../../components/car-modal/car-modal';
-import { NavController, ModalController } from 'ionic-angular';
+import { NavController, ModalController,ToastController } from 'ionic-angular';
 import {CarProvider} from '../../providers/car-provider';
 import {Car} from '../../app/car';
 
@@ -17,12 +17,24 @@ export class CarPage implements OnInit{
   (
     public navCtrl: NavController,
     public modalCtrl: ModalController,
-    private carProvider: CarProvider
+    private carProvider: CarProvider,
+    private toastCtrl : ToastController
   ) {
     
   }
     car: Car;
+    toastsuccess = this.toastCtrl.create({
+        message :'',
+        position:'bottom',
+        duration:3000
+      });
 
+      toasterror = this.toastCtrl.create({
+        message :'',
+        position:'bottom',
+       showCloseButton:true,
+       closeButtonText:'ok'
+      });
 
     public carForm = new FormGroup(
       {
@@ -39,10 +51,6 @@ export class CarPage implements OnInit{
     }
 );
 
-
-
-    
-    ;
     carModalOpen():void{
          
       this.carProvider.getCars().then((cars)=>{    
@@ -85,12 +93,24 @@ export class CarPage implements OnInit{
 
   onSave( form :FormGroup):void{
    
-    this.carProvider.saveCar(form.value);
+    this.carProvider.saveCar(form.value).then((data)=>{
+      this.toastsuccess.setMessage("Votre Voiture a bien été sauvegardée");
+      this.toastsuccess.present();
+    }).catch((error)=>{
+      this.toasterror.setMessage("Il y a eu une erreur lors de la sauvegarde \n "+error.message);
+      this.toasterror.present();
+    });
   }
 
   onCreate( form :FormGroup):void{
 
-    this.carProvider.addCar(form.value);
+    this.carProvider.addCar(form.value).then((data)=>{
+      this.toastsuccess.setMessage("Votre Voiture a bien été ajoutée");
+      this.toastsuccess.present();
+    }).catch((error)=>{
+      this.toasterror.setMessage("Il y a eu une erreur lors de l'ajout \n "+error.message);
+      this.toasterror.present();
+    });
 
   }
 

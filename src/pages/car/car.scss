@@ -1,3 +1,6 @@
-page-about {
+ion-input[name="bevel_gear1"]::after{
+    content: "/";
+    position: absolute;
+    top: 13px;
 
 }

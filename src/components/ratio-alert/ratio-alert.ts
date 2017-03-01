@@ -19,7 +19,6 @@ export class RatioAlertComponent {
   }
 
   public ratioForm = new FormGroup({
-    id : new FormControl(0, Validators.required),
     type: new FormControl("1re",Validators.required),
     a: new FormControl("",Validators.required),
     b: new FormControl("",Validators.required)
