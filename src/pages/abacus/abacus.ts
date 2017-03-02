@@ -1,4 +1,4 @@
-import { Component,ViewChild, OnInit} from '@angular/core';
+import { Component,ViewChild} from '@angular/core';
 import { NavController,AlertController } from 'ionic-angular';
 import{Chart} from 'chart.js'
 import { CalculProvider} from '../../providers/calcul-provider';
@@ -46,10 +46,6 @@ export class AbacusPage  {
   }
 
 
-
-
-
-    
   ionViewDidLoad() {
 
       this.tire();      

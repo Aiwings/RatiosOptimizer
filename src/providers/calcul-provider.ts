@@ -65,7 +65,7 @@ export class CalculProvider {
   private calculatePowerDrop():void{
     let car = this.carProv.getSelectedCar();
 
-    for(let i=0; i<car.nb_speed; i++)
+    for(let i=0; i<(car.nb_speed -1); i++)
     {
        let ratio = this.ratioProv.getRatios()[i+1];
        let sub =  Math.PI * this.tire_diam * Math.pow(10,-6) *(car.bevel_gear1 / car.bevel_gear2)*(ratio.a / ratio.b)*60;
