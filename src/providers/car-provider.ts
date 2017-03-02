@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
-import 'rxjs/add/operator/map';
+
 import { Car } from '../app/car';
 import { DBProvider } from './db-provider';
+//import { CalculProvider } from './calcul-provider';
 
 
 /*
@@ -18,7 +18,9 @@ export class CarProvider {
   private cars: Array<any>;
   private selectedCar: Car;
 
-  constructor(public http: Http, public db: DBProvider) {
+  constructor( public db: DBProvider, 
+//  private calcul : CalculProvider
+  ) {
     console.log('Calling CarProvider Provider');
   }
 
@@ -77,6 +79,7 @@ export class CarProvider {
 
   setSelectedCar(car: Car): void {
     this.selectedCar = car;
+    //this.calcul.calculate();
   }
 
 

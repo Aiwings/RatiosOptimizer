@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
-import 'rxjs/add/operator/map';
+
+
 import { SQLite } from 'ionic-native';
 
 import { Car } from '../app/car';
@@ -19,7 +19,7 @@ export class DBProvider {
 
   private db: SQLite;
   public isOpen: boolean;
-  constructor(public http: Http) {
+  constructor() {
     console.log('#### Calling DBProvider Provider ####');
 
     if (!this.isOpen) {

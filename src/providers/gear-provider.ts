@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
 import {Gearbox} from '../app/gearbox';
 import {DBProvider} from'./db-provider'
-import 'rxjs/add/operator/map';
+
 
 /*
   Generated class for the GearProvider provider.
@@ -14,7 +13,6 @@ import 'rxjs/add/operator/map';
 export class GearProvider {
 
   constructor(
-    public http: Http,
     private db : DBProvider) {
     console.log('Calling, GearProvider Provider');
   }

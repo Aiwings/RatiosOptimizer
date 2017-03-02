@@ -29,7 +29,7 @@ export class RatioModalComponent implements OnInit{
 
   }
   ngOnInit():void{
-    this.ratios = this.params.get('ratios');
+    this.ratios = this.ratioProvider.getRatios()
   }
   deleteRatio(ratio:Ratio)
   {

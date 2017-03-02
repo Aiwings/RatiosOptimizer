@@ -3,13 +3,15 @@ import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { CloudSettings, CloudModule } from '@ionic/cloud-angular';
 import {Storage} from '@ionic/storage';
 
+
+
 import { MyApp } from './app.component';
 
 import {DBProvider} from '../providers/db-provider';
 import {CarProvider} from '../providers/car-provider';
 import {GearProvider} from '../providers/gear-provider';
 import {RatioProvider} from '../providers/ratio-provider';
-
+import {CalculProvider} from '../providers/calcul-provider';
 
 import { CarPage } from '../pages/car/car';
 import { AbacusPage } from '../pages/abacus/abacus';
@@ -44,8 +46,8 @@ const cloudSettings: CloudSettings = {
   ],
   imports: [
     IonicModule.forRoot(MyApp),
-    CloudModule.forRoot(cloudSettings)
-
+    CloudModule.forRoot(cloudSettings),
+    
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -60,6 +62,6 @@ const cloudSettings: CloudSettings = {
     RatioAlertComponent,
     GearModalComponent
   ],
-  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler},CarProvider,GearProvider,DBProvider,RatioProvider, Storage],
+  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler},CarProvider,GearProvider,DBProvider,RatioProvider,CalculProvider, Storage],
 })
 export class AppModule {}

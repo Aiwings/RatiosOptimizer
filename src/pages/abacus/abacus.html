@@ -3,15 +3,52 @@
     <ion-title>
       Abaque
     </ion-title>
+    <ion-buttons start>
+      <button ion-button (click)="tire()">
+        <span ion-text color="primary" showWhen="ios">Tire</span>
+        <ion-icon name="md-disc" showWhen="android, windows"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content>
-  <ion-list>
-    <ion-list-header>Follow us on Twitter</ion-list-header>
-    <ion-item>
-      <ion-icon name="ionic" item-left></ion-icon>
-      @ionicframework
-    </ion-item>
-  </ion-list>
+  <ion-card style="display:block">
+    <ion-card-header>
+      Bar Charts
+    </ion-card-header>
+       <ion-card-content>
+          <canvas #barCanvas></canvas>
+      </ion-card-content>
+  </ion-card>
+    <ion-card style="display:block">
+    <ion-card-header>
+        Max ratios
+    </ion-card-header>
+       <ion-card-content>
+         <ion-grid>
+           <ion-row>
+             <ion-col>
+                  Max engine Speed
+             </ion-col>
+           </ion-row>
+           <ion-row>
+             <ion-col *ngFor="let speed of calcul.getMaxSpeed()" >
+                {{(speed).toFixed(3)}}
+             </ion-col>
+           </ion-row>
+                   <ion-row>
+             <ion-col>
+            Drop
+             </ion-col>
+           </ion-row>
+           <ion-row>
+             <ion-col *ngFor="let drop of calcul.getPowerDrop()" >
+                {{(drop).toFixed(3)}}
+             </ion-col>
+           </ion-row>
+         </ion-grid>
+      </ion-card-content>
+  </ion-card>
+
 </ion-content>
