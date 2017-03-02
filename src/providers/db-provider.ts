@@ -51,7 +51,6 @@ export class DBProvider {
   + 'brand TEXT,'
   + 'type TEXT,'
   + 'serial TEXT,'
-  + 'ratios TEXT'
   + ')';
 
 
@@ -97,7 +96,7 @@ export class DBProvider {
   }
 
   private onCreateError(error): void {
-    console.error("Unable to create table "+ error.message, error);
+    console.error("Unable to create table " + error.message, error);
   }
 
 
@@ -171,46 +170,46 @@ export class DBProvider {
   }
 
 
-    selectGearById(id:number) : Promise<any> {
-      return new Promise((resolve,reject)=>{
-        this.db.executeSql("SELECT * FROM gearbox WHERE id = ?;", [id]).then((data) => {
-          resolve(data);
-        }).catch((error)=>{
-          reject(error);
-        });
-      });
-    }
 
-    selectGearsByCarid(carid:number) : Promise<any> {
-      return new Promise((resolve,reject)=>{
-        this.db.executeSql("SELECT * FROM gearbox WHERE carid = ? ORDER BY id;", [carid]).then((data) => {
-          resolve(data);
-        }).catch((error)=>{
-          reject(error);
-        });
+  selectGearById(id: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.db.executeSql("SELECT * FROM gearbox WHERE id = ?;", [id]).then((data) => {
+        resolve(data);
+      }).catch((error) => {
+        reject(error);
       });
-    }
+    });
+  }
 
-    saveGear(gear: Gearbox): Promise<any> {
-      return new Promise((resolve, reject) => {
-      this.selectGearById(gear.id).then((data)=>{
+  selectGearsByCarid(carid: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.db.executeSql("SELECT * FROM gearbox WHERE carid = ? ORDER BY id;", [carid]).then((data) => {
+        resolve(data);
+      }).catch((error) => {
+        reject(error);
+      });
+    });
+  }
+
+  saveGear(gear: Gearbox): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.selectGearById(gear.id).then((data) => {
         console.log(JSON.stringify(data));
 
-        if(data.rows.length !=0)
-        {
-            this.updateGear(gear).then((data) => {
+        if (data.rows.length != 0) {
+          this.updateGear(gear).then((data) => {
             resolve(data);
           }).catch((error) => {
             reject(error);
           });
-        }else{
-        this.addGear(gear).then((data) => {
-          resolve(data);
-        }).catch((error) => {
-          reject(error);
-        });
+        } else {
+          this.addGear(gear).then((data) => {
+            resolve(data);
+          }).catch((error) => {
+            reject(error);
+          });
         }
-       
+
       }).catch((error) => {
         reject(error);
       });
@@ -219,14 +218,14 @@ export class DBProvider {
 
 
 
-    updateGear(gear: Gearbox): Promise<any> {
+  updateGear(gear: Gearbox): Promise<any> {
 
     return new Promise((resolve, reject) => {
-      this.db.executeSql("UPDATE gearbox "+
-                         "SET brand = ? ,type = ?, serial= ?, ratios=? "+
-                         "WHERE id = ? ;", 
-                         [gear.brand,gear.type,gear.serial,gear.ratios,gear.id]
-                         ).then((data) => {
+      this.db.executeSql("UPDATE gearbox " +
+        "SET brand = ? ,type = ?, serial= ? " +
+        "WHERE id = ? ;",
+        [gear.brand, gear.type, gear.serial, gear.id]
+      ).then((data) => {
         resolve(data);
       }).catch((error) => {
         reject(error);
@@ -237,22 +236,22 @@ export class DBProvider {
   addGear(gear: Gearbox): Promise<any> {
 
     return new Promise((resolve, reject) => {
-      this.db.executeSql("INSERT INTO gearbox(carid,brand,type,serial,ratios) "
-                        +"VALUES(?,?,?,?,?);",
-                         [gear.carid,gear.brand,gear.type,gear.serial,JSON.stringify(gear.ratios)]
+      this.db.executeSql("INSERT INTO gearbox(carid,brand,type,serial) "
+        + "VALUES(?,?,?,?,?);",
+        [gear.carid, gear.brand, gear.type, gear.serial]
       ).then((data) => {
-          this.selectGearsByCarid(gear.carid).then((data)=>{
+        this.selectGearsByCarid(gear.carid).then((data) => {
           resolve({
-            id:data.rows.length -1
+            id: data.rows.length - 1
           });
-          }).catch((error)=>{reject(error);});
+        }).catch((error) => { reject(error); });
       }).catch((error) => {
         reject(error);
       });
     });
 
   }
- 
+
 
 
 }

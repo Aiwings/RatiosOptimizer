@@ -5,9 +5,11 @@ import {Storage} from '@ionic/storage';
 
 import { MyApp } from './app.component';
 
+import {DBProvider} from '../providers/db-provider';
 import {CarProvider} from '../providers/car-provider';
 import {GearProvider} from '../providers/gear-provider';
-import {DBProvider} from '../providers/db-provider';
+import {RatioProvider} from '../providers/ratio-provider';
+
 
 import { CarPage } from '../pages/car/car';
 import { AbacusPage } from '../pages/abacus/abacus';
@@ -18,6 +20,9 @@ import { TabsPage } from '../pages/tabs/tabs';
 import { CarModalComponent } from '../components/car-modal/car-modal';
 import {RatioModalComponent } from '../components/ratio-modal/ratio-modal';
 import {RatioAlertComponent } from '../components/ratio-alert/ratio-alert';
+import {GearModalComponent} from '../components/gear-modal/gear-modal';
+
+
 const cloudSettings: CloudSettings = {
   'core': {
     'app_id': '2085da6d'
@@ -34,7 +39,8 @@ const cloudSettings: CloudSettings = {
     TabsPage,
     CarModalComponent,
     RatioModalComponent,
-    RatioAlertComponent
+    RatioAlertComponent,
+    GearModalComponent
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -51,8 +57,9 @@ const cloudSettings: CloudSettings = {
     TabsPage,
     CarModalComponent,
     RatioModalComponent,
-    RatioAlertComponent
+    RatioAlertComponent,
+    GearModalComponent
   ],
-  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler},CarProvider,GearProvider,DBProvider, Storage],
+  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler},CarProvider,GearProvider,DBProvider,RatioProvider, Storage],
 })
 export class AppModule {}

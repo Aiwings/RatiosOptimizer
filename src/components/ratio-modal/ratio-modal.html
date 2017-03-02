@@ -19,6 +19,6 @@
   </ion-item>
 </ion-list>
 <ion-fab right bottom>
-  <button ion-fab (click)="onCreate()" color="danger"><ion-icon name="add"  ></ion-icon></button>
+  <button ion-fab (click)="onCreate()" [disabled]="!enabled" color="danger"><ion-icon name="add"  ></ion-icon></button>
 </ion-fab>    
 </ion-content> 

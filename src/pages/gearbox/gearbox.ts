@@ -55,7 +55,6 @@ export class GearboxPage implements OnInit {
         type: "",
         brand: "",
         serial: 0,
-        ratios:[]
       };
       this.gearProv.setGB(this.gb);
     }
@@ -81,15 +80,11 @@ export class GearboxPage implements OnInit {
 
   ratios(): void {
     
-    let modal = this.modalCtrl.create(RatioModalComponent,{ratios:this.gb.ratios});
+    let modal = this.modalCtrl.create(RatioModalComponent,{});
     modal.present();
     modal.onDidDismiss((data)=>{
-      if(data.ratios)
-      {
-        this.gb.ratios = data.ratios;
-        this.gearProv.setGB(this.gb);
-      }
-    })
+     
+    });
   }
   gearModalOpen():void{
     

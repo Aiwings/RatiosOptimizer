@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import{ModalController,NavParams,ViewController} from 'ionic-angular';
 import {RatioAlertComponent} from '../ratio-alert/ratio-alert'
 import {Ratio} from '../../app/ratio';
+import {RatioProvider} from '../../providers/ratio-provider'
 
 /*
   Generated class for the RatioModal component.
@@ -16,13 +17,14 @@ import {Ratio} from '../../app/ratio';
 export class RatioModalComponent implements OnInit{
 
 
-
+  enabled= true;
   ratios : Ratio [];
   
   type : string;
   constructor(public modalCtrl : ModalController,
               public params : NavParams,
-              public viewCtrl:ViewController) {
+              public viewCtrl:ViewController,
+              public ratioProvider: RatioProvider) {
     console.log('Calling  RatioModal Component');
 
   }
@@ -37,9 +39,11 @@ export class RatioModalComponent implements OnInit{
 
 
   onCreate():void {
+    this.enabled = false;
     let modal = this.modalCtrl.create(RatioAlertComponent);
     modal.present();
     modal.onDidDismiss((data)=>{
+      this.enabled = true;
       if(data.ratio)
       {
         this.ratios.push(data.ratio);
@@ -49,10 +53,8 @@ export class RatioModalComponent implements OnInit{
     
   }
   dismiss():void{
-  let data = {
-     ratios: this.ratios
-   };
-  this.viewCtrl.dismiss(data);
+    this.ratioProvider.setRatios(this.ratios);
+    this.viewCtrl.dismiss();
   }
 
 
