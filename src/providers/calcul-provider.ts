@@ -19,15 +19,18 @@ export class CalculProvider {
   }
   private max_speed :number[];
   private power_drop: number[];
-  private ratio_diff :number[];
+  private ratio_diff :any[];
 
   private tire_diam : number;
-  
 
-  public setDiam(tire_diam : number) :void {
-    this.tire_diam = tire_diam;
-    this.calculate();
+
+  public setDiam(tire_diam : number) : void {
+    this.tire_diam = tire_diam; 
   }
+    public getDiam() :number {
+      return this.tire_diam;
+  }
+
 
   public getMaxSpeed():number[]{
     if(!this.max_speed)
@@ -51,42 +54,78 @@ export class CalculProvider {
 
    private calculateMaxSpeed():void{
 
+     this.max_speed = []; 
      let car = this.carProv.getSelectedCar();
-       console.log(JSON.stringify(car));
-
+ 
+    
      for(let i = 0; i<car.nb_speed; i++)
      {
         let ratio = this.ratioProv.getRatios()[i];       
-        this.max_speed[i] = (Math.PI * this.tire_diam * 0.000001) * car.max_engine_speed *60 * (car.bevel_gear1 /car.bevel_gear2)*(ratio.a /ratio.b);
+        this.max_speed.push((Math.PI * this.tire_diam * 0.000001) * car.max_engine_speed *60 * (car.bevel_gear1 /car.bevel_gear2)*(ratio.a /ratio.b));
      }
+
     
+  }
+  public toRpm(kmh : number[]): number[]{
+    let rpm : number[] =[];
+    for(let i=0; i<kmh.length;i++){
+      rpm[i] = Math.round(kmh[i] /(60* Math.PI*this.tire_diam *Math.pow(10,-6)));
+    }
+    console.log(rpm);
+    return rpm;
   }
 
   private calculatePowerDrop():void{
     let car = this.carProv.getSelectedCar();
+    this.power_drop = [];
 
     for(let i=0; i<(car.nb_speed -1); i++)
     {
        let ratio = this.ratioProv.getRatios()[i+1];
-       let sub =  Math.PI * this.tire_diam * Math.pow(10,-6) *(car.bevel_gear1 / car.bevel_gear2)*(ratio.a / ratio.b)*60;
-       console.log(this.max_speed[i]);
-       console.log(sub);
-      this.power_drop[i] = car.max_engine_speed - (this.max_speed[i] /(sub));
+       let sub =  Math.PI * this.tire_diam * Math.pow(10,-6)* 60* (car.bevel_gear1 / car.bevel_gear2)*(ratio.a / ratio.b);
+
+      this.power_drop.push(car.max_engine_speed - (this.max_speed[i] /(sub)));
     }
+    console.log("## Power Drop ##");
+    console.log(this.power_drop);
   }
 
-  public calculate() :void {
+  public calculate() : Promise<any> {
 
-    if(this.carProv.getSelectedCar() && this.tire_diam && (this.ratioProv.getRatios().length!=0 ))
+    return new Promise((resolve,reject)=>{
+      if(this.carProv.getSelectedCar() && this.tire_diam && (this.ratioProv.getRatios().length!=0 ))
     {
-      if(!this.max_speed){ this.max_speed = [];}
-      if(!this.power_drop){this.power_drop =[];}
-
 
       this.calculateMaxSpeed();
       this.calculatePowerDrop();
+      this.calculateDiff();
+      resolve();
     }
-    
+    else
+    {
+      reject();
+    }
+    })
+
+  }
+  private calculateDiff():void{
+    this.ratio_diff = [];
+    let max_engine_speed = this.carProv.getSelectedCar().max_engine_speed;
+
+   
+    for (let i = 0 ; i < this.power_drop.length; i++)
+    {
+      this.ratio_diff.push({
+          x : this.max_speed[i],
+          y : max_engine_speed});
+      this.ratio_diff.push({
+          x : this.max_speed[i],
+          y:Math.round(max_engine_speed - this.power_drop[i])});
+    }
+    this.ratio_diff.push({
+       x: (this.max_speed[this.max_speed.length-1]),
+       y: max_engine_speed});
+      console.log(this.ratio_diff);
   }
 
 

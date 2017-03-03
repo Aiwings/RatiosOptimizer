@@ -52,8 +52,10 @@ export class CarProvider {
       }
       car.id = id;
       this.cars.push(car);
+      this.selectedCar = car;
+      
       this.db.addCar(car).then((data) => {
-        this.selectedCar = car;
+      
         resolve(data);
       }).catch((error) => {
         reject(error);

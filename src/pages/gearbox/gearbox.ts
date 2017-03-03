@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, AlertController, ModalController,ToastController } from 'ionic-angular';
+import { NavController, ModalController,ToastController } from 'ionic-angular';
 import { CarProvider } from '../../providers/car-provider';
 import { GearProvider } from '../../providers/gear-provider';
 import { RatioModalComponent } from '../../components/ratio-modal/ratio-modal';
@@ -16,7 +16,6 @@ export class GearboxPage implements OnInit {
   constructor(
     public navCtrl: NavController,
     private carProv: CarProvider,
-    public alertCtrl: AlertController,
     public modalCtrl: ModalController,
     public gearProv: GearProvider,
     private toastCtrl: ToastController) {
@@ -40,24 +39,15 @@ export class GearboxPage implements OnInit {
 
   ngOnInit(): void {
 
-    if (!this.carProv.getSelectedCar()) {
-      let alert = this.alertCtrl.create({
-        title: 'Attention!',
-        subTitle: 'Veuillez Selectionner une voiture!',
-        buttons: ['OK']
-      });
-      alert.present();
-    }
-    else {
       this.gb = {
         id: 0,
         carid: this.carProv.getSelectedCar().id,
         type: "",
         brand: "",
-        serial: 0,
+        serial:0,
       };
       this.gearProv.setGB(this.gb);
-    }
+    
   }
 
   save(): void {

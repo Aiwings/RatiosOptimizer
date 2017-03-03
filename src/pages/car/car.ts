@@ -45,9 +45,9 @@ export class CarPage implements OnInit{
        fia_category:new FormControl("", Validators.required),
        weight:new FormControl(0, Validators.required),
        nb_speed:new FormControl(3, Validators.required),
-       bevel_gear1:new FormControl(0,Validators.required),
-       bevel_gear2:new FormControl(0, Validators.required),
-       max_engine_speed:new FormControl(0, Validators.required)
+       bevel_gear1:new FormControl("",Validators.required),
+       bevel_gear2:new FormControl("", Validators.required),
+       max_engine_speed:new FormControl("", Validators.required)
     }
 );
 
@@ -79,7 +79,7 @@ export class CarPage implements OnInit{
                 bevel_gear2: 0,
                 max_engine_speed:0,
               };
-              this.carForm.setValue(this.car,{onlySelf:true});
+           //   this.carForm.setValue(this.car,{onlySelf:true});
             }
         });  
       });

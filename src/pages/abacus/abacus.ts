@@ -20,8 +20,11 @@ export class AbacusPage  {
 
 
 
-  tire() : void {
-    let prompt = this.alertCtrl.create({
+  tire() : Promise<number> {
+
+    return new Promise((resolve,reject)=>
+    {
+      let prompt = this.alertCtrl.create({
       title:"Diamètre du pneu",
       message : "Veuillez saisir le diamètre de votre pneu en mm",
       inputs: [{
@@ -38,26 +41,22 @@ export class AbacusPage  {
       {
         text:'OK',
         handler: data =>{
-          this.calcul.setDiam(data.tire);
+          resolve(data.tire);
         }
       }]
     })
     prompt.present();
+    });
+
   }
-
-
-  ionViewDidLoad() {
-
-      this.tire();      
-
-        this.barChart = new Chart(this.barCanvas.nativeElement, {
+  drawGraph() : void {
+      this.barChart = new Chart(this.barCanvas.nativeElement, {
  
             type: 'line',
             data: {
-                labels: ["jan", "feb", "mar", "apr", "may", "jun","july"],
                 datasets: [{
-                    label: 'Line example',
-                    data: [12, 19, 3, 5, 2, 3,7],
+                    label: 'Calcul des rapports',
+                    data: this.calcul.getRatioDiff(),
                     backgroundColor: [
                         'rgba(255, 99, 132, 0.2)',
                         'rgba(54, 162, 235, 0.2)',
@@ -74,20 +73,42 @@ export class AbacusPage  {
                         'rgba(153, 102, 255, 1)',
                         'rgba(255, 159, 64, 1)'
                     ],
-                    borderWidth: 1
-                }]
+                    borderWidth: 1,
+                    lineTension:0
+                },]
             },
             options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero:true
-                        }
-                    }]
-                }
+              scales:{
+                xAxes: [{
+                  type:'linear',
+                  position:'bottom'
+                }]
+              }
             }
  
         });
   }
+
+    ionViewDidEnter() {
+
+      if(!this.calcul.getDiam())
+      {
+        this.tire().then((diam)=>{
+          this.calcul.setDiam(diam);
+          this.calcul.calculate().then(()=>{
+                console.log(this.calcul.toRpm(this.calcul.getMaxSpeed()));
+                this.drawGraph();
+          });
+        }); 
+      }
+      else
+      {
+          this.calcul.calculate().then(()=>{
+                console.log(this.calcul.toRpm(this.calcul.getMaxSpeed()));
+                this.drawGraph();
+          });
+      }
+
+    }
  
 }
