@@ -1,19 +1,15 @@
-.ios, .md {
-
-page-abacus {
-
-
-    ion-card-header{
-        font-weight: bold;
+.ios,
+.md {
+  page-abacus {
+    ion-card-header {
+      font-weight: bold;
     }
-    ion-col{
-        border-left: 1px solid black;
-        border-right: 1px solid black;
+    ion-col {
+      border-right: 1px solid black;
     }
-    ion-row{
-        border-top:1px solid black;
-        border-bottom:1px solid black;
+    ion-row {
+      border-bottom: 1px solid black;
+      border-left:1px solid black;
     }
+  }
 }
-}
-

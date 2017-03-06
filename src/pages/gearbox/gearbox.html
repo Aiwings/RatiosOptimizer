@@ -31,7 +31,7 @@
     </ion-item>
       <ion-item>
         <ion-label>Type de boîte</ion-label>
-          <ion-select [(ngModel)]="gb.type" name="type" #type="ngModel" >
+          <ion-select [(ngModel)]="gb.type" name="type" #type="ngModel" required>
              <ion-option *ngFor="let type of types" value="{{type}}">{{type}}</ion-option>
          </ion-select>
       </ion-item>

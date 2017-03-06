@@ -13,42 +13,42 @@
 </ion-header>
 
 <ion-content>
-  <ion-card style="display:block"  >
+  <ion-card style="display:block">
     <ion-card-header>
       Abaque
     </ion-card-header>
-       <ion-card-content>
-          <canvas #barCanvas></canvas>
-      </ion-card-content>
+    <ion-card-content>
+      <canvas #lineCanvas></canvas>
+    </ion-card-content>
   </ion-card>
-    <ion-card style="display:block">
+  <ion-card style="display:block">
     <ion-card-header>
-        Données
+      Données
     </ion-card-header>
-       <ion-card-content>
-         <ion-grid>
-           <ion-row>
-             <ion-col>
-                  Vmax (km/h)
-             </ion-col>
-           </ion-row>
-           <ion-row>
-             <ion-col *ngFor="let speed of calcul.getMaxSpeed()" >
-                {{(speed).toFixed(2)}}
-             </ion-col>
-           </ion-row>
-                   <ion-row>
-             <ion-col>
-            Chutes de Régimes (tr/min)
-             </ion-col>
-           </ion-row>
-           <ion-row>
-             <ion-col *ngFor="let drop of calcul.getPowerDrop()" >
-                {{(drop).toFixed(2)}}
-             </ion-col>
-           </ion-row>
-         </ion-grid>
-      </ion-card-content>
+    <ion-card-content>
+      <ion-grid>
+        <ion-row style="border-top:1px solid black;">
+          <ion-col>
+            <h3>Vmax (km/h)</h3>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col *ngFor="let speed of calcul.getMaxSpeed()">
+            {{(speed).toFixed(2)}}
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <h3>Chutes de Régime (tr/min)</h3>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col *ngFor="let drop of calcul.getPowerDrop()">
+            {{(drop).toFixed(2)}}
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
   </ion-card>
 
 </ion-content>

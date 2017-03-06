@@ -79,7 +79,7 @@ export class CarPage implements OnInit{
                 bevel_gear2: 0,
                 max_engine_speed:0,
               };
-           //   this.carForm.setValue(this.car,{onlySelf:true});
+              this.carForm.setValue(this.car,{onlySelf:true});
             }
         });  
       });
