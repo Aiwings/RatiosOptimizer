@@ -89,7 +89,6 @@ export class CarPage implements OnInit {
     this.carProvider.getCars().then((cars) => {
       this.cars = cars;
     });
-
   }
   onSelect(): void {
 
@@ -101,7 +100,6 @@ export class CarPage implements OnInit {
     }
 
   }
-
 
   onSave(form: FormGroup): void {
 
@@ -125,6 +123,4 @@ export class CarPage implements OnInit {
     });
 
   }
-
-
 }
