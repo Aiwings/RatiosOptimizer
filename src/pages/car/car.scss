@@ -1,1 +1,20 @@
-
+page-car {
+  .bg1 {
+    width: 60%;
+    float: left;
+  }
+  .bg2 {
+    width: 40%;
+    float: right;
+  }
+  ion-buttons ion-select {
+    width: 1px;
+    height: 1px;
+  }
+  ion-buttons ion-icon {
+    font-size: 170%;
+    color: white;
+    position: relative;
+    top: 13px;
+  }
+}

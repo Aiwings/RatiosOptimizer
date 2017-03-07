@@ -3,42 +3,44 @@
     <ion-title>
       Boîte de Vitesse
     </ion-title>
-    <ion-buttons start>
-      <button ion-button (click)="save()">
-        <ion-icon name="md-archive" ></ion-icon>
-      </button>
-      <button ion-button (click)="gearModalOpen()">
-        <ion-icon name="ios-arrow-dropdown" ></ion-icon>
-      </button>
-      </ion-buttons>
+    <ion-buttons start  *ngIf="gearBoxes.length != 0">
+        <ion-icon name="ios-arrow-dropdown"></ion-icon>
+        <ion-select [(ngModel)]="selectedGear" (ionChange)="onSelect()">
+          <ion-option *ngFor="let gearBox of gearBoxes" [value]="gearBox">{{gearBox.brand}} - {{gearBox.type}} </ion-option>
+        </ion-select>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content>
   <ion-list>
-  <form #f="ngForm" novalidate *ngIf="carProv.getSelectedCar()" >
-    <ion-item > 
-      <ion-label>Voiture</ion-label>
-      <ion-input type="text"   value="{{carProv.getSelectedCar().brand}} - {{carProv.getSelectedCar().type}} "  name="car"></ion-input>
-    </ion-item>
-    <ion-item>
+    <form #f="ngForm" novalidate *ngIf="carProv.getSelectedCar()">
+      <ion-item>
+        <ion-label>Voiture</ion-label>
+        <ion-input type="text" value="{{carProv.getSelectedCar().brand}} - {{carProv.getSelectedCar().type}} " name="car"></ion-input>
+      </ion-item>
+      <ion-item>
         <ion-label>Marque</ion-label>
-        <ion-input type="text"  name="brand" [(ngModel)]="gb.brand" #name="ngModel" required></ion-input>
-    </ion-item>
-    <ion-item>
+        <ion-input type="text" name="brand" [(ngModel)]="gb.brand" #name="ngModel" required></ion-input>
+      </ion-item>
+      <ion-item>
         <ion-label>N° Série</ion-label>
-        <ion-input type="text"  name="serial" [(ngModel)]="gb.serial" #serial="ngModel"  required></ion-input>
-    </ion-item>
+        <ion-input type="text" name="serial" [(ngModel)]="gb.serial" #serial="ngModel" required></ion-input>
+      </ion-item>
       <ion-item>
         <ion-label>Type de boîte</ion-label>
-          <ion-select [(ngModel)]="gb.type" name="type" #type="ngModel" required>
-             <ion-option *ngFor="let type of types" value="{{type}}">{{type}}</ion-option>
-         </ion-select>
+        <ion-select [(ngModel)]="gb.type" name="type" #type="ngModel" required>
+          <ion-option *ngFor="let type of types" value="{{type}}">{{type}}</ion-option>
+        </ion-select>
       </ion-item>
-       <button ion-button block [disabled]="!f.valid" (click)="ratios();" color="danger" icon-left >
+       <button ion-button block (click)="save()" [disabled]="!f.valid" color="danger" icon-left>
+        <ion-icon name="md-archive" ></ion-icon>
+          Sauvegarder la boite
+      </button>
+      <button ion-button block [disabled]="!f.valid" (click)="ratios();" color="danger" icon-left >
          <ion-icon name="arrow-dropup" ></ion-icon>
           Rapports de boîte
         </button>
-  </form>
+    </form>
   </ion-list>
 </ion-content>

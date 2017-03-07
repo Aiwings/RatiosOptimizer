@@ -1,6 +1,12 @@
-import { Injectable } from '@angular/core';
-import {Gearbox} from '../app/gearbox';
-import {DBProvider} from'./db-provider'
+import {
+  Injectable
+} from '@angular/core';
+import {
+  Gearbox
+} from '../app/gearbox';
+import {
+  DBProvider
+} from './db-provider'
 
 
 /*
@@ -13,43 +19,56 @@ import {DBProvider} from'./db-provider'
 export class GearProvider {
 
   constructor(
-    private db : DBProvider) {
+    private db: DBProvider) {
     console.log('Calling, GearProvider Provider');
   }
 
-  private gearBox : Gearbox;
+  private gearBox: Gearbox;
 
-  setGB( gb: Gearbox) : void {
+  setGB(gb: Gearbox): void {
     this.gearBox = gb;
   }
 
-  getGB(carid : number) : Promise <any>{
 
-      return new Promise((resolve,reject)=>{
-         if(this.gearBox && this.gearBox.carid == carid) 
-             {
-               resolve(this.gearBox)
-             }
-             else
-             {
-               reject({});
-             }
-      });
-    }
-
-    saveGB(gb:Gearbox) : Promise<any>{
-      this.gearBox = gb;
-
-      return new Promise((resolve,reject)=>{
-        this.db.saveGear(gb).then((data)=>{
-          if(data.id)
-          {
-            this.gearBox.id = data.id;
-          }
-          resolve(this.gearBox);
-        }).catch((error)=>{
+  getGB(id ? : number): Promise < any > {
+    
+    return new Promise((resolve, reject) => {
+      if (this.gearBox) {
+        if (id && this.db.isOpen) {
+          this.db.selectGearById(id).then((gb) => {
+            resolve(gb);
+          }).catch((error) => {
             reject(error);
-        });
+          });
+        }
+        resolve(this.gearBox);
+      } else {
+        reject(new Error("No gearbox found"));
+      }
+    });
+  }
+  getGBs(carid: number): Promise < any > {
+    return new Promise((resolve, reject) => {
+      this.db.selectGearsByCarid(carid).then((data) => {
+        resolve(data);
+      }).catch((error) => {
+        reject(error);
       });
-    }
+    });
+  }
+
+  saveGB(gb: Gearbox): Promise < any > {
+    this.gearBox = gb;
+
+    return new Promise((resolve, reject) => {
+      this.db.saveGear(gb).then((data) => {
+        if (data.id) {
+          this.gearBox.id = data.id;
+        }
+        resolve(this.gearBox);
+      }).catch((error) => {
+        reject(error);
+      });
+    });
+  }
 }

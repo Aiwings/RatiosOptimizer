@@ -12,7 +12,8 @@ export class GearboxPage implements OnInit {
 
 
   types = ["DG", "DGB", "FG400", "FGA", "FT1", "FT200", "LD", "LG400", "LG500", "MK5", "MK6", "MK8"];
-
+  gearBoxes : Gearbox [] = [];
+  selectedGear: Gearbox;
   constructor(
     public navCtrl: NavController,
     private carProv: CarProvider,
@@ -46,8 +47,26 @@ export class GearboxPage implements OnInit {
         brand: "",
         serial:0,
       };
+      this.gearBoxes.push(this.gb);
       this.gearProv.setGB(this.gb);
-    
+       this.gearProv.getGBs(this.carProv.getSelectedCar().id).then((gbs)=>{
+           if(gbs)
+           {
+            this.gearBoxes = gbs;
+            console.log("GBS " +JSON.stringify(gbs));
+           }
+         
+      }).catch((error)=>{
+        console.error(error.message,error);
+          this.toasterror.setMessage("Impossible de récupérer les boites \n "+error.message);
+          this.toasterror.present();
+      });
+  }
+  onSelect():void {
+    if(this.selectedGear)
+    {
+      this.gb = this.selectedGear;
+    }
   }
 
   save(): void {
@@ -55,6 +74,7 @@ export class GearboxPage implements OnInit {
     {
         this.gearProv.getGB(this.carProv.getSelectedCar().id).then((gb)=>{
           this.gb =gb;
+          this.gearBoxes.push(this.gb);
         }).catch((error)=>{
            this.toasterror.setMessage("Il y a eu une erreur lors de la sauvegarde \n "+error.message);
            this.toasterror.present();
@@ -73,12 +93,6 @@ export class GearboxPage implements OnInit {
     let modal = this.modalCtrl.create(RatioModalComponent,{});
     modal.present();
     modal.onDidDismiss((data)=>{
-     
     });
   }
-  gearModalOpen():void{
-    
-
-  } 
-
 }

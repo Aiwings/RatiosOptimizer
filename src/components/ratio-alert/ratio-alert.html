@@ -14,10 +14,12 @@
             <ion-option value="Std">Std</ion-option>
           </ion-select>
         </ion-item>
-        <ion-item>
-          <ion-label>Rapport de boite (a/b)</ion-label>
+        <ion-item class="r1">
+          <ion-label>Rapport</ion-label>
           <ion-input type="number" formControlName="a" name="a" placeholder="a">/</ion-input> 
-         
+         </ion-item>
+         <ion-item class="r2">
+           <ion-label>/</ion-label>
           <ion-input type="number" formControlName="b" name="b"placeholder="b"></ion-input>
         </ion-item>
           <button   [disabled]="!ratioForm.valid" color="danger" (click)="onSave(ratioForm.value)"   ion-button block>Sauvegarder</button>

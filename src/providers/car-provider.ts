@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { Car } from '../app/car';
 import { DBProvider } from './db-provider';
-//import { CalculProvider } from './calcul-provider';
+
 
 
 /*
@@ -19,13 +19,14 @@ export class CarProvider {
   private selectedCar: Car;
 
   constructor( public db: DBProvider, 
-//  private calcul : CalculProvider
+
   ) {
     console.log('Calling CarProvider Provider');
   }
 
   getCars(): Promise<Car[]> {
     return new Promise((resolve, reject) => {
+ 
       if (!this.cars) {
         this.db.getCars().then((cars) => {
           this.cars = cars;
@@ -45,6 +46,9 @@ export class CarProvider {
   addCar(car: Car): Promise<any> {
 
      return new Promise((resolve,reject)=>{
+
+      if(!this.cars){this.cars = [];}
+
       car.date_config = new Date();
       let id = 1;
       if (this.cars.length != 0) {
@@ -81,7 +85,7 @@ export class CarProvider {
 
   setSelectedCar(car: Car): void {
     this.selectedCar = car;
-    //this.calcul.calculate();
+
   }
 
 

@@ -6,6 +6,7 @@ import { GearboxPage } from '../gearbox/gearbox';
 import { AbacusPage } from '../abacus/abacus';
 import{CarProvider} from '../../providers/car-provider';
 import{RatioProvider} from '../../providers/ratio-provider';
+
 @Component({
   templateUrl: 'tabs.html'
 })
@@ -21,9 +22,10 @@ export class TabsPage {
   constructor(
     public carProv : CarProvider,
     public alertCtrl : AlertController,
-    public ratioProv : RatioProvider
+    public ratioProv : RatioProvider,
+
   ) {
-    
+ 
   }
   checkCar():void {
     if(this.carProv.getSelectedCar())
@@ -36,4 +38,5 @@ export class TabsPage {
       alert.present();
     }
   }
+
 }

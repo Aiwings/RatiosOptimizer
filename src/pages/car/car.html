@@ -3,17 +3,18 @@
     <ion-title>
       Voiture
     </ion-title>
-     <ion-buttons start>
-      <button ion-button (click)="carModalOpen()">
-        <ion-icon name="ios-arrow-dropdown" ></ion-icon>
-      </button>
+    <ion-buttons start *ngIf="cars.length!=0" >
+        <ion-icon name="ios-arrow-dropdown"></ion-icon>
+      <ion-select [(ngModel)]="selectedCar" (ionChange)="onSelect()">
+        <ion-option *ngFor="let car of cars" [value]="car">{{car.brand}} - {{car.date_config|date:'dd/MM/yy'}} </ion-option>
+      </ion-select>
     </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
   <ion-list>
-      <form [formGroup]="carForm">
+    <form [formGroup]="carForm">
       <ion-item>
         <ion-label>Marque</ion-label>
         <ion-input type="text" formControlName="brand" name="brand"></ion-input>
@@ -22,7 +23,7 @@
         <ion-label>Type</ion-label>
         <ion-input type="text" formControlName="type" name="type"></ion-input>
       </ion-item>
-       <ion-item>
+      <ion-item>
         <ion-label>FIA</ion-label>
         <ion-input type="text" formControlName="fia_category" name="type"></ion-input>
       </ion-item>
@@ -30,27 +31,28 @@
         <ion-label>Poids(Kg)</ion-label>
         <ion-input type="number" formControlName="weight" name="type"></ion-input>
       </ion-item>
-       <ion-item>
-         <ion-label>Vitesses</ion-label>
-        
-         <ion-range min="3" max="6" step="1" snaps="true" color="secondary" formControlName="nb_speed">
-            <ion-label range-left>3</ion-label>
-            <ion-label range-right>6</ion-label>
-         </ion-range>
-      </ion-item>
       <ion-item>
-        <ion-label>Couple Conique (a/b)</ion-label>
-        <ion-input type="number" formControlName="bevel_gear1" name="bevel_gear1" placeholder="a"></ion-input> 
-        <ion-input type="number" formControlName="bevel_gear2" name="bevel_gear2" placeholder="b"></ion-input> 
+        <ion-label>Vitesses</ion-label>
+
+        <ion-range min="3" max="6" step="1" snaps="true" color="secondary" formControlName="nb_speed">
+          <ion-label range-left>3</ion-label>
+          <ion-label range-right>6</ion-label>
+        </ion-range>
+      </ion-item>
+      <ion-item class="bg1">
+        <ion-label>C.C</ion-label>
+        <ion-input type="number" formControlName="bevel_gear1" name="bevel_gear1" placeholder="a"></ion-input>
+      </ion-item>
+      <ion-item class="bg2">
+        <ion-label>/</ion-label>
+        <ion-input type="number" formControlName="bevel_gear2" name="bevel_gear2" placeholder="b"></ion-input>
       </ion-item>
       <ion-item>
         <ion-label>Régime Max(tr/min)</ion-label>
         <ion-input type="number" formControlName="max_engine_speed" name="max_engine_speed"></ion-input>
       </ion-item>
-      <div *ngIf="car">
-        <button   [disabled]="!carForm.valid" color="danger" (click)="onSave(carForm)" *ngIf="car.id !=0"  ion-button block>Sauvegarder</button>
-        <button   [disabled]="!carForm.valid" color="danger" (click)="onCreate(carForm)" *ngIf="car.id ==0"  ion-button block>Ajouter</button>
-      </div>
+      <button [disabled]="!carForm.valid" color="danger" (click)="onSave(carForm)" *ngIf="selectedCar" ion-button block>Sauvegarder</button>
+      <button [disabled]="!carForm.valid" color="danger" (click)="onCreate(carForm)" *ngIf="!selectedCar" ion-button block>Ajouter</button>
     </form>
-    </ion-list>
+  </ion-list>
 </ion-content>
