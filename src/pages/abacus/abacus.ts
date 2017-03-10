@@ -1,6 +1,6 @@
 import {
   Component,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
 import {
   NavController,
@@ -12,7 +12,9 @@ import {
 import {
   CalculProvider
 } from '../../providers/calcul-provider';
-
+import {
+  Subscription
+} from 'rxjs/Subscription';
 @Component({
   selector: 'page-abacus',
   templateUrl: 'abacus.html'
@@ -20,19 +22,25 @@ import {
 export class AbacusPage {
 
   constructor(public navCtrl: NavController,
-    public calcul: CalculProvider,
+    public calculProv: CalculProvider,
     public alertCtrl: AlertController) {
+
+    this.calculSub = this.calculProv.getCalcul().subscribe(calcul => this.calcul = calcul);
 
   }
   @ViewChild('lineCanvas') lineCanvas;
 
   lineChart: any;
 
+  calculSub: Subscription;
+  calcul: {
+    max_speed: number[],
+    power_drop: number[],
+    ratio_diff: any[]
+  }
 
+  tire(){
 
-  tire(): Promise < number > {
-
-    return new Promise((resolve, reject) => {
       let prompt = this.alertCtrl.create({
         title: "Diamètre du pneu",
         message: "Veuillez saisir le diamètre de votre pneu en mm",
@@ -50,14 +58,13 @@ export class AbacusPage {
           {
             text: 'OK',
             handler: data => {
-              resolve(data.tire);
+              this.calculProv.setDiam(data.tire);
+              this.drawGraph();
             }
           }
         ]
       })
       prompt.present();
-    });
-
   }
   drawGraph(): void {
     this.lineChart = new Chart(this.lineCanvas.nativeElement, {
@@ -66,7 +73,7 @@ export class AbacusPage {
       data: {
         datasets: [{
           label: 'Calcul des rapports',
-          data: this.calcul.getRatioDiff(),
+          data: this.calcul.ratio_diff,
           backgroundColor: [
             'rgba(255, 99, 132, 0.2)',
             'rgba(54, 162, 235, 0.2)',
@@ -99,23 +106,11 @@ export class AbacusPage {
     });
   }
 
-  ionViewDidEnter() {
-
-    if (!this.calcul.getDiam()) {
-      this.tire().then((diam) => {
-        this.calcul.setDiam(diam);
-        this.calcul.calculate().then(() => {
-          console.log(this.calcul.toRpm(this.calcul.getMaxSpeed()));
-          this.drawGraph();
-        });
-      });
-    } else {
-      this.calcul.calculate().then(() => {
-        console.log(this.calcul.toRpm(this.calcul.getMaxSpeed()));
-        this.drawGraph();
-      });
+   ionViewDidEnter() {
+    if (!this.calculProv.getDiam()) {
+      this.tire();
     }
-
+      this.drawGraph();
   }
 
 }

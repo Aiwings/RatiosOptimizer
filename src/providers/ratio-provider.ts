@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
-
+import { BehaviorSubject }    from 'rxjs/BehaviorSubject';
+import {
+  Subscription
+} from 'rxjs/Subscription';
 import {Ratio} from '../app/ratio';
 import {CarProvider} from './car-provider'
 
@@ -10,32 +13,30 @@ export class RatioProvider {
       public carProv :CarProvider
     ) {
     console.log('Calling RatioProvider Provider');
+    this.carSub = this.carProv.getSelectedCar().subscribe((car)=>{
+      this.car = car;
+    })
+  }
+  carSub:Subscription;
+  car;
+  private ratios= new BehaviorSubject<Ratio[]>([]);
+
+  private ratioValid =new BehaviorSubject<boolean>(false) ;
+
+  public isValid() {
+    return this.ratioValid.asObservable();
   }
 
-  private ratios: Ratio[];
 
-  private ratioValid : boolean =false ;
-
-  public isRatioValid() :boolean {
-    return this.ratioValid;
-  }
-
-
- public getRatios() : Ratio[]{
-
-    if(!this.ratios)
-    {
-      this.ratios = [];
-    }
-    return this.ratios;
+ public getRatios() {
+    return this.ratios.asObservable();
   }
 
   public setRatios(ratios:Ratio []):boolean{
-    let car = this.carProv.getSelectedCar();
-    if(car.nb_speed == ratios.length)
+    if(this.car.nb_speed == ratios.length)
     {
-       this.ratios = ratios;
-       this.ratioValid = true;
+       this.ratios.next(ratios);
+       this.ratioValid.next(true);
        return true; 
     }
     return false;

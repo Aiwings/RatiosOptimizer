@@ -7,7 +7,9 @@ export class Car {
     fia_category:string;
     weight:number;
     nb_speed:number;
-    bevel_gear1: number;
-    bevel_gear2: number;
+    bevelgear:{
+        a:number,
+        b:number
+    }
     max_engine_speed : number;
 }

@@ -3,11 +3,10 @@
     <ion-title>
       Voiture
     </ion-title>
-    <ion-buttons start *ngIf="cars.length!=0" >
-        <ion-icon name="ios-arrow-dropdown"></ion-icon>
-      <ion-select [(ngModel)]="selectedCar" (ionChange)="onSelect()">
-        <ion-option *ngFor="let car of cars" [value]="car">{{car.brand}} - {{car.date_config|date:'dd/MM/yy'}} </ion-option>
-      </ion-select>
+    <ion-buttons start>
+      <button ion-button icon-only (click)="presentPopover($event)">
+         <ion-icon name="more"></ion-icon>
+     </button>
     </ion-buttons>
   </ion-navbar>
 </ion-header>
@@ -32,27 +31,27 @@
         <ion-input type="number" formControlName="weight" name="type"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label>Vitesses</ion-label>
+        <ion-label>Nb vitesses - {{carForm.value.nb_speed}}</ion-label>
 
         <ion-range min="3" max="6" step="1" snaps="true" color="secondary" formControlName="nb_speed">
           <ion-label range-left>3</ion-label>
           <ion-label range-right>6</ion-label>
         </ion-range>
       </ion-item>
-      <ion-item class="bg1">
-        <ion-label>C.C</ion-label>
-        <ion-input type="number" formControlName="bevel_gear1" name="bevel_gear1" placeholder="a"></ion-input>
-      </ion-item>
-      <ion-item class="bg2">
-        <ion-label>/</ion-label>
-        <ion-input type="number" formControlName="bevel_gear2" name="bevel_gear2" placeholder="b"></ion-input>
-      </ion-item>
+      <div formGroupName="bevelgear">
+        <ion-item class="bg1">
+          <ion-label>C.C</ion-label>
+          <ion-input type="number" formControlName="a" name="a" placeholder="a"></ion-input>
+        </ion-item>
+        <ion-item class="bg2">
+          <ion-label>/</ion-label>
+          <ion-input type="number" formControlName="b" name="b" placeholder="b"></ion-input>
+        </ion-item>
+      </div>
       <ion-item>
         <ion-label>Régime Max(tr/min)</ion-label>
         <ion-input type="number" formControlName="max_engine_speed" name="max_engine_speed"></ion-input>
       </ion-item>
-      <button [disabled]="!carForm.valid" color="danger" (click)="onSave(carForm)" *ngIf="selectedCar" ion-button block>Sauvegarder</button>
-      <button [disabled]="!carForm.valid" color="danger" (click)="onCreate(carForm)" *ngIf="!selectedCar" ion-button block>Ajouter</button>
     </form>
   </ion-list>
 </ion-content>

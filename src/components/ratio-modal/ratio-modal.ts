@@ -16,7 +16,11 @@ import {
 } from '../../app/ratio';
 import {
   RatioProvider
-} from '../../providers/ratio-provider'
+} from '../../providers/ratio-provider';
+import {
+  Subscription
+} from 'rxjs/Subscription';
+
 
 /*
   Generated class for the RatioModal component.
@@ -30,7 +34,7 @@ import {
 })
 export class RatioModalComponent implements OnInit {
 
-
+  ratioSub:Subscription;
   enabled = true;
   ratios: Ratio[];
 
@@ -42,10 +46,11 @@ export class RatioModalComponent implements OnInit {
     public alertCtrl: AlertController) {
     console.log('Calling  RatioModal Component');
 
+    this.ratioSub = this.ratioProvider.getRatios().subscribe((ratios) => {
+      this.ratios = ratios;
+    });
   }
-  ngOnInit(): void {
-    this.ratios = this.ratioProvider.getRatios()
-  }
+  ngOnInit(): void {}
   deleteRatio(ratio: Ratio) {
     let index = this.ratios.indexOf(ratio);
     this.ratios.splice(index, 1);

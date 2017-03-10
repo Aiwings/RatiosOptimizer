@@ -7,7 +7,7 @@
       <ion-list>
       <form [formGroup]="ratioForm">
         <ion-item>
-          <ion-label>Type de vitesse</ion-label>
+          <ion-label>Type de rapport</ion-label>
           <ion-select formControlName="type">
             <ion-option value="1re">1re</ion-option>
             <ion-option value="2e">2e</ion-option>
@@ -16,11 +16,11 @@
         </ion-item>
         <ion-item class="r1">
           <ion-label>Rapport</ion-label>
-          <ion-input type="number" formControlName="a" name="a" placeholder="a">/</ion-input> 
+          <ion-input type="number" formControlName="a" name="a" placeholder="M"></ion-input> 
          </ion-item>
          <ion-item class="r2">
            <ion-label>/</ion-label>
-          <ion-input type="number" formControlName="b" name="b"placeholder="b"></ion-input>
+          <ion-input type="number" formControlName="b" name="b"placeholder="m"></ion-input>
         </ion-item>
           <button   [disabled]="!ratioForm.valid" color="danger" (click)="onSave(ratioForm.value)"   ion-button block>Sauvegarder</button>
       </form>

@@ -60,7 +60,9 @@ import {
 import {
   RatioAlertComponent
 } from '../components/ratio-alert/ratio-alert';
-
+import {
+  PopoverPageComponent  
+} from '../components/popover-page/popover-page';
 
 
 const cloudSettings: CloudSettings = {
@@ -79,6 +81,7 @@ const cloudSettings: CloudSettings = {
     TabsPage,
     RatioModalComponent,
     RatioAlertComponent,
+    PopoverPageComponent
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -94,7 +97,8 @@ const cloudSettings: CloudSettings = {
     GearboxPage,
     TabsPage,
     RatioModalComponent,
-    RatioAlertComponent
+    RatioAlertComponent,
+    PopoverPageComponent
   ],
   providers: [{
     provide: ErrorHandler,

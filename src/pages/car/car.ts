@@ -4,14 +4,15 @@ import {
 } from '@angular/core';
 import {
   FormGroup,
-  FormControl,
+  FormBuilder,
   Validators
 } from '@angular/forms';
 
 import {
   NavController,
   ModalController,
-  ToastController
+  ToastController,
+  PopoverController
 } from 'ionic-angular';
 import {
   CarProvider
@@ -19,7 +20,9 @@ import {
 import {
   Car
 } from '../../app/car';
-
+import {
+  PopoverPageComponent
+} from '../../components/popover-page/popover-page'
 @Component({
 
   selector: 'page-car',
@@ -33,13 +36,15 @@ export class CarPage implements OnInit {
       public navCtrl: NavController,
       public modalCtrl: ModalController,
       private carProvider: CarProvider,
-      private toastCtrl: ToastController
+      private toastCtrl: ToastController,
+      private fb: FormBuilder,
+      private popCtrl: PopoverController
     ) {
 
-    }
-
+    }  
+  carForm: FormGroup;
   cars: Car[] = [];
-  selectedCar : Car;
+
   toastsuccess = this.toastCtrl.create({
     message: '',
     position: 'bottom',
@@ -53,55 +58,74 @@ export class CarPage implements OnInit {
     closeButtonText: 'ok'
   });
 
-  public carForm = new FormGroup({
-    id: new FormControl(0, Validators.required),
-    date_config: new FormControl(),
-    brand: new FormControl("", Validators.required),
-    type: new FormControl("", Validators.required),
-    fia_category: new FormControl("", Validators.required),
-    weight: new FormControl(0, Validators.required),
-    nb_speed: new FormControl(""),
-    bevel_gear1: new FormControl("", Validators.required),
-    bevel_gear2: new FormControl("", Validators.required),
-    max_engine_speed: new FormControl("", Validators.required)
-  });
+
 
   ngOnInit(): void {
     console.log("## Cars On Init ###");
 
-    let car : Car = {
-    id: 0,
-    date_config: new Date(),
-    brand: "",
-    type: "",
-    fia_category: "",
-    weight: 0,
-    nb_speed: 3,
-    bevel_gear1: 0,
-    bevel_gear2: 0,
-    max_engine_speed: 0,
-  };
-    this.carForm.setValue(car, {
-      onlySelf: true
+    this.carForm = this.fb.group({
+      id: 0,
+      date_config:'',
+      brand: ['', Validators.required],
+      type: ['', Validators.required],
+      fia_category: ['', Validators.required],
+      weight: ['', Validators.required],
+      nb_speed: ['', Validators.required],
+      bevelgear: this.fb.group({
+        a: ['', Validators.required],
+        b: ['', Validators.required]
+      }),
+      max_engine_speed: ['', Validators.required],
     });
-
-
     this.carProvider.getCars().then((cars) => {
       this.cars = cars;
     });
+    this.subcribeToFormChanges();
   }
-  onSelect(): void {
+  subcribeToFormChanges() {
+    // initialize stream
+    const formChanges$ = this.carForm.valueChanges;
 
-    if (this.selectedCar) {
-      this.carProvider.setSelectedCar(this.selectedCar);
-      this.carForm.setValue(this.selectedCar, {
-        onlySelf: true
-      });
-    }
+    // subscribe to the stream 
+    formChanges$.subscribe((x) => {
+      if (this.carForm.valid) {
+        console.log(x);
+        this.carProvider.setSelectedCar(x);
+        this.carProvider.setValid(true);
+      } else {
+        this.carProvider.setValid(false);
+      }
+    });
 
   }
+  presentPopover(event) {
+    let popover = this.popCtrl.create(PopoverPageComponent, {
+      selectitems: this.cars,
+      titre: 'Voitures',
+      select: (element) => {
+       
+        this.carProvider.setSelectedCar(element);
+        this.carForm.setValue(element, {
+          onlySelf: true
+        });
+      },
+      save: () => {
+        if (this.carForm.valid) {
+          if (this.carForm.value.id == 0) {
+            this.create(this.carForm)
+          } else {
+            this.update(this.carForm);
+          }
+        }
 
-  onSave(form: FormGroup): void {
+      }
+    });
+    popover.present({
+      ev: event
+    });
+  }
+
+  update(form: FormGroup): void {
 
     this.carProvider.saveCar(form.value).then((data) => {
       this.toastsuccess.setMessage("Votre Voiture a bien été sauvegardée");
@@ -112,7 +136,7 @@ export class CarPage implements OnInit {
     });
   }
 
-  onCreate(form: FormGroup): void {
+  create(form: FormGroup): void {
 
     this.carProvider.addCar(form.value).then((data) => {
       this.toastsuccess.setMessage("Votre Voiture a bien été ajoutée");

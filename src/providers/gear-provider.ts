@@ -7,7 +7,7 @@ import {
 import {
   DBProvider
 } from './db-provider'
-
+import { BehaviorSubject }    from 'rxjs/BehaviorSubject';
 
 /*
   Generated class for the GearProvider provider.
@@ -22,35 +22,34 @@ export class GearProvider {
     private db: DBProvider) {
     console.log('Calling, GearProvider Provider');
   }
-
-  private gearBox: Gearbox;
+  private gbs:Gearbox [] = [];
+  private gearBox= new BehaviorSubject<Gearbox>({
+    id:0,
+    brand: "",
+    type:"",
+    serial:0
+  });
 
   setGB(gb: Gearbox): void {
-    this.gearBox = gb;
+    this.gearBox.next(gb);
   }
 
 
-  getGB(id ? : number): Promise < any > {
+  getGB(): Promise < any > {
     
     return new Promise((resolve, reject) => {
       if (this.gearBox) {
-        if (id && this.db.isOpen) {
-          this.db.selectGearById(id).then((gb) => {
-            resolve(gb);
-          }).catch((error) => {
-            reject(error);
-          });
-        }
-        resolve(this.gearBox);
+          resolve(this.gearBox.asObservable());
       } else {
         reject(new Error("No gearbox found"));
       }
     });
   }
-  getGBs(carid: number): Promise < any > {
+  getGBs(): Promise < any > {
     return new Promise((resolve, reject) => {
-      this.db.selectGearsByCarid(carid).then((data) => {
-        resolve(data);
+      this.db.selectGears().then((gbs) => {
+        this.gbs=gbs;
+        resolve(this.gbs);
       }).catch((error) => {
         reject(error);
       });
@@ -58,13 +57,9 @@ export class GearProvider {
   }
 
   saveGB(gb: Gearbox): Promise < any > {
-    this.gearBox = gb;
 
     return new Promise((resolve, reject) => {
       this.db.saveGear(gb).then((data) => {
-        if (data.id) {
-          this.gearBox.id = data.id;
-        }
         resolve(this.gearBox);
       }).catch((error) => {
         reject(error);

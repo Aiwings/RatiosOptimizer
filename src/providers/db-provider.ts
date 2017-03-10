@@ -33,9 +33,7 @@ export class DBProvider {
     if (!this.isOpen) {
       this.db = new SQLite();
       this.initDB();
-
     }
-
   }
 
 
@@ -47,15 +45,13 @@ export class DBProvider {
     'fia_category TEXT,' +
     'weight INTEGER,' +
     'nb_speed INTEGER,' +
-    'bevel_gear1 INTEGER,' +
-    'bevel_gear2 INTEGER,' +
+    'bevelgear TEXT,' +
     'max_engine_speed INTEGER' +
     ')';
 
 
   private gearTable: string = '(' +
     'id INTEGER PRIMARY KEY AUTOINCREMENT,' +
-    'carid INTEGER,' +
     'brand TEXT,' +
     'type TEXT,' +
     'serial TEXT' +
@@ -68,20 +64,20 @@ export class DBProvider {
         name: 'data.db',
         location: 'default'
       }).then(() => {
-
-        /// CREATING TABLE CARS ///
-        this.createTable("cars", this.carTable).then((data) => {
-          console.log("Table created" + JSON.stringify(data));
-        }).catch((error) => {
-          this.onCreateError(error);
-        });
-        /// CREATING TABLE GEARBOX ///
-        this.createTable("gearbox", this.gearTable).then((data) => {
-          console.log("Table created" + JSON.stringify(data));
-        }).catch((error) => {
-          this.onCreateError(error);
-        });
-        this.isOpen = true;
+    
+          /// CREATING TABLE CAR ///
+          this.createTable("car", this.carTable).then((data) => {
+            console.log("Table created" + JSON.stringify(data));
+          }).catch((error) => {
+            this.onCreateError(error);
+          });
+          /// CREATING TABLE GEARBOX ///
+          this.createTable("gearbox", this.gearTable).then((data) => {
+            console.log("Table created" + JSON.stringify(data));
+          }).catch((error) => {
+            this.onCreateError(error);
+          });
+          this.isOpen = true;
       }).catch((error) => {
         console.error("Unable to open database" + error.message, error);
       })
@@ -89,8 +85,6 @@ export class DBProvider {
       console.error(error.message, error)
     }
   }
-
-
   private createTable(name: string, struct: string): Promise < any > {
     return new Promise((resolve, reject) => {
       this.db.executeSql('create table if not exists ' + name + ' ' + struct, {})
@@ -102,7 +96,21 @@ export class DBProvider {
         })
     });
   }
+  private dropTables() {
+    return new Promise((resolve, reject) => {
+      this.db.executeSql('DROP TABLE IF EXISTS cars', []).then((data) => {
+        this.db.executeSql('DROP TABLE IF EXISTS gearbox', []).then((data) => {
+          resolve(data);
+        }).catch((error) => {
+          alert(error.message);
+          reject(error);
+        });
+      }).catch((error) => {
+        reject(error);
+      });
 
+    });
+  }
   private onCreateError(error): void {
     console.error("Unable to create table " + error.message, error);
   }
@@ -113,15 +121,14 @@ export class DBProvider {
 
       try {
         this.db.executeSql(
-          "INSERT INTO cars(date_config,brand,type,fia_category,weight,nb_speed, bevel_gear1, bevel_gear2, max_engine_speed) VALUES (?,?,?,?,?,?,?,?,?);", [
+          "INSERT INTO car(date_config,brand,type,fia_category,weight,nb_speed, bevelgear,max_engine_speed) VALUES (?,?,?,?,?,?,?,?);", [
             car.date_config.toString(),
             car.brand,
             car.type,
             car.fia_category,
             car.weight,
             car.nb_speed,
-            car.bevel_gear1,
-            car.bevel_gear2,
+            JSON.stringify(car.bevelgear),
             car.max_engine_speed
           ]
         ).then((data) => {
@@ -140,15 +147,14 @@ export class DBProvider {
     return new Promise((resolve, reject) => {
       try {
         this.db.executeSql(
-          "UPDATE cars SET brand=?,type=?,fia_category=?,weight=?,nb_speed=?, bevel_gear1=?,bevel_gear2=?,max_engine_speed=?" +
+          "UPDATE car SET brand=?,type=?,fia_category=?,weight=?,nb_speed=?, bevelgear=?,max_engine_speed=?" +
           "WHERE id = ?;", [
             car.brand,
             car.type,
             car.fia_category,
             car.weight,
             car.nb_speed,
-            car.bevel_gear1,
-            car.bevel_gear2,
+            JSON.stringify(car.bevelgear),
             car.max_engine_speed,
             car.id
           ]
@@ -167,7 +173,7 @@ export class DBProvider {
     return new Promise((resolve, reject) => {
       try {
         this.db.executeSql(
-          "SELECT * FROM cars;", []
+          "SELECT * FROM car;", []
         ).then((data) => {
           let cars = [];
           if (data.rows.length > 0) {
@@ -187,7 +193,7 @@ export class DBProvider {
   selectCarById(id: number): Promise < any > {
     return new Promise((resolve, reject) => {
       try {
-        this.db.executeSql("SELECT * FROM cars WHERE id = ?;", [id]).then((data) => {
+        this.db.executeSql("SELECT * FROM car WHERE id = ?;", [id]).then((data) => {
           if (data.rows.length > 0) {
             resolve(data.rows.item(0));
           } else {
@@ -211,7 +217,7 @@ export class DBProvider {
         if (data.rows.length > 0) {
           resolve(data.rows.item(0));
         } else {
-          reject(new Error("No Elements found"));
+          reject(new Error("404"));
         }
       }).catch((error) => {
         reject(error);
@@ -219,10 +225,10 @@ export class DBProvider {
     });
   }
 
-  selectGearsByCarid(carid: number): Promise < any > {
+  selectGears(): Promise < any > {
     return new Promise((resolve, reject) => {
       try {
-        this.db.executeSql("SELECT * FROM gearbox WHERE carid = ? ORDER BY id;", [carid]).then((data) => {
+        this.db.executeSql("SELECT * FROM gearbox ORDER BY id;", []).then((data) => {
           let gbs = [];
           if (data.rows.length > 0) {
             for (let i = 0; i < data.rows.length; i++) {
@@ -230,7 +236,7 @@ export class DBProvider {
             }
             resolve(gbs);
           } else {
-            reject(new Error("No elements found"));
+            reject(new Error("404"));
           }
 
         }).catch((error) => {
@@ -244,30 +250,24 @@ export class DBProvider {
 
   saveGear(gear: Gearbox): Promise < any > {
     return new Promise((resolve, reject) => {
-      try {
-        this.selectGearById(gear.id).then((data) => {
-          console.log(JSON.stringify(data));
 
-          if (data.rows.length != 0) {
-            this.updateGear(gear).then((data) => {
-              resolve(data);
-            }).catch((error) => {
-              reject(error);
-            });
-          } else {
-            this.addGear(gear).then((data) => {
-              resolve(data);
-            }).catch((error) => {
-              reject(error);
-            });
-          }
-
+      this.selectGearById(gear.id).then((data) => {
+        this.updateGear(gear).then((data) => {
+          resolve(data);
         }).catch((error) => {
           reject(error);
         });
-      } catch (error) {
-        reject(error);
-      }
+      }).catch((error) => {
+        if (error.message == "404") {
+          this.addGear(gear).then((data) => {
+            resolve(data);
+          }).catch((error) => {
+            reject(error);
+          });
+        } else {
+          reject(error);
+        }
+      });
     });
   }
 
@@ -295,16 +295,10 @@ export class DBProvider {
   addGear(gear: Gearbox): Promise < any > {
 
     return new Promise((resolve, reject) => {
-      this.db.executeSql("INSERT INTO gearbox(carid,brand,type,serial) " +
-        "VALUES(?,?,?,?,?);", [gear.carid, gear.brand, gear.type, gear.serial]
+      this.db.executeSql("INSERT INTO gearbox(brand,type,serial) " +
+        "VALUES(?,?,?);", [gear.brand, gear.type, gear.serial]
       ).then((data) => {
-        this.selectGearsByCarid(gear.carid).then((data) => {
-          resolve({
-            id: data.rows.length - 1
-          });
-        }).catch((error) => {
-          reject(error);
-        });
+        resolve(data);
       }).catch((error) => {
         reject(error);
       });
