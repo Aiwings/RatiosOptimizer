@@ -13,7 +13,7 @@
 </ion-header>
 <ion-content>
 <ion-list *ngIf="ratios">
-  <ion-item  *ngFor="let ratio of ratios">  
+  <ion-item  *ngFor="let ratio of ratios" (click)="modify(ratio);">  
     {{ratio.type}} - {{ratio.a}} / {{ratio.b}} - {{(ratio.a / ratio.b).toFixed(3)}}
     <ion-icon (click)="deleteRatio(ratio);" name="ios-close-circle" item-right> </ion-icon>
   </ion-item>

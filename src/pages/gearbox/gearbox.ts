@@ -1,6 +1,7 @@
 import {
   Component,
-  OnInit
+  OnInit,
+  OnDestroy
 } from '@angular/core';
 import {
   NavController,
@@ -38,9 +39,9 @@ import {
   selector: 'page-gearbox',
   templateUrl: 'gearbox.html'
 })
-export class GearboxPage implements OnInit {
+export class GearboxPage implements OnInit, OnDestroy {
 
-  gearForm : FormGroup;
+  gearForm: FormGroup;
   car: Car;
   carSub: Subscription;
 
@@ -54,7 +55,7 @@ export class GearboxPage implements OnInit {
     public gearProv: GearProvider,
     private toastCtrl: ToastController,
     private popCtrl: PopoverController,
-    private fb : FormBuilder) {
+    private fb: FormBuilder) {
 
     this.carSub = this.carProv.getSelectedCar().subscribe((car) => {
       this.car = car;
@@ -76,36 +77,34 @@ export class GearboxPage implements OnInit {
   ngOnInit(): void {
 
     this.gearForm = this.fb.group({
-      id:0,
-      brand:['', Validators.required],
-      type:['', Validators.required],
-      serial:['', Validators.required]
+      id: 0,
+      brand: ['', Validators.required],
+      type: ['', Validators.required],
+      serial: ['', Validators.required]
     });
-
-
     this.gearProv.getGBs().then((gbs) => {
       if (gbs) {
         this.gearBoxes = gbs;
-         alert("GBS " + JSON.stringify(this.gearBoxes));
       }
     }).catch((error) => {
       console.error(error.message, error);
-      this.toasterror.setMessage("Impossible de récupérer les boites \n " + error.message);
-      this.toasterror.present();
     });
 
     this.subscribeToFormChanges();
   }
 
-  subscribeToFormChanges(){
+  ngOnDestroy() {
+    this.carSub.unsubscribe();
+  }
+
+  subscribeToFormChanges() {
     const formChanges$ = this.gearForm.valueChanges;
 
-      formChanges$.subscribe((x)=>{
-        if(this.gearForm.valid)
-        {
-          this.gearProv.setGB(x);
-        }
-      });
+    formChanges$.subscribe((x) => {
+      if (this.gearForm.valid) {
+        this.gearProv.setGB(x);
+      }
+    });
   }
   presentPopover(event) {
     let popover = this.popCtrl.create(PopoverPageComponent, {
@@ -117,9 +116,8 @@ export class GearboxPage implements OnInit {
           onlySelf: true
         });
       },
-      save: ()=>{
-        if( this.gearForm.valid)
-        {
+      save: () => {
+        if (this.gearForm.valid) {
           this.save();
         }
       }
@@ -131,16 +129,14 @@ export class GearboxPage implements OnInit {
 
 
   save(): void {
-    let gb : Gearbox = this.gearForm.value;
+    let gb: Gearbox = this.gearForm.value;
     if (gb.id == 0) {
       let length = this.gearBoxes.length;
-      let id =  length + 1;
+      let id = length + 1;
       gb.id = id;
       this.gearBoxes.push(gb);
-    }
-    else
-    {
-      let index = gb.id -1;
+    } else {
+      let index = gb.id - 1;
       this.gearBoxes[index] = gb;
     }
     this.gearProv.saveGB(gb).then((data) => {
@@ -154,7 +150,6 @@ export class GearboxPage implements OnInit {
   }
 
   ratios(): void {
-
     let modal = this.modalCtrl.create(RatioModalComponent, {});
     modal.present();
     modal.onDidDismiss((data) => {});

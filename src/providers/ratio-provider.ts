@@ -4,6 +4,7 @@ import {
   Subscription
 } from 'rxjs/Subscription';
 import {Ratio} from '../app/ratio';
+import {Car} from '../app/car';
 import {CarProvider} from './car-provider'
 
 @Injectable()
@@ -14,11 +15,18 @@ export class RatioProvider {
     ) {
     console.log('Calling RatioProvider Provider');
     this.carSub = this.carProv.getSelectedCar().subscribe((car)=>{
+    if(this.car)
+    {
+      if(this.car.bevelgear != car.bevelgear )
+      {
+        this.ratioValid.next(false);
+      }
+    }
       this.car = car;
     })
   }
   carSub:Subscription;
-  car;
+  car :Car;
   private ratios= new BehaviorSubject<Ratio[]>([]);
 
   private ratioValid =new BehaviorSubject<boolean>(false) ;
@@ -26,7 +34,6 @@ export class RatioProvider {
   public isValid() {
     return this.ratioValid.asObservable();
   }
-
 
  public getRatios() {
     return this.ratios.asObservable();

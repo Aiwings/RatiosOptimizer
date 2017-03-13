@@ -1,6 +1,7 @@
 import {
   Component,
   ViewChild,
+  OnDestroy
 } from '@angular/core';
 import {
   NavController,
@@ -19,7 +20,7 @@ import {
   selector: 'page-abacus',
   templateUrl: 'abacus.html'
 })
-export class AbacusPage {
+export class AbacusPage implements OnDestroy{
 
   constructor(public navCtrl: NavController,
     public calculProv: CalculProvider,
@@ -112,5 +113,8 @@ export class AbacusPage {
     }
       this.drawGraph();
   }
+    ngOnDestroy(){
+      this.calculSub.unsubscribe();
+    }
 
 }

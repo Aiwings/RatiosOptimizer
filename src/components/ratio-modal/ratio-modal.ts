@@ -1,6 +1,6 @@
 import {
   Component,
-  OnInit
+  OnDestroy
 } from '@angular/core';
 import {
   ModalController,
@@ -21,18 +21,11 @@ import {
   Subscription
 } from 'rxjs/Subscription';
 
-
-/*
-  Generated class for the RatioModal component.
-
-  See https://angular.io/docs/ts/latest/api/core/index/ComponentMetadata-class.html
-  for more info on Angular 2 Components.
-*/
 @Component({
   selector: 'ratio-modal',
   templateUrl: 'ratio-modal.html'
 })
-export class RatioModalComponent implements OnInit {
+export class RatioModalComponent implements OnDestroy {
 
   ratioSub:Subscription;
   enabled = true;
@@ -50,7 +43,9 @@ export class RatioModalComponent implements OnInit {
       this.ratios = ratios;
     });
   }
-  ngOnInit(): void {}
+  ngOnDestroy(): void {
+    this.ratioSub.unsubscribe();
+  }
   deleteRatio(ratio: Ratio) {
     let index = this.ratios.indexOf(ratio);
     this.ratios.splice(index, 1);
@@ -69,6 +64,21 @@ export class RatioModalComponent implements OnInit {
 
     });
 
+  }
+  modify(ratio: Ratio)
+  {
+  this.enabled = false;
+  let index = this.ratios.indexOf(ratio);
+    let modal = this.modalCtrl.create(RatioAlertComponent,{
+      ratio : ratio
+    });
+    modal.present();
+    modal.onDidDismiss((data) => {
+      this.enabled = true;
+      if (data.ratio) {
+        this.ratios[index] = data.ratio;
+      }
+    });
   }
   dismiss(): void {
     if (this.ratioProvider.setRatios(this.ratios)) {

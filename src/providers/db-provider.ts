@@ -14,13 +14,6 @@ import {
   Gearbox
 } from '../app/gearbox';
 
-
-/*
-  Generated class for the DBProvider provider.
-
-  See https://angular.io/docs/ts/latest/guide/dependency-injection.html
-  for more info on providers and Angular 2 DI.
-*/
 @Injectable()
 
 export class DBProvider {
@@ -57,6 +50,16 @@ export class DBProvider {
     'serial TEXT' +
     ')';
 
+  private circuitTable: string = '(' +
+    'id INTEGER PRIMARY KEY AUTOINCREMENT,' +
+    'car_id INTEGER, ' +
+    'gearbox_id INTEGER, ' +
+    'name TEXT' +
+    'tire_diam INTEGER, ' +
+    'event TEXT, ' +
+    'v_max INTEGER' +
+    ')';
+
 
   public initDB() {
     try {
@@ -64,20 +67,26 @@ export class DBProvider {
         name: 'data.db',
         location: 'default'
       }).then(() => {
-    
-          /// CREATING TABLE CAR ///
-          this.createTable("car", this.carTable).then((data) => {
-            console.log("Table created" + JSON.stringify(data));
-          }).catch((error) => {
-            this.onCreateError(error);
-          });
-          /// CREATING TABLE GEARBOX ///
-          this.createTable("gearbox", this.gearTable).then((data) => {
-            console.log("Table created" + JSON.stringify(data));
-          }).catch((error) => {
-            this.onCreateError(error);
-          });
-          this.isOpen = true;
+
+        /// CREATING TABLE CAR ///
+        this.createTable("car", this.carTable).then((data) => {
+          console.log("Table created" + JSON.stringify(data));
+        }).catch((error) => {
+          this.onCreateError(error);
+        });
+        /// CREATING TABLE GEARBOX ///
+        this.createTable("gearbox", this.gearTable).then((data) => {
+          console.log("Table created" + JSON.stringify(data));
+        }).catch((error) => {
+          this.onCreateError(error);
+        });
+        this.createTable("circuit", this.circuitTable).then((data) => {
+          console.log("Table created" + JSON.stringify(data));
+        }).catch((error) => {
+          this.onCreateError(error);
+        });
+
+        this.isOpen = true;
       }).catch((error) => {
         console.error("Unable to open database" + error.message, error);
       })
@@ -96,21 +105,20 @@ export class DBProvider {
         })
     });
   }
-  private dropTables() {
-    return new Promise((resolve, reject) => {
-      this.db.executeSql('DROP TABLE IF EXISTS cars', []).then((data) => {
-        this.db.executeSql('DROP TABLE IF EXISTS gearbox', []).then((data) => {
-          resolve(data);
-        }).catch((error) => {
-          alert(error.message);
-          reject(error);
-        });
-      }).catch((error) => {
-        reject(error);
-      });
-
-    });
-  }
+  // private dropTables() {
+  //   return new Promise((resolve, reject) => {
+  //     this.db.executeSql('DROP TABLE IF EXISTS cars', []).then((data) => {
+  //       this.db.executeSql('DROP TABLE IF EXISTS gearbox', []).then((data) => {
+  //         resolve(data);
+  //       }).catch((error) => {
+  //         alert(error.message);
+  //         reject(error);
+  //       });
+  //     }).catch((error) => {
+  //       reject(error);
+  //     });
+  //   });
+  // }
   private onCreateError(error): void {
     console.error("Unable to create table " + error.message, error);
   }
