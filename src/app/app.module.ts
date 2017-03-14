@@ -36,6 +36,9 @@ import {
 import {
   CalculProvider
 } from '../providers/calcul-provider';
+import {
+  CircuitProvider
+} from '../providers/circuit-provider';
 
 import {
   CarPage
@@ -61,8 +64,11 @@ import {
   RatioAlertComponent
 } from '../components/ratio-alert/ratio-alert';
 import {
-  PopoverPageComponent  
+  PopoverPageComponent
 } from '../components/popover-page/popover-page';
+import {
+  CircuitModalComponent
+} from '../components/circuit-modal/circuit-modal';
 
 
 const cloudSettings: CloudSettings = {
@@ -81,7 +87,8 @@ const cloudSettings: CloudSettings = {
     TabsPage,
     RatioModalComponent,
     RatioAlertComponent,
-    PopoverPageComponent
+    PopoverPageComponent,
+    CircuitModalComponent
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -98,11 +105,12 @@ const cloudSettings: CloudSettings = {
     TabsPage,
     RatioModalComponent,
     RatioAlertComponent,
-    PopoverPageComponent
+    PopoverPageComponent,
+    CircuitModalComponent
   ],
   providers: [{
     provide: ErrorHandler,
     useClass: IonicErrorHandler
-  }, CarProvider, GearProvider, DBProvider, RatioProvider, CalculProvider, Storage],
+  }, DBProvider,CarProvider, GearProvider, RatioProvider, CalculProvider, CircuitProvider, Storage],
 })
 export class AppModule {}

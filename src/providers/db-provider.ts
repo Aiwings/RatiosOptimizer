@@ -13,7 +13,12 @@ import {
 import {
   Gearbox
 } from '../app/gearbox';
-
+import {
+  Circuit
+} from '../app/circuit';
+import {
+  Ratio
+} from '../app/ratio';
 @Injectable()
 
 export class DBProvider {
@@ -22,11 +27,6 @@ export class DBProvider {
   public isOpen: boolean;
   constructor() {
     console.log('#### Calling DBProvider Provider ####');
-
-    if (!this.isOpen) {
-      this.db = new SQLite();
-      this.initDB();
-    }
   }
 
 
@@ -57,12 +57,18 @@ export class DBProvider {
     'name TEXT' +
     'tire_diam INTEGER, ' +
     'event TEXT, ' +
-    'v_max INTEGER' +
-    ')';
+    'v_max INTEGER, ' +
+    'ratios TEXT, ' +
+    'weather TEXT, ' +
+    'comments TEXT'
+  ')';
 
 
-  public initDB() {
-    try {
+  public initDB(): Promise < any > {
+
+    return new Promise((resolve, reject) => {
+      this.db = new SQLite();
+
       this.db.openDatabase({
         name: 'data.db',
         location: 'default'
@@ -70,29 +76,27 @@ export class DBProvider {
 
         /// CREATING TABLE CAR ///
         this.createTable("car", this.carTable).then((data) => {
-          console.log("Table created" + JSON.stringify(data));
+          console.log("Table created car" + JSON.stringify(data));
         }).catch((error) => {
           this.onCreateError(error);
         });
         /// CREATING TABLE GEARBOX ///
-        this.createTable("gearbox", this.gearTable).then((data) => {
-          console.log("Table created" + JSON.stringify(data));
+        this.createTable("gear_box", this.gearTable).then((data) => {
+          console.log("Table created gb" + JSON.stringify(data));
         }).catch((error) => {
           this.onCreateError(error);
         });
         this.createTable("circuit", this.circuitTable).then((data) => {
-          console.log("Table created" + JSON.stringify(data));
+          console.log("Table created circ" + JSON.stringify(data));
         }).catch((error) => {
           this.onCreateError(error);
         });
-
-        this.isOpen = true;
+        resolve(true);
       }).catch((error) => {
         console.error("Unable to open database" + error.message, error);
+        reject((error));
       })
-    } catch (error) {
-      console.error(error.message, error)
-    }
+    });
   }
   private createTable(name: string, struct: string): Promise < any > {
     return new Promise((resolve, reject) => {
@@ -108,7 +112,7 @@ export class DBProvider {
   // private dropTables() {
   //   return new Promise((resolve, reject) => {
   //     this.db.executeSql('DROP TABLE IF EXISTS cars', []).then((data) => {
-  //       this.db.executeSql('DROP TABLE IF EXISTS gearbox', []).then((data) => {
+  //       this.db.executeSql('DROP TABLE IF EXISTS gear_box', []).then((data) => {
   //         resolve(data);
   //       }).catch((error) => {
   //         alert(error.message);
@@ -177,8 +181,9 @@ export class DBProvider {
     });
   }
 
-  getCars(): Promise < any > {
+  public getCars(): Promise < any > {
     return new Promise((resolve, reject) => {
+
       try {
         this.db.executeSql(
           "SELECT * FROM car;", []
@@ -188,8 +193,11 @@ export class DBProvider {
             for (let i = 0; i < data.rows.length; i++) {
               cars.push( < Car > data.rows.item(i));
             }
+            resolve(cars);
+          } else {
+            reject(new Error("404"));
           }
-          resolve(cars);
+
         }).catch((error) => {
           reject(error);
         });
@@ -198,14 +206,14 @@ export class DBProvider {
       }
     });
   }
-  selectCarById(id: number): Promise < any > {
+  public selectCarById(id: number): Promise < any > {
     return new Promise((resolve, reject) => {
       try {
         this.db.executeSql("SELECT * FROM car WHERE id = ?;", [id]).then((data) => {
           if (data.rows.length > 0) {
             resolve(data.rows.item(0));
           } else {
-            reject(new Error("No Elements found"));
+            reject(new Error("404"));
           }
         }).catch((error) => {
           reject(error);
@@ -216,12 +224,9 @@ export class DBProvider {
     });
   }
 
-
-
-
-  selectGearById(id: number): Promise < any > {
+  public selectGearById(id: number): Promise < any > {
     return new Promise((resolve, reject) => {
-      this.db.executeSql("SELECT * FROM gearbox WHERE id = ?;", [id]).then((data) => {
+      this.db.executeSql("SELECT * FROM gear_box WHERE id = ?;", [id]).then((data) => {
         if (data.rows.length > 0) {
           resolve(data.rows.item(0));
         } else {
@@ -233,10 +238,10 @@ export class DBProvider {
     });
   }
 
-  selectGears(): Promise < any > {
+  public selectGears(): Promise < any > {
     return new Promise((resolve, reject) => {
       try {
-        this.db.executeSql("SELECT * FROM gearbox ORDER BY id;", []).then((data) => {
+        this.db.executeSql("SELECT * FROM gear_box ORDER BY id;", []).then((data) => {
           let gbs = [];
           if (data.rows.length > 0) {
             for (let i = 0; i < data.rows.length; i++) {
@@ -256,7 +261,7 @@ export class DBProvider {
     });
   }
 
-  saveGear(gear: Gearbox): Promise < any > {
+  public saveGear(gear: Gearbox): Promise < any > {
     return new Promise((resolve, reject) => {
 
       this.selectGearById(gear.id).then((data) => {
@@ -279,13 +284,11 @@ export class DBProvider {
     });
   }
 
-
-
-  updateGear(gear: Gearbox): Promise < any > {
+  private updateGear(gear: Gearbox): Promise < any > {
 
     return new Promise((resolve, reject) => {
       try {
-        this.db.executeSql("UPDATE gearbox " +
+        this.db.executeSql("UPDATE gear_box " +
           "SET brand = ? ,type = ?, serial= ? " +
           "WHERE id = ? ;", [gear.brand, gear.type, gear.serial, gear.id]
         ).then((data) => {
@@ -300,10 +303,10 @@ export class DBProvider {
 
   }
 
-  addGear(gear: Gearbox): Promise < any > {
+  private addGear(gear: Gearbox): Promise < any > {
 
     return new Promise((resolve, reject) => {
-      this.db.executeSql("INSERT INTO gearbox(brand,type,serial) " +
+      this.db.executeSql("INSERT INTO gear_box(brand,type,serial) " +
         "VALUES(?,?,?);", [gear.brand, gear.type, gear.serial]
       ).then((data) => {
         resolve(data);
@@ -313,7 +316,46 @@ export class DBProvider {
     });
 
   }
+  public getCircuits(): Promise < Circuit[] > {
+    return new Promise((resolve, reject) => {
+      this.db.executeSql("SELECT * from circuit", []).then((data) => {
+        if (data.rows.length > 0) {
+          let circuits: Circuit[] = []
+          for (let i = 0; i < data.rows.length; i++) {
+            let el = data.rows.item(i);
+            el.ratios = < Ratio > JSON.parse(el.ratio);
+            circuits.push(el);
+          }
+          resolve(circuits);
+        } else {
+          reject(new Error("404"));
+        }
+      }).catch((error) => {
+        reject(error);
+      });
+    });
 
+  }
+  public addCircuit(circuit: Circuit): Promise < any > {
+    return new Promise((resolve, reject) => {
+      this.db.executeSql("INSERT INTO circuit" +
+        "(name,car_id,gearbox_id,tire_diam,ratios,vmax,event,weather,comments) " +
+        "VALUES(?,?,?,?,?,?,?,?,?);", [circuit.name,
+          circuit.car_id,
+          circuit.gearbox_id,
+          circuit.tire_diam,
+          JSON.stringify(circuit.ratios),
+          circuit.v_max,
+          circuit.event,
+          circuit.weather,
+          circuit.comments
+        ]).then((data) => {
+        resolve(data);
+      }).catch((error) => {
+        reject(error);
+      });
+    });
+  }
 
 
 }

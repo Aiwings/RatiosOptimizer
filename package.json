@@ -1,7 +1,7 @@
 {
-  "name": "ionic-hello-world",
-  "author": "Ionic Framework",
-  "homepage": "http://ionicframework.com/",
+  "name": "ratio-optimizer",
+  "author": "121 DigitalMedia",
+  "homepage": "http://www.121digitalmedia.eu/",
   "private": true,
   "scripts": {
     "clean": "ionic-app-scripts clean",
@@ -43,5 +43,5 @@
     "cordova-plugin-splashscreen"
   ],
   "cordovaPlatforms": [],
-  "description": "RatiosOptimizer: An Ionic project"
+  "description": "RatiosOptimizer: Ratio Optimizer for Hewland"
 }

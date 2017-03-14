@@ -1,6 +1,7 @@
 import {
   Component,
-  OnInit
+  OnInit,
+  OnDestroy
 } from '@angular/core';
 import {
   FormGroup,
@@ -22,14 +23,17 @@ import {
 } from '../../app/car';
 import {
   PopoverPageComponent
-} from '../../components/popover-page/popover-page'
+} from '../../components/popover-page/popover-page';
+import {
+  Subscription
+} from 'rxjs/Subscription';
 @Component({
 
   selector: 'page-car',
   templateUrl: 'car.html',
 
 })
-export class CarPage implements OnInit {
+export class CarPage implements OnInit, OnDestroy {
 
   constructor
     (
@@ -41,10 +45,20 @@ export class CarPage implements OnInit {
       private popCtrl: PopoverController
     ) {
 
-    }  
+       this.carsSub = this.carProvider.getCars().subscribe(
+         cars => {
+           this.cars = cars;
+         },
+         err => {
+           console.log(err.message);
+          this.cars = [];
+           this.toasterror.setMessage("can't find cars " + err.message);
+           this.toasterror.present();
+         });
+    }
   carForm: FormGroup;
   cars: Car[] = [];
-
+  carsSub: Subscription;
   toastsuccess = this.toastCtrl.create({
     message: '',
     position: 'bottom',
@@ -65,7 +79,7 @@ export class CarPage implements OnInit {
 
     this.carForm = this.fb.group({
       id: 0,
-      date_config:'',
+      date_config: '',
       brand: ['', Validators.required],
       type: ['', Validators.required],
       fia_category: ['', Validators.required],
@@ -76,9 +90,6 @@ export class CarPage implements OnInit {
         b: ['', Validators.required]
       }),
       max_engine_speed: ['', Validators.required],
-    });
-    this.carProvider.getCars().then((cars) => {
-      this.cars = cars;
     });
     this.subcribeToFormChanges();
   }
@@ -96,14 +107,16 @@ export class CarPage implements OnInit {
         this.carProvider.setValid(false);
       }
     });
-
+  }
+  ngOnDestroy() {
+    this.carsSub.unsubscribe();
   }
   presentPopover(event) {
     let popover = this.popCtrl.create(PopoverPageComponent, {
       selectitems: this.cars,
       titre: 'Voitures',
       select: (element) => {
-       
+
         this.carProvider.setSelectedCar(element);
         this.carForm.setValue(element, {
           onlySelf: true

@@ -4,10 +4,14 @@
   See https://angular.io/docs/ts/latest/api/core/index/ComponentMetadata-class.html
   for more info on Angular 2 Components.
 -->
-<ion-list>
+<ion-list *ngIf="titre !='Abaque'" >
   <ion-list-header>{{titre}}</ion-list-header>
   <button ion-item (click)="save()">Sauvegarder</button>
   <ion-item *ngFor="let item of selectitems" (click)="select(item)" >
       {{item.brand}} - {{item.type}}
   </ion-item>
+</ion-list>
+<ion-list *ngIf="titre =='Abaque'">
+    <button ion-item (click)="circuit()">Circuit...</button>
+    <button ion-item (click)="tire()">Diamètre...</button>
 </ion-list>

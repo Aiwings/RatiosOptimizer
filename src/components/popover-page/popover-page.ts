@@ -1,4 +1,7 @@
-import { Component,OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
 import {
   NavParams,
   ViewController,
@@ -14,21 +17,31 @@ import {
   templateUrl: 'popover-page.html'
 })
 export class PopoverPageComponent implements OnInit {
-  titre:string
-  selectitems : any;
-  save:any;
-  select:any;
-  constructor(private params : NavParams,
-              private viewCtrl : ViewController) {
+  titre: string;
+  selectitems: any;
+  save: any;
+  select: any;
+  circuit: any;
+  tire: any;
+  constructor(private params: NavParams,
+    private viewCtrl: ViewController) {
     console.log('Hello PopoverPage Component');
   }
-  ngOnInit(){
+  ngOnInit() {
+    this.titre = this.params.get('titre');
+    if (this.titre == "Abaque") {
+      this.circuit = this.params.get('circuit');
+      this.tire = this.params.get('tire');
+    } else {
       this.selectitems = this.params.get('selectitems');
-      this.titre = this.params.get('titre');
       this.select = this.params.get('select');
-      this.save=  this.params.get('save');
+      this.save = this.params.get('save');
+    }
+
+
+
   }
-  close(){
+  close() {
     this.viewCtrl.dismiss();
   }
 

@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Circuit
+    </ion-title>
+    <ion-buttons start>
+      <button ion-button (click)="dismiss()">
+        <ion-icon name="md-close"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-list>
+    <form [formGroup]="circForm">
+      <ion-item>
+        <ion-label>Voiture</ion-label>
+        <ion-input type="text" value="{{car.brand}} {{car.type}}"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>Circuit</ion-label>
+        <ion-input type="text" formControlName="name" name="name" placeholder="circuit"></ion-input>
+      </ion-item>
+      <ion-item>
+          <ion-segment formControlName="event" color="danger">
+            <ion-segment-button value="Essai">
+              Essai
+            </ion-segment-button>
+            <ion-segment-button value="Course">
+              Course
+            </ion-segment-button>
+          </ion-segment>
+      </ion-item>
+      <ion-item>
+        <ion-label>Vmax</ion-label>
+        <ion-input type="number" formControlName="v_max" name="v_max" placeholder="Vmax"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-textarea formControlName="comments" name="comments" placeholder="Entrez vos commentaires...">
+        </ion-textarea>
+      </ion-item>
+    </form>
+  </ion-list>
+</ion-content>

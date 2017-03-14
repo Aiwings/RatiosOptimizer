@@ -5,7 +5,9 @@ import {
 } from '@angular/core';
 import {
   NavController,
-  AlertController
+  AlertController,
+  PopoverController,
+  ModalController
 } from 'ionic-angular';
 import {
   Chart
@@ -16,6 +18,8 @@ import {
 import {
   Subscription
 } from 'rxjs/Subscription';
+import {PopoverPageComponent} from '../../components/popover-page/popover-page';
+import {CircuitModalComponent} from '../../components/circuit-modal/circuit-modal';
 @Component({
   selector: 'page-abacus',
   templateUrl: 'abacus.html'
@@ -24,7 +28,9 @@ export class AbacusPage implements OnDestroy{
 
   constructor(public navCtrl: NavController,
     public calculProv: CalculProvider,
-    public alertCtrl: AlertController) {
+    public alertCtrl: AlertController,
+    public popCtrl : PopoverController,
+    public modalCtrl : ModalController) {
 
     this.calculSub = this.calculProv.getCalcul().subscribe(calcul => this.calcul = calcul);
 
@@ -67,6 +73,29 @@ export class AbacusPage implements OnDestroy{
       })
       prompt.present();
   }
+    presentPopover(event) {
+    let popover = this.popCtrl.create(PopoverPageComponent, {
+
+      titre: 'Abaque',
+      tire:()=>{
+        this.tire();
+      },
+      circuit: () => {
+        this.circuit();
+      }
+    });
+    popover.present({
+      ev: event
+    });
+  }
+  circuit()
+  {
+      let modal = this.modalCtrl.create(CircuitModalComponent,{
+        tire_diam : this.calculProv.getDiam()
+    });
+     modal.present();
+  }
+
   drawGraph(): void {
     this.lineChart = new Chart(this.lineCanvas.nativeElement, {
 

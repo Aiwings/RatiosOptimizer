@@ -10,7 +10,7 @@ import {
 import {
   ViewController,
   NavParams
-} from 'ionic-angular'
+} from 'ionic-angular';
 
 @Component({
   selector: 'ratio-alert',

@@ -46,6 +46,7 @@ export class GearboxPage implements OnInit, OnDestroy {
   carSub: Subscription;
 
   types = ["DG", "DGB", "FG400", "FGA", "FT1", "FT200", "LD", "LG400", "LG500", "MK5", "MK6", "MK8"];
+  gearsSub: Subscription;
   gearBoxes: Gearbox[] = [];
 
   constructor(
@@ -60,6 +61,17 @@ export class GearboxPage implements OnInit, OnDestroy {
     this.carSub = this.carProv.getSelectedCar().subscribe((car) => {
       this.car = car;
     });
+
+    this.gearsSub = this.gearProv.getGBs().subscribe(
+      data => {
+        this.gearBoxes = data;
+      },
+      err => {
+        console.log(err.message);
+        this.gearBoxes = [];
+        this.toasterror.setMessage("can't find gearboxes " + err.message);
+        this.toasterror.present();
+      });
   }
   toastsuccess = this.toastCtrl.create({
     message: '',
@@ -81,13 +93,6 @@ export class GearboxPage implements OnInit, OnDestroy {
       brand: ['', Validators.required],
       type: ['', Validators.required],
       serial: ['', Validators.required]
-    });
-    this.gearProv.getGBs().then((gbs) => {
-      if (gbs) {
-        this.gearBoxes = gbs;
-      }
-    }).catch((error) => {
-      console.error(error.message, error);
     });
 
     this.subscribeToFormChanges();
