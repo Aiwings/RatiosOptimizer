@@ -39,6 +39,9 @@ import {
 import {
   CircuitProvider
 } from '../providers/circuit-provider';
+import {
+  HttpProvider
+} from '../providers/http-provider';
 
 import {
   CarPage
@@ -111,6 +114,6 @@ const cloudSettings: CloudSettings = {
   providers: [{
     provide: ErrorHandler,
     useClass: IonicErrorHandler
-  }, DBProvider,CarProvider, GearProvider, RatioProvider, CalculProvider, CircuitProvider, Storage],
+  }, DBProvider,CarProvider, GearProvider, RatioProvider, CalculProvider, CircuitProvider,HttpProvider, Storage],
 })
 export class AppModule {}

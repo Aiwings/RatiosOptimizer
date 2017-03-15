@@ -1,15 +1,24 @@
-ratio-alert ion-icon{
-    float:right;
-}
-
-ratio-alert {
-    padding: 20% 0;
-}
-.r1{
-    width:60%;
-    float:left;
-}
-.r2{
-    width:40%;
-    float:right;
-}
+ ratio-alert {
+   padding: 40% 0;
+   background-color: rgba(0, 0, 0, .7);
+   ion-icon {
+     float: right;
+   }
+   .r1 {
+     width: 60%;
+     float: left;
+   }
+   .r2 {
+     width: 40%;
+     float: right;
+   }
+   .button-md {
+     width: 80%;
+     margin: 0 auto;
+     border-radius: 5px;
+   }
+ }
+ 
+ .card-header {
+   color: white;
+ }

@@ -84,7 +84,7 @@ export class CarPage implements OnInit, OnDestroy {
       type: ['', Validators.required],
       fia_category: ['', Validators.required],
       weight: ['', Validators.required],
-      nb_speed: ['', Validators.required],
+      nb_speed: [3, Validators.required],
       bevelgear: this.fb.group({
         a: ['', Validators.required],
         b: ['', Validators.required]

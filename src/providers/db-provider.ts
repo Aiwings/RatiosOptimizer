@@ -52,16 +52,16 @@ export class DBProvider {
 
   private circuitTable: string = '(' +
     'id INTEGER PRIMARY KEY AUTOINCREMENT,' +
-    'car_id INTEGER, ' +
-    'gearbox_id INTEGER, ' +
-    'name TEXT' +
-    'tire_diam INTEGER, ' +
-    'event TEXT, ' +
-    'v_max INTEGER, ' +
-    'ratios TEXT, ' +
-    'weather TEXT, ' +
-    'comments TEXT'
-  ')';
+    'car_id INTEGER,' +
+    'gearbox_id INTEGER,' +
+    'name TEXT,' +
+    'tire_diam INTEGER,' +
+    'event TEXT,' +
+    'v_max INTEGER,' +
+    'ratios TEXT,' +
+    'weather TEXT,' +
+    'comments TEXT'+
+    ')';
 
 
   public initDB(): Promise < any > {
@@ -76,18 +76,18 @@ export class DBProvider {
 
         /// CREATING TABLE CAR ///
         this.createTable("car", this.carTable).then((data) => {
-          console.log("Table created car" + JSON.stringify(data));
+          console.log("Table created car " + JSON.stringify(data));
         }).catch((error) => {
           this.onCreateError(error);
         });
         /// CREATING TABLE GEARBOX ///
         this.createTable("gear_box", this.gearTable).then((data) => {
-          console.log("Table created gb" + JSON.stringify(data));
+          console.log("Table created gb " + JSON.stringify(data));
         }).catch((error) => {
           this.onCreateError(error);
         });
         this.createTable("circuit", this.circuitTable).then((data) => {
-          console.log("Table created circ" + JSON.stringify(data));
+          console.log("Table created circ " + JSON.stringify(data));
         }).catch((error) => {
           this.onCreateError(error);
         });

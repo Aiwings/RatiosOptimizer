@@ -90,36 +90,24 @@ export class AbacusPage implements OnDestroy{
   }
   circuit()
   {
+    let index = this.calcul.max_speed.length -1
       let modal = this.modalCtrl.create(CircuitModalComponent,{
-        tire_diam : this.calculProv.getDiam()
+        tire_diam : this.calculProv.getDiam(),
+        v_max : this.calcul.max_speed[index]
     });
      modal.present();
   }
 
   drawGraph(): void {
-    this.lineChart = new Chart(this.lineCanvas.nativeElement, {
+       this.lineChart = new Chart(this.lineCanvas.nativeElement, {
 
       type: 'line',
       data: {
         datasets: [{
-          label: 'Calcul des rapports',
+          label: 'Différence de rapports',
+          fill: false,
           data: this.calcul.ratio_diff,
-          backgroundColor: [
-            'rgba(255, 99, 132, 0.2)',
-            'rgba(54, 162, 235, 0.2)',
-            'rgba(255, 206, 86, 0.2)',
-            'rgba(75, 192, 192, 0.2)',
-            'rgba(153, 102, 255, 0.2)',
-            'rgba(255, 159, 64, 0.2)'
-          ],
-          borderColor: [
-            'rgba(255,99,132,1)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 206, 86, 1)',
-            'rgba(75, 192, 192, 1)',
-            'rgba(153, 102, 255, 1)',
-            'rgba(255, 159, 64, 1)'
-          ],
+          borderColor: 'rgba(178, 83, 102,1)',
           borderWidth: 1,
           lineTension: 0
         }, ]
@@ -128,8 +116,35 @@ export class AbacusPage implements OnDestroy{
         scales: {
           xAxes: [{
             type: 'linear',
-            position: 'bottom'
+            position: 'bottom',
+            gridLines: {
+              color: 'rgba(100,100,100,1)'
+            },
+            scaleLabel: {
+              display: true,
+              labelString: 'V (km/h)'
+            }
+          }],
+          yAxes: [{
+            gridLines: {
+              color: 'rgba(100,100,100,1)'
+            },
+            ticks: {
+              min: 4000,
+              stepSize: 500
+            },
+            scaleLabel: {
+              display: true,
+              labelString: 'Δ(tr/min)'
+            }
           }]
+        },
+        legend: {
+          display: true,
+          labels: {
+            fontColor: 'rgb(152, 151, 151)',
+            usePointStyle: true,
+          }
         }
       }
 

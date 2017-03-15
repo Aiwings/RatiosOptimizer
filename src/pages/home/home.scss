@@ -1,25 +1,24 @@
 page-home {
-    text-align : center;
-}
-
-.logo{
-    width: 80%;
-    height:auto;
-    margin:0 auto;
-}
-.choice{
-    padding-top:10%;
-}
-
-.choice .icon{
-    font-size : 500%; 
-}
-.choice h2{
-    font-size:100%;
-}
-.choice ion-col{
-    color:#C3A776;
-}
-.choice ion-col:hover{
-    color:#931916;
+  text-align: center;
+  .logo {
+    width: 72%;
+    height: auto;
+    text-align: center;
+    margin: 5% auto;
+  }
+  .choice {
+    padding-top: 10%;
+  }
+  .choice .icon {
+    font-size: 500%;
+  }
+  .choice h2 {
+    font-size: 100%;
+  }
+  .choice ion-col {
+    color: #C3A776;
+  }
+  .choice ion-col:hover {
+    color: #931916;
+  }
 }

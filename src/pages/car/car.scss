@@ -1,18 +1,36 @@
 page-car {
   .bg1 {
-    width: 60%;
+    width: 50%;
     float: left;
+    padding-top: 1px;
   }
   .bg2 {
-    width: 40%;
+    width: 50%;
     float: right;
   }
-  ion-buttons ion-select {
-    width: 1px;
-    height: 1px;
+  .list-md .item-input.ng-valid.input-has-value:not(.input-has-focus):last-child {
+    border-bottom: none !important;
+    box-shadow: none!important;
   }
-  ion-buttons ion-icon {
-    font-size: 140%;
-    color: white;
+  form>.item-input .label {
+    width: 40%;
+    font-size: smaller;
+  }
+  #lbl-4 {
+    margin: 0;
+    position: relative;
+    top: 13px;
+  }
+  .list-md .item-input:last-child {
+    border-bottom: 1px solid transparent;
+  }
+  .md-range {
+    padding: 5px 5px;
+  }
+  .range-md .range-tick-active {
+    background-color: #8e2323;
+  }
+  .range-md .range-tick {
+    background-color: #bdbdbd;
   }
 }

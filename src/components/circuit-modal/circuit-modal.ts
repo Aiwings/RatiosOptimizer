@@ -58,6 +58,7 @@ export class CircuitModalComponent implements OnInit, OnDestroy {
   ratios: Ratio[];
 
   tire_diam: number = 0;
+  v_max : number =0;
   circuit: Circuit;
   circForm: FormGroup;
 
@@ -86,20 +87,31 @@ export class CircuitModalComponent implements OnInit, OnDestroy {
   dismiss(): void {
     this.viewCtrl.dismiss();
   }
+  save(formData:{}){
+    console.log(formData);
+  }
+
   ngOnInit() {
-     this.tire_diam = this.params.get('tire_diam');
+    this.tire_diam = this.params.get('tire_diam');
+    this.v_max = this.params.get('v_max');
+    console.log(this.tire_diam);
+    console.log(this.v_max);
 
     this.circForm = this.fb.group({
       id: 0,
       car_id: this.car.id,
       gearbox_id: this.gearbox.id,
       name: ['', Validators.required],
-      tire_diam: 0,
+      tire_diam:[{value:'', disabled: true}],
       event: ['Essai', Validators.required],
-      v_max: ['', Validators.required],
+      v_max: [{value:'', disabled: true}],
       ratios: '',
       weather: "",
       comments: ''
+    });
+    this.circForm.patchValue({
+      tire_diam: this.tire_diam,
+      v_max : Math.round(this.v_max)
     });
   }
   ngOnDestroy() {
@@ -107,4 +119,5 @@ export class CircuitModalComponent implements OnInit, OnDestroy {
     this.gearSub.unsubscribe();
     this.carSub.unsubscribe();
   }
+
 }

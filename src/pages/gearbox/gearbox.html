@@ -16,7 +16,7 @@
     <form [formGroup]="gearForm"  novalidate *ngIf="car">
       <ion-item>
         <ion-label>Voiture</ion-label>
-        <ion-input type="text" value="{{car.brand}} - {{car.type}}" name="car"></ion-input>
+        <ion-input [disabled]="true" type="text" value="{{car.brand}} - {{car.type}}" name="car"></ion-input>
       </ion-item>
       <ion-item>
         <ion-label>Marque</ion-label>

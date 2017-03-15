@@ -31,9 +31,8 @@
         <ion-input type="number" formControlName="weight" name="type"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label>Nb vitesses - {{carForm.value.nb_speed}}</ion-label>
-
-        <ion-range min="3" max="6" step="1" snaps="true" color="secondary" formControlName="nb_speed">
+        <ion-label><span style="color:white;">{{carForm.value.nb_speed}}</span> vitesses</ion-label>
+        <ion-range min="3" max="6" step="1" snaps="true" color="danger" formControlName="nb_speed">
           <ion-label range-left>3</ion-label>
           <ion-label range-right>6</ion-label>
         </ion-range>

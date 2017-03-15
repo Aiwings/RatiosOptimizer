@@ -16,32 +16,74 @@
 // automatically applied to the <body> element in the app.
 
 .toolbar-background {
-  background-color: #931916;
+  background-color: #af2a2a;
+}
+.tabbar{
+  background-color: #8E2323!important;
 }
 
-.content{
-    background-color:#1A1A1A;
+.content {
+  background-color: #222222;
+  form .label,
+  .item-select .label-md,
+  .item-input .label-md {
+    color: #ABA8A8;
+  }
 }
-.toolbar-title{
-    color:white;
+
+.card {
+  border-radius: 5px;
+  background-color: #2b2b2b;
+  form .label,
+  .item-select .label-md,
+  .item-input .label-md {
+    color: #989797;
+  }
+  ion-card-header {
+    font-weight: bold;
+    color: white;
+  }
 }
+
+form .item {
+  background-color: transparent;
+}
+
+form .ng-valid.input-has-value:not(.input-has-focus) .item-inner {
+  border-bottom-color: #206634 !important;
+  box-shadow: inset 0 -1px 0 0 #206634!important;
+}
+
+.select-text,
+.toolbar-title {
+  color: white;
+}
+
+.text-input {
+  background-color: white;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #7A7979;
+}
+
 .tab-button[aria-selected=true] {
-    color:white;
-    background-color: #931916;
-}
-.tab-button[aria-selected=false] {
-    color:white;
-    background-color: #C3A779;
+  color: white;
+  background-color: #8e2323;
 }
 
+.tab-button[aria-selected=false] {
+  color: white;
+  background-color: #C3A776;
+}
 
 .tab-button[aria-selected=true] .tab-button-icon,
-.tab-button[aria-selected=true] .tab-button-text{
-    color:white!important;
+.tab-button[aria-selected=true] .tab-button-text {
+  color: white!important;
 }
+
 .bar-button-default-md,
-.bar-button-default-ios
-{
-    color:white;
+.bar-button-default-ios {
+  color: white;
 }
+
 
