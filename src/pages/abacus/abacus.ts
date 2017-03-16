@@ -43,7 +43,8 @@ export class AbacusPage implements OnDestroy{
   calcul: {
     max_speed: number[],
     power_drop: number[],
-    ratio_diff: any[]
+    ratio_diff: any[],
+    gap:number[]
   }
 
   tire(){

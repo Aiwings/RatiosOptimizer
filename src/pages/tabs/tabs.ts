@@ -52,7 +52,7 @@ export class TabsPage {
     public ratioProv: RatioProvider,
 
   ) {
-    this.carSub = this.carProv.getValid().subscribe((valid) => {
+    this.carSub = this.carProv.isValid().subscribe((valid) => {
       this.carValid = valid;
     });
     this.ratioSub = this.ratioProv.isValid().subscribe((valid) => {

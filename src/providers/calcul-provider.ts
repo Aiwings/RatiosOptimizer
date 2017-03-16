@@ -46,11 +46,13 @@ export class CalculProvider {
   private calcul = new BehaviorSubject < {
     max_speed: number[],
     power_drop: number[],
-    ratio_diff: any[]
+    ratio_diff: any[],
+    gap :number[]
   } > ({
     max_speed: [],
     power_drop: [],
-    ratio_diff: []
+    ratio_diff: [],
+    gap:[]
   });
 
   carSub: Subscription;
@@ -107,13 +109,24 @@ export class CalculProvider {
       let max_speed = this.calculateMaxSpeed();
       let power_drop = this.calculatePowerDrop(max_speed);
       let ratio_diff = this.calculateDiff(max_speed, power_drop);
-
+      let gap = this.calculateGap(max_speed);
       this.calcul.next({
         max_speed: max_speed,
         power_drop: power_drop,
-        ratio_diff: ratio_diff
+        ratio_diff: ratio_diff,
+        gap:gap
       });
     }
+  }
+  private calculateGap(max_speed) :number[]
+  { 
+    let gap = [];
+    for (let i=0; i<max_speed.length -1;i++)
+    {
+      gap.push(max_speed[i+1] - max_speed[i] );
+    }
+    return gap;
+
   }
   private calculateDiff(max_speed, power_drop): number[] {
     let ratio_diff = [];

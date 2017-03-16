@@ -323,7 +323,14 @@ export class DBProvider {
           let circuits: Circuit[] = []
           for (let i = 0; i < data.rows.length; i++) {
             let el = data.rows.item(i);
-            el.ratios = < Ratio > JSON.parse(el.ratio);
+            console.log(el)
+            try {
+               el.ratios = < Ratio > JSON.parse(el.ratios);
+            }
+            catch(error)
+            {
+              console.error(error.message,error);
+            }
             circuits.push(el);
           }
           resolve(circuits);
@@ -339,7 +346,7 @@ export class DBProvider {
   public addCircuit(circuit: Circuit): Promise < any > {
     return new Promise((resolve, reject) => {
       this.db.executeSql("INSERT INTO circuit" +
-        "(name,car_id,gearbox_id,tire_diam,ratios,vmax,event,weather,comments) " +
+        "(name,car_id,gearbox_id,tire_diam,ratios,v_max,event,weather,comments) " +
         "VALUES(?,?,?,?,?,?,?,?,?);", [circuit.name,
           circuit.car_id,
           circuit.gearbox_id,

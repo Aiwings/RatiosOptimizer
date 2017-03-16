@@ -46,6 +46,16 @@
             {{(drop).toFixed(1)}}
           </ion-col>
         </ion-row>
+        <ion-row>
+          <ion-col>
+            <h3>Ecart (km/h)</h3>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col *ngFor="let gap of calcul.gap">
+            {{(gap).toFixed(1)}}
+          </ion-col>
+        </ion-row>
       </ion-grid>
     </ion-card-content>
   </ion-card>

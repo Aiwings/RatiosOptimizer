@@ -46,8 +46,7 @@ export class GearboxPage implements OnInit, OnDestroy {
   carSub: Subscription;
 
   types = ["DG", "DGB", "FG400", "FGA", "FT1", "FT200", "LD", "LG400", "LG500", "MK5", "MK6", "MK8"];
-  gearsSub: Subscription;
-  gearBoxes: Gearbox[] = [];
+
 
   constructor(
     public navCtrl: NavController,
@@ -61,17 +60,6 @@ export class GearboxPage implements OnInit, OnDestroy {
     this.carSub = this.carProv.getSelectedCar().subscribe((car) => {
       this.car = car;
     });
-
-    this.gearsSub = this.gearProv.getGBs().subscribe(
-      data => {
-        this.gearBoxes = data;
-      },
-      err => {
-        console.log(err.message);
-        this.gearBoxes = [];
-        this.toasterror.setMessage("can't find gearboxes " + err.message);
-        this.toasterror.present();
-      });
   }
   toastsuccess = this.toastCtrl.create({
     message: '',
@@ -113,7 +101,6 @@ export class GearboxPage implements OnInit, OnDestroy {
   }
   presentPopover(event) {
     let popover = this.popCtrl.create(PopoverPageComponent, {
-      selectitems: this.gearBoxes,
       titre: "Boîtes",
       select: (element) => {
         this.gearProv.setGB(element);
@@ -135,15 +122,7 @@ export class GearboxPage implements OnInit, OnDestroy {
 
   save(): void {
     let gb: Gearbox = this.gearForm.value;
-    if (gb.id == 0) {
-      let length = this.gearBoxes.length;
-      let id = length + 1;
-      gb.id = id;
-      this.gearBoxes.push(gb);
-    } else {
-      let index = gb.id - 1;
-      this.gearBoxes[index] = gb;
-    }
+  
     this.gearProv.saveGB(gb).then((data) => {
       this.toastsuccess.setMessage("Succès de la sauvegarde");
       this.toastsuccess.present();
@@ -159,4 +138,14 @@ export class GearboxPage implements OnInit, OnDestroy {
     modal.present();
     modal.onDidDismiss((data) => {});
   }
+
+  ionViewDidEnter() {
+     let gb = this.gearProv.getValue();
+     if (gb != this.gearForm.value)
+     {
+        this.gearForm.setValue(gb, {
+          onlySelf: true
+        });
+     }
+   }
 }

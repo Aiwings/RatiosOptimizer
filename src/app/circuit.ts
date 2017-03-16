@@ -7,7 +7,7 @@ export class Circuit{
     tire_diam:number;
     event :string;
     v_max : number;
-    ratios :Ratio;
+    ratios :Ratio[];
     weather: string;
     comments:string;
 } 

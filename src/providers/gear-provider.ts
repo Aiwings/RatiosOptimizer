@@ -20,7 +20,7 @@ export class GearProvider {
     console.log('Calling, GearProvider Provider');
 
   }
-  private gearBoxes = new BehaviorSubject < Gearbox[] > ([]);
+
   private gearBox = new BehaviorSubject < Gearbox > ({
     id: 0,
     brand: "",
@@ -32,25 +32,26 @@ export class GearProvider {
     this.gearBox.next(gb);
   }
 
-  setGBs(gbs : Gearbox[]) : void {
-    this.gearBoxes.next(gbs);
-  }
 
   getGB() {
     return this.gearBox.asObservable();
   }
-  getGBs() {
-    return this.gearBoxes.asObservable();
-  }
+
 
   saveGB(gb: Gearbox): Promise < any > {
-
     return new Promise((resolve, reject) => {
+
       this.db.saveGear(gb).then((data) => {
-        resolve(this.gearBox);
+        gb.id = data.insertId;
+        this.gearBox.next(gb);
+        resolve(data);
       }).catch((error) => {
         reject(error);
       });
     });
+  }
+  getValue()
+  {
+    return this.gearBox.value;
   }
 }

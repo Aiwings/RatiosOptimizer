@@ -1,7 +1,7 @@
 import {
   Component,
   OnInit,
-  OnDestroy
+
 } from '@angular/core';
 import {
   FormGroup,
@@ -15,25 +15,27 @@ import {
   ToastController,
   PopoverController
 } from 'ionic-angular';
+
 import {
   CarProvider
 } from '../../providers/car-provider';
-import {
-  Car
-} from '../../app/car';
+
+
+
 import {
   PopoverPageComponent
 } from '../../components/popover-page/popover-page';
-import {
-  Subscription
-} from 'rxjs/Subscription';
+
+
 @Component({
 
   selector: 'page-car',
   templateUrl: 'car.html',
 
 })
-export class CarPage implements OnInit, OnDestroy {
+export class CarPage implements OnInit {
+
+
 
   constructor
     (
@@ -45,20 +47,10 @@ export class CarPage implements OnInit, OnDestroy {
       private popCtrl: PopoverController
     ) {
 
-       this.carsSub = this.carProvider.getCars().subscribe(
-         cars => {
-           this.cars = cars;
-         },
-         err => {
-           console.log(err.message);
-          this.cars = [];
-           this.toasterror.setMessage("can't find cars " + err.message);
-           this.toasterror.present();
-         });
     }
   carForm: FormGroup;
-  cars: Car[] = [];
-  carsSub: Subscription;
+
+
   toastsuccess = this.toastCtrl.create({
     message: '',
     position: 'bottom',
@@ -102,21 +94,16 @@ export class CarPage implements OnInit, OnDestroy {
       if (this.carForm.valid) {
         console.log(x);
         this.carProvider.setSelectedCar(x);
-        this.carProvider.setValid(true);
       } else {
         this.carProvider.setValid(false);
       }
     });
   }
-  ngOnDestroy() {
-    this.carsSub.unsubscribe();
-  }
+
   presentPopover(event) {
     let popover = this.popCtrl.create(PopoverPageComponent, {
-      selectitems: this.cars,
       titre: 'Voitures',
       select: (element) => {
-
         this.carProvider.setSelectedCar(element);
         this.carForm.setValue(element, {
           onlySelf: true
@@ -130,7 +117,6 @@ export class CarPage implements OnInit, OnDestroy {
             this.update(this.carForm);
           }
         }
-
       }
     });
     popover.present({
@@ -160,4 +146,14 @@ export class CarPage implements OnInit, OnDestroy {
     });
 
   }
+   ionViewDidEnter() {
+     let selectedCar = this.carProvider.getValue();
+     if (selectedCar != this.carForm.value)
+     {
+        this.carForm.setValue(selectedCar, {
+          onlySelf: true
+        });
+     }
+   }
+
 }

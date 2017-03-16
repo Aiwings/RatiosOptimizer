@@ -1,5 +1,16 @@
-import { Component } from '@angular/core';
-import {  ModalController, NavController } from 'ionic-angular';
+import {
+  Component
+} from '@angular/core';
+import {
+  NavController,
+  AlertController
+} from 'ionic-angular';
+import {
+  DBProvider
+} from '../../providers/db-provider';
+import {
+  CircuitProvider
+} from '../../providers/circuit-provider';
 
 @Component({
   selector: 'page-home',
@@ -7,22 +18,60 @@ import {  ModalController, NavController } from 'ionic-angular';
 })
 export class HomePage {
 
- // tabs:Tabs;
+  // tabs:Tabs;
 
   constructor(
 
-    public modalCtrl: ModalController,
-    public navCtrl :NavController
-    ) {
-  //  this.tabs = navCtrl.parent;
+    public navCtrl: NavController,
+    public db: DBProvider,
+    public circProv: CircuitProvider,
+    public alertCtrl: AlertController
+  ) {
+    //  this.tabs = navCtrl.parent;
 
   }
 
-  toCar():void{
+  toCar(): void {
     this.navCtrl.parent.select(1);
   }
-    circuitModalOpen():void{
-    
+  circuit(): void {
+    this.db.getCircuits().then(data => {
+      let options = {
+        title: 'Circuit',
+        message: 'Selectionner un circuit',
+        buttons: [{
+            text: 'Annuler',
+            role: 'cancel',
+            handler: () => {
+              console.log('Cancel clicked');
+            }
+          },
+          {
+            text: 'Ok',
+            handler: data => {
+              console.log(data);
+              this.circProv.setCircuit(data);
+            }
+          }
+        ],
+        inputs: []
+      };
+
+      for (let i = 0; i < data.length; i++) {
+        options.inputs.push({
+          name: data[i].name,
+          value: data[i],
+          label: data[i].name,
+          type: 'radio'
+        });
+      }
+      // Create the alert with the options
+      let alert = this.alertCtrl.create(options);
+      alert.present();
+
+    });
+
+
   }
 
 }

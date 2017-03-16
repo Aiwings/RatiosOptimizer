@@ -16,7 +16,7 @@ import {
 @Injectable()
 export class CarProvider {
 
-  private cars = new BehaviorSubject < Car[] > ([]);
+
   private selectedCar = new BehaviorSubject < Car > ({
     id: 0,
     date_config: new Date(),
@@ -32,13 +32,13 @@ export class CarProvider {
     max_engine_speed: 0
   });
 
-  private isValid = new BehaviorSubject < boolean > (false);
+  private valid = new BehaviorSubject < boolean > (false);
 
   public setValid(valid: boolean): void {
-    this.isValid.next(valid);
+    this.valid.next(valid);
   }
-  public getValid() {
-    return this.isValid.asObservable();
+  public isValid() {
+    return this.valid.asObservable();
   }
 
   constructor(public db: DBProvider,
@@ -47,29 +47,13 @@ export class CarProvider {
     console.log('Calling CarProvider Provider');
   }
 
-  public setCars(cars)
-  {
-    this.cars.next(cars);
-  }
-
-  public getCars() {
-    return this.cars.asObservable();
-  }
-
   public addCar(car: Car): Promise < any > {
 
     return new Promise((resolve, reject) => {
-
       car.date_config = new Date();
-
-      let id = this.cars.value.length + 1;
-      car.id = id;
-      let cars = this.cars.value;
-      cars.push(car);
-      this.cars.next(cars);
-      this.selectedCar.next(car);
       this.db.addCar(car).then((data) => {
-
+        car.id = data.insertId;
+        this.selectedCar.next(car);
         resolve(data);
       }).catch((error) => {
         reject(error);
@@ -80,10 +64,6 @@ export class CarProvider {
   public saveCar(car: Car): Promise < any > {
 
     return new Promise((resolve, reject) => {
-      let index = car.id - 1;
-      let cars = this.cars.value;
-      cars[index] = car;
-      this.cars.next(cars);
       this.db.saveCar(car).then((data) => {
         resolve(data);
       }).catch((error) => {
@@ -94,9 +74,14 @@ export class CarProvider {
   public getSelectedCar() {
     return this.selectedCar.asObservable();
   }
+  getValue()
+  {
+    return this.selectedCar.value;
+  }
 
   public setSelectedCar(car: Car): void {
     this.selectedCar.next(car);
+    this.valid.next(true);
   }
 
 
