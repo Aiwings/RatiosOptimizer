@@ -132,8 +132,6 @@ export class CircuitModalComponent implements OnInit, OnDestroy {
     }
 
   }
-
-
   toastsuccess = this.toastCtrl.create({
     message: '',
     position: 'bottom',
@@ -180,15 +178,18 @@ export class CircuitModalComponent implements OnInit, OnDestroy {
     this.carSub.unsubscribe();
     this.afterSave.unsubscribe();
   }
-   ionViewDidEnter() {
-     let circuit = this.circProv.getValue();
-     if(circuit.id !=0 && circuit != this.circForm.value )
-     if (circuit != this.circForm.value)
-     {
-        this.circForm.setValue(circuit, {
-          onlySelf: true
+  ionViewDidEnter() {
+    let circuit = this.circProv.getValue();
+    if (circuit.id != 0) {
+      if (circuit != this.circForm.value) {
+        this.circForm.patchValue({
+          id: circuit.id,
+          event: circuit.event,
+          comments: circuit.comments,
+          weather:circuit.weather
         });
-     }
-   }
+      }
+    }
+  }
 
 }
