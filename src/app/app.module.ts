@@ -56,22 +56,17 @@ import {
   HomePage
 } from '../pages/home/home';
 import {
-  TabsPage
-} from '../pages/tabs/tabs';
+RatioPage
+} from '../pages/ratio/ratio';
+import {CircuitPage} from '../pages/circuit/circuit';
 
-
-import {
-  RatioModalComponent
-} from '../components/ratio-modal/ratio-modal';
 import {
   RatioAlertComponent
 } from '../components/ratio-alert/ratio-alert';
 import {
   PopoverPageComponent
 } from '../components/popover-page/popover-page';
-import {
-  CircuitModalComponent
-} from '../components/circuit-modal/circuit-modal';
+
 
 
 const cloudSettings: CloudSettings = {
@@ -87,11 +82,10 @@ const cloudSettings: CloudSettings = {
     AbacusPage,
     HomePage,
     GearboxPage,
-    TabsPage,
-    RatioModalComponent,
+    RatioPage,
+    CircuitPage,
     RatioAlertComponent,
-    PopoverPageComponent,
-    CircuitModalComponent
+    PopoverPageComponent
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -105,11 +99,10 @@ const cloudSettings: CloudSettings = {
     AbacusPage,
     HomePage,
     GearboxPage,
-    TabsPage,
-    RatioModalComponent,
+    RatioPage,
+    CircuitPage,
     RatioAlertComponent,
-    PopoverPageComponent,
-    CircuitModalComponent
+    PopoverPageComponent
   ],
   providers: [{
     provide: ErrorHandler,

@@ -24,7 +24,7 @@ export class CarProvider {
     type: "",
     fia_category: "",
     weight: 0,
-    nb_speed: 0,
+    nb_speed: 3,
     bevelgear: {
       a: 0,
       b: 0
@@ -74,10 +74,7 @@ export class CarProvider {
   public getSelectedCar() {
     return this.selectedCar.asObservable();
   }
-  getValue()
-  {
-    return this.selectedCar.value;
-  }
+
 
   public setSelectedCar(car: Car): void {
     this.selectedCar.next(car);

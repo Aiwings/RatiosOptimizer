@@ -54,7 +54,7 @@ export class CalculProvider {
     ratio_diff: [],
     gap:[]
   });
-
+  private v_max : number;
   carSub: Subscription;
   ratioSub: Subscription;
   car: Car;
@@ -73,14 +73,20 @@ export class CalculProvider {
   public getCalcul() {
     return this.calcul.asObservable();
   }
-
+  public getVmax()
+  {
+    return this.v_max;
+  }
   private calculateMaxSpeed(): number[] {
 
     let max_speed = [];
     for (let i = 0; i < this.car.nb_speed; i++) {
       let ratio = this.ratios[i];
-      max_speed.push((Math.PI * this.tire_diam * 0.000001) * this.car.max_engine_speed * 60 * (this.car.bevelgear.a / this.car.bevelgear.b) * (ratio.a / ratio.b));
+      let speed = (Math.PI * this.tire_diam * 0.000001) * this.car.max_engine_speed * 60 * (this.car.bevelgear.a / this.car.bevelgear.b) * (ratio.a / ratio.b)
+      max_speed.push(parseFloat((speed).toFixed(2)));
     }
+    this.v_max = max_speed[max_speed.length -1];
+
     console.log("## Max Speed ##");
     console.log(max_speed);
 
@@ -96,7 +102,7 @@ export class CalculProvider {
       let ratio = this.ratios[i + 1];
       let sub = Math.PI * this.tire_diam * Math.pow(10, -6) * 60 * (this.car.bevelgear.a / this.car.bevelgear.b) * (ratio.a / ratio.b);
 
-      power_drop.push(this.car.max_engine_speed - (max_speed[i] / (sub)));
+      power_drop.push(Math.round(this.car.max_engine_speed - (max_speed[i] / (sub))));
     }
     console.log("## Power Drop ##");
     console.log(power_drop);
@@ -120,13 +126,13 @@ export class CalculProvider {
   }
   private calculateGap(max_speed) :number[]
   { 
-    let gap = [];
+    let gaps = [];
     for (let i=0; i<max_speed.length -1;i++)
     {
-      gap.push(max_speed[i+1] - max_speed[i] );
+      let gap = parseFloat((max_speed[i + 1] - max_speed[i]).toFixed(2));
+      gaps.push(gap);
     }
-    return gap;
-
+    return gaps;
   }
   private calculateDiff(max_speed, power_drop): number[] {
     let ratio_diff = [];

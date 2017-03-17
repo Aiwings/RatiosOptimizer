@@ -50,8 +50,5 @@ export class GearProvider {
       });
     });
   }
-  getValue()
-  {
-    return this.gearBox.value;
-  }
+
 }

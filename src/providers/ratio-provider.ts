@@ -26,8 +26,12 @@ export class RatioProvider {
     console.log('Calling RatioProvider Provider');
     this.carSub = this.carProv.getSelectedCar().subscribe((car) => {
       if (this.car) {
-        if (this.car.bevelgear != car.bevelgear) {
+        if (this.ratios.value.length != car.nb_speed) {
           this.ratioValid.next(false);
+        }
+        else
+        {
+          this.ratioValid.next(true);
         }
       }
       this.car = car;
@@ -56,9 +60,5 @@ export class RatioProvider {
       return true;
     }
     return false;
-  }
-  setFromCircuit(ratios: Ratio[]) {
-    this.ratios.next(ratios);
-    this.ratioValid.next(true);    
   }
 }

@@ -11,7 +11,7 @@ import {
 import {
   CircuitProvider
 } from '../../providers/circuit-provider';
-
+import {CarPage} from '../car/car';
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
@@ -32,7 +32,7 @@ export class HomePage {
   }
 
   toCar(): void {
-    this.navCtrl.parent.select(1);
+    this.navCtrl.setRoot(CarPage);
   }
   circuit(): void {
     this.db.getCircuits().then(data => {

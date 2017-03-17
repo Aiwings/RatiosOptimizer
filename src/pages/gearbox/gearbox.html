@@ -1,5 +1,8 @@
 <ion-header>
-  <ion-navbar>
+  <ion-navbar hideBackButton>
+        <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
     <ion-title>
       Boîte de Vitesse
     </ion-title>
@@ -32,9 +35,9 @@
           <ion-option *ngFor="let type of types" [value]="type">{{type}}</ion-option>
         </ion-select>
       </ion-item>
-      <button ion-button block [disabled]="!gearForm.valid" (click)="ratios();" color="danger" icon-left>
-         <ion-icon name="arrow-dropup" ></ion-icon>
+      <button ion-button  [disabled]="!gearForm.valid" (click)="ratios();" color="danger" icon-right>
           Rapports de boîte
+           <ion-icon name="ios-arrow-forward" ></ion-icon>
         </button>
     </form>
   </ion-list>

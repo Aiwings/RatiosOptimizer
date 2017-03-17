@@ -16,8 +16,8 @@ import {
   GearProvider
 } from '../../providers/gear-provider';
 import {
-  RatioModalComponent
-} from '../../components/ratio-modal/ratio-modal';
+  RatioPage
+} from '../ratio/ratio';
 import {
   PopoverPageComponent
 } from '../../components/popover-page/popover-page';
@@ -44,6 +44,7 @@ export class GearboxPage implements OnInit, OnDestroy {
   gearForm: FormGroup;
   car: Car;
   carSub: Subscription;
+  gearSub: Subscription;
 
   types = ["DG", "DGB", "FG400", "FGA", "FT1", "FT200", "LD", "LG400", "LG500", "MK5", "MK6", "MK8"];
 
@@ -84,6 +85,17 @@ export class GearboxPage implements OnInit, OnDestroy {
     });
 
     this.subscribeToFormChanges();
+
+    this.gearSub = this.gearProv.getGB().subscribe(gb => {
+      if (gb.id != 0 && this.gearForm) {
+        if (gb.id != this.gearForm.value.id) {
+          this.gearForm.setValue(gb, {
+            onlySelf: true
+          });
+        }
+      }
+
+    });
   }
 
   ngOnDestroy() {
@@ -122,7 +134,7 @@ export class GearboxPage implements OnInit, OnDestroy {
 
   save(): void {
     let gb: Gearbox = this.gearForm.value;
-  
+
     this.gearProv.saveGB(gb).then((data) => {
       this.toastsuccess.setMessage("Succès de la sauvegarde");
       this.toastsuccess.present();
@@ -134,18 +146,6 @@ export class GearboxPage implements OnInit, OnDestroy {
   }
 
   ratios(): void {
-    let modal = this.modalCtrl.create(RatioModalComponent, {});
-    modal.present();
-    modal.onDidDismiss((data) => {});
+    this.navCtrl.setRoot(RatioPage);
   }
-
-  ionViewDidEnter() {
-     let gb = this.gearProv.getValue();
-     if (gb != this.gearForm.value)
-     {
-        this.gearForm.setValue(gb, {
-          onlySelf: true
-        });
-     }
-   }
 }

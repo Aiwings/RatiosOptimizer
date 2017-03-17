@@ -60,7 +60,7 @@ export class DBProvider {
     'v_max INTEGER,' +
     'ratios TEXT,' +
     'weather TEXT,' +
-    'comments TEXT'+
+    'comments TEXT' +
     ')';
 
 
@@ -325,11 +325,9 @@ export class DBProvider {
             let el = data.rows.item(i);
             console.log(el)
             try {
-               el.ratios = < Ratio > JSON.parse(el.ratios);
-            }
-            catch(error)
-            {
-              console.error(error.message,error);
+              el.ratios = < Ratio > JSON.parse(el.ratios);
+            } catch (error) {
+              console.error(error.message, error);
             }
             circuits.push(el);
           }
@@ -361,6 +359,25 @@ export class DBProvider {
       }).catch((error) => {
         reject(error);
       });
+    });
+  }
+  public saveCircuit(circuit: Circuit): Promise < any > {
+    return new Promise((resolve, reject) => {
+      this.db.executeSql('UPDATE circuit ' +
+        'SET name = ? , car_id = ?, gearbox_id = ?, tire_diam = ?, ratios = ?, v_max = ?, event = ?, weather = ? ,comments = ? ', [circuit.name,
+          circuit.car_id,
+          circuit.gearbox_id,
+          circuit.tire_diam,
+          JSON.stringify(circuit.ratios),
+          circuit.v_max,
+          circuit.event,
+          circuit.weather,
+          circuit.comments
+        ]).then((data)=>{
+          resolve(data);
+        }).catch(error=>{
+          reject(error);
+        })
     });
   }
 

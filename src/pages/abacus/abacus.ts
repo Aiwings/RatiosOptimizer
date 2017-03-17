@@ -19,7 +19,8 @@ import {
   Subscription
 } from 'rxjs/Subscription';
 import {PopoverPageComponent} from '../../components/popover-page/popover-page';
-import {CircuitModalComponent} from '../../components/circuit-modal/circuit-modal';
+
+import{CircuitPage} from  '../circuit/circuit';
 @Component({
   selector: 'page-abacus',
   templateUrl: 'abacus.html'
@@ -91,12 +92,7 @@ export class AbacusPage implements OnDestroy{
   }
   circuit()
   {
-    let index = this.calcul.max_speed.length -1
-      let modal = this.modalCtrl.create(CircuitModalComponent,{
-        tire_diam : this.calculProv.getDiam(),
-        v_max : this.calcul.max_speed[index]
-    });
-     modal.present();
+    this.navCtrl.setRoot(CircuitPage);
   }
 
   drawGraph(): void {

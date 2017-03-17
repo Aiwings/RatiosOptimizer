@@ -1,5 +1,8 @@
 <ion-header>
-  <ion-navbar>
+  <ion-navbar hideBackButton > 
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
     <ion-title>
       Voiture
     </ion-title>
@@ -53,4 +56,9 @@
       </ion-item>
     </form>
   </ion-list>
+  <button ion-button  [disabled]="!carForm.valid" (click)="togb();" color="danger" icon-right>
+        Boite de Vitesse 
+         <ion-icon name="ios-arrow-forward" ></ion-icon>
+      
+        </button>
 </ion-content>

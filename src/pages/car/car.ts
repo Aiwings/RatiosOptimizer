@@ -8,6 +8,9 @@ import {
   FormBuilder,
   Validators
 } from '@angular/forms';
+import {
+  Subscription
+} from 'rxjs/Subscription';
 
 import {
   NavController,
@@ -20,6 +23,9 @@ import {
   CarProvider
 } from '../../providers/car-provider';
 
+import {
+  GearboxPage
+} from '../gearbox/gearbox';
 
 
 import {
@@ -47,9 +53,11 @@ export class CarPage implements OnInit {
       private popCtrl: PopoverController
     ) {
 
+
     }
   carForm: FormGroup;
 
+  carSub: Subscription;
 
   toastsuccess = this.toastCtrl.create({
     message: '',
@@ -84,6 +92,17 @@ export class CarPage implements OnInit {
       max_engine_speed: ['', Validators.required],
     });
     this.subcribeToFormChanges();
+
+    this.carSub = this.carProvider.getSelectedCar().subscribe(car => {
+      if (car.id != 0 && this.carForm) {
+        if (this.carForm.value.id != car.id) {
+          this.carForm.setValue(car, {
+            onlySelf: true
+          });
+        }
+      }
+    });
+
   }
   subcribeToFormChanges() {
     // initialize stream
@@ -146,14 +165,9 @@ export class CarPage implements OnInit {
     });
 
   }
-   ionViewDidEnter() {
-     let selectedCar = this.carProvider.getValue();
-     if (selectedCar != this.carForm.value)
-     {
-        this.carForm.setValue(selectedCar, {
-          onlySelf: true
-        });
-     }
-   }
+
+  togb() {
+    this.navCtrl.setRoot(GearboxPage);
+  }
 
 }

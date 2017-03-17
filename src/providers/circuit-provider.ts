@@ -84,6 +84,7 @@ export class CircuitProvider {
         max_engine_speed: data.max_engine_speed
       };
       this.carProv.setSelectedCar(car);
+      this.ratioProv.setRatios(circuit.ratios);
     }).catch(error => {
       console.error(error.message, error);
     });
@@ -93,7 +94,7 @@ export class CircuitProvider {
     }).catch(error => {
       console.error(error.message, error);
     });
-    this.ratioProv.setFromCircuit(circuit.ratios);
+
     this.calculProv.setDiam(circuit.tire_diam);
   }
   getValue(){

@@ -12,10 +12,15 @@ import {
 } from '@angular/forms';
 import {
   ViewController,
+  NavController,
   NavParams,
   ToastController
 } from 'ionic-angular';
 
+
+import {
+  Subscription
+} from 'rxjs/Subscription';
 
 import {
   Circuit
@@ -43,13 +48,17 @@ import {
   CircuitProvider
 } from '../../providers/circuit-provider';
 import {
-  Subscription
-} from 'rxjs/Subscription';
+  CalculProvider
+} from '../../providers/calcul-provider';
+
+
+
+
 @Component({
-  selector: 'circuit-modal',
-  templateUrl: 'circuit-modal.html'
+  selector: 'page-circuit',
+  templateUrl: 'circuit.html'
 })
-export class CircuitModalComponent implements OnInit, OnDestroy {
+export class CircuitPage implements OnInit, OnDestroy {
 
   carSub: Subscription;
   car: Car;
@@ -67,17 +76,17 @@ export class CircuitModalComponent implements OnInit, OnDestroy {
   v_max: number = 0;
   circForm: FormGroup;
 
-  constructor(
+
+  constructor(public navCtrl: NavController,
+    public navParams: NavParams,
     private carProv: CarProvider,
     private gearProv: GearProvider,
     private ratioProv: RatioProvider,
     private circProv: CircuitProvider,
     private viewCtrl: ViewController,
-    private params: NavParams,
     private fb: FormBuilder,
-    private toastCtrl: ToastController) {
-    console.log('Hello CircuitModal Component');
-
+    private toastCtrl: ToastController,
+    private calculProv: CalculProvider) {
 
     this.carSub = this.carProv.getSelectedCar().subscribe(car => {
       this.car = car;
@@ -90,16 +99,18 @@ export class CircuitModalComponent implements OnInit, OnDestroy {
       this.ratios = ratios;
     });
 
-
     this.afterSave = this.onSave.subscribe(data => {
       if (data.car_id != 0 && data.gearbox_id != 0) {
         this.circProv.saveCircuit(data);
       }
     });
+
   }
-  dismiss(): void {
-    this.viewCtrl.dismiss();
+  ionViewDidLoad() {
+    console.log('ionViewDidLoad CircuitPage');
   }
+
+
   save(formData: Circuit) {
     formData.ratios = this.ratios;
     formData.tire_diam = this.tire_diam;
@@ -145,9 +156,13 @@ export class CircuitModalComponent implements OnInit, OnDestroy {
     closeButtonText: 'ok'
   });
 
+  ngOnDestroy() {
+    this.ratioSub.unsubscribe();
+    this.gearSub.unsubscribe();
+    this.carSub.unsubscribe();
+    this.afterSave.unsubscribe();
+  }
   ngOnInit() {
-    this.tire_diam = this.params.get('tire_diam');
-    this.v_max = this.params.get('v_max');
 
     this.circForm = this.fb.group({
       id: 0,
@@ -172,21 +187,20 @@ export class CircuitModalComponent implements OnInit, OnDestroy {
       v_max: Math.round(this.v_max)
     });
   }
-  ngOnDestroy() {
-    this.ratioSub.unsubscribe();
-    this.gearSub.unsubscribe();
-    this.carSub.unsubscribe();
-    this.afterSave.unsubscribe();
-  }
+
+
   ionViewDidEnter() {
+    this.tire_diam = this.calculProv.getDiam();
+    this.v_max = this.calculProv.getVmax();
     let circuit = this.circProv.getValue();
     if (circuit.id != 0) {
       if (circuit != this.circForm.value) {
         this.circForm.patchValue({
           id: circuit.id,
+          name: circuit.name,
           event: circuit.event,
           comments: circuit.comments,
-          weather:circuit.weather
+          weather: circuit.weather
         });
       }
     }

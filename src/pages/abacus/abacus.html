@@ -1,13 +1,16 @@
 <ion-header>
   <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>
+      Abaque
+    </ion-title>
     <ion-buttons start>
       <button ion-button icon-only (click)="presentPopover($event)">
          <ion-icon name="more"></ion-icon>
      </button>
     </ion-buttons>
-    <ion-title>
-      Abaque
-    </ion-title>
   </ion-navbar>
 </ion-header>
 
@@ -27,23 +30,18 @@
     <ion-card-content>
       <ion-grid>
         <ion-row style="border-top:1px solid #646464;">
+          <ion-col *ngFor="let speed of calcul.max_speed">
+            {{calcul.max_speed.indexOf(speed) +1}}
+          </ion-col>
+        </ion-row>
+        <ion-row>
           <ion-col>
             <h3>Vmax (km/h)</h3>
           </ion-col>
         </ion-row>
         <ion-row>
           <ion-col *ngFor="let speed of calcul.max_speed">
-            {{(speed).toFixed(1)}}
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col>
-            <h3>Chutes de Régime (tr/min)</h3>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col *ngFor="let drop of calcul.power_drop">
-            {{(drop).toFixed(1)}}
+            {{speed}}
           </ion-col>
         </ion-row>
         <ion-row>
@@ -52,8 +50,20 @@
           </ion-col>
         </ion-row>
         <ion-row>
+          <ion-col></ion-col>
           <ion-col *ngFor="let gap of calcul.gap">
-            {{(gap).toFixed(1)}}
+            {{gap}}
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <h3>Chutes de Régime (tr/min)</h3>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col></ion-col>
+          <ion-col *ngFor="let drop of calcul.power_drop">
+            {{drop}}
           </ion-col>
         </ion-row>
       </ion-grid>

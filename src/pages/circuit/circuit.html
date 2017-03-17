@@ -1,16 +1,22 @@
+<!--
+  Generated template for the Circuit page.
+
+  See http://ionicframework.com/docs/v2/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
 <ion-header>
-  <ion-toolbar>
-    <ion-title>
-      Circuit
-    </ion-title>
-    <ion-buttons start>
-      <button ion-button (click)="dismiss()">
-        <ion-icon name="md-close"></ion-icon>
-      </button>
-    </ion-buttons>
-  </ion-toolbar>
+
+  <ion-navbar hideBackButton>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>circuit</ion-title>
+  </ion-navbar>
+
 </ion-header>
-<ion-content>
+
+
+<ion-content padding>
   <ion-list>
     <form [formGroup]="circForm" (ngSubmit)="save(circForm.value)">
       <ion-item>
@@ -43,7 +49,7 @@
         <ion-textarea formControlName="comments" name="comments" rows="5" placeholder="Entrez vos commentaires...">
         </ion-textarea>
       </ion-item>
-            <button ion-button block [disabled]="!circForm.valid" type="submit" color="danger" icon-left>
+      <button ion-button block [disabled]="!circForm.valid" type="submit" color="danger" icon-left>
          <ion-icon name="md-archive" ></ion-icon>
           Sauvegarder
         </button>
