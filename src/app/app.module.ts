@@ -15,8 +15,6 @@ import {
   Storage
 } from '@ionic/storage';
 
-
-
 import {
   MyApp
 } from './app.component';
@@ -25,20 +23,10 @@ import {
   DBProvider
 } from '../providers/db-provider';
 import {
-  CarProvider
-} from '../providers/car-provider';
-import {
-  GearProvider
-} from '../providers/gear-provider';
-import {
-  RatioProvider
-} from '../providers/ratio-provider';
-import {
-  CalculProvider
-} from '../providers/calcul-provider';
-import {
-  CircuitProvider
+  Services
 } from '../providers/circuit-provider';
+import {CalculProvider}
+from '../providers/calcul-provider';
 import {
   HttpProvider
 } from '../providers/http-provider';
@@ -107,6 +95,6 @@ const cloudSettings: CloudSettings = {
   providers: [{
     provide: ErrorHandler,
     useClass: IonicErrorHandler
-  }, DBProvider,CarProvider, GearProvider, RatioProvider, CalculProvider, CircuitProvider,HttpProvider, Storage],
+  }, DBProvider,Services, CalculProvider, HttpProvider, Storage],
 })
 export class AppModule {}

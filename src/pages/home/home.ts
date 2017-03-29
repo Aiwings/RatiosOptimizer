@@ -12,6 +12,7 @@ import {
   CircuitProvider
 } from '../../providers/circuit-provider';
 import {CarPage} from '../car/car';
+import {CircuitPage}  from '../circuit/circuit'
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
@@ -28,7 +29,6 @@ export class HomePage {
     public alertCtrl: AlertController
   ) {
     //  this.tabs = navCtrl.parent;
-
   }
 
   toCar(): void {
@@ -51,6 +51,7 @@ export class HomePage {
             handler: data => {
               console.log(data);
               this.circProv.setCircuit(data);
+              this.navCtrl.setRoot(CircuitPage);
             }
           }
         ],
@@ -68,10 +69,6 @@ export class HomePage {
       // Create the alert with the options
       let alert = this.alertCtrl.create(options);
       alert.present();
-
     });
-
-
   }
-
 }

@@ -18,10 +18,7 @@ import {
   ToastController,
   PopoverController
 } from 'ionic-angular';
-
-import {
-  CarProvider
-} from '../../providers/car-provider';
+import {CircuitProvider} from '../../providers/circuit-provider';
 
 import {
   GearboxPage
@@ -47,7 +44,7 @@ export class CarPage implements OnInit {
     (
       public navCtrl: NavController,
       public modalCtrl: ModalController,
-      private carProvider: CarProvider,
+      private circProv: CircuitProvider,
       private toastCtrl: ToastController,
       private fb: FormBuilder,
       private popCtrl: PopoverController
@@ -75,7 +72,7 @@ export class CarPage implements OnInit {
 
 
   ngOnInit(): void {
-    console.log("## Cars On Init ###");
+
 
     this.carForm = this.fb.group({
       id: 0,
@@ -93,7 +90,7 @@ export class CarPage implements OnInit {
     });
     this.subcribeToFormChanges();
 
-    this.carSub = this.carProvider.getSelectedCar().subscribe(car => {
+    this.carSub = this.circProv.getCar().subscribe(car => {
       if (car.id != 0 && this.carForm) {
         if (this.carForm.value.id != car.id) {
           this.carForm.setValue(car, {
@@ -111,10 +108,9 @@ export class CarPage implements OnInit {
     // subscribe to the stream 
     formChanges$.subscribe((x) => {
       if (this.carForm.valid) {
-        console.log(x);
-        this.carProvider.setSelectedCar(x);
+        this.circProv.setCar(x);
       } else {
-        this.carProvider.setValid(false);
+        this.circProv.setCarValid(false);
       }
     });
   }
@@ -123,7 +119,7 @@ export class CarPage implements OnInit {
     let popover = this.popCtrl.create(PopoverPageComponent, {
       titre: 'Voitures',
       select: (element) => {
-        this.carProvider.setSelectedCar(element);
+        this.circProv.setCar(element);
         this.carForm.setValue(element, {
           onlySelf: true
         });
@@ -145,7 +141,7 @@ export class CarPage implements OnInit {
 
   update(form: FormGroup): void {
 
-    this.carProvider.saveCar(form.value).then((data) => {
+    this.circProv.saveCar(form.value).then((data) => {
       this.toastsuccess.setMessage("Votre Voiture a bien été sauvegardée");
       this.toastsuccess.present();
     }).catch((error) => {
@@ -156,18 +152,17 @@ export class CarPage implements OnInit {
 
   create(form: FormGroup): void {
 
-    this.carProvider.addCar(form.value).then((data) => {
+    this.circProv.addCar(form.value).then((data) => {
       this.toastsuccess.setMessage("Votre Voiture a bien été ajoutée");
       this.toastsuccess.present();
     }).catch((error) => {
       this.toasterror.setMessage("Il y a eu une erreur lors de l'ajout \n " + error.message);
       this.toasterror.present();
     });
-
   }
-
   togb() {
     this.navCtrl.setRoot(GearboxPage);
   }
 
 }
+

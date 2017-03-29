@@ -10,7 +10,7 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>circuit</ion-title>
+    <ion-title>Circuit</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -39,11 +39,11 @@
       </ion-item>
       <ion-item>
         <ion-label>Diamètre des pneus (mm)</ion-label>
-        <ion-input type="number" formControlName="tire_diam" name="tire_diam" placeholder="pneu"></ion-input>
+        <ion-input type="number" formControlName="tire_diam" name="tire_diam"  placeholder="pneu"></ion-input>
       </ion-item>
       <ion-item>
         <ion-label>Vmax (km/h)</ion-label>
-        <ion-input type="number" formControlName="v_max" name="v_max" placeholder="Vmax"></ion-input>
+        <ion-input type="number" formControlName="v_max" name="v_max" value="{{v_max}}" placeholder="Vmax"></ion-input>
       </ion-item>
       <ion-item>
         <ion-textarea formControlName="comments" name="comments" rows="5" placeholder="Entrez vos commentaires...">

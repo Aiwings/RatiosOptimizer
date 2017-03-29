@@ -364,7 +364,9 @@ export class DBProvider {
   public saveCircuit(circuit: Circuit): Promise < any > {
     return new Promise((resolve, reject) => {
       this.db.executeSql('UPDATE circuit ' +
-        'SET name = ? , car_id = ?, gearbox_id = ?, tire_diam = ?, ratios = ?, v_max = ?, event = ?, weather = ? ,comments = ? ', [circuit.name,
+        'SET name = ? , car_id = ?, gearbox_id = ?, tire_diam = ?, ratios = ?, v_max = ?, event = ?, weather = ? ,comments = ?'+
+         'WHERE id = ?;', 
+         [circuit.name,
           circuit.car_id,
           circuit.gearbox_id,
           circuit.tire_diam,
@@ -372,7 +374,8 @@ export class DBProvider {
           circuit.v_max,
           circuit.event,
           circuit.weather,
-          circuit.comments
+          circuit.comments,
+          circuit.id
         ]).then((data)=>{
           resolve(data);
         }).catch(error=>{

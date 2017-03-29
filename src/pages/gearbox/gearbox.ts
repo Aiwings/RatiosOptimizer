@@ -10,12 +10,6 @@ import {
   PopoverController
 } from 'ionic-angular';
 import {
-  CarProvider
-} from '../../providers/car-provider';
-import {
-  GearProvider
-} from '../../providers/gear-provider';
-import {
   RatioPage
 } from '../ratio/ratio';
 import {
@@ -30,6 +24,7 @@ import {
 import {
   Subscription
 } from 'rxjs/Subscription';
+import {CircuitProvider} from '../../providers/circuit-provider';
 import {
   FormGroup,
   FormBuilder,
@@ -51,14 +46,13 @@ export class GearboxPage implements OnInit, OnDestroy {
 
   constructor(
     public navCtrl: NavController,
-    private carProv: CarProvider,
+    private circProv: CircuitProvider,
     public modalCtrl: ModalController,
-    public gearProv: GearProvider,
     private toastCtrl: ToastController,
     private popCtrl: PopoverController,
     private fb: FormBuilder) {
 
-    this.carSub = this.carProv.getSelectedCar().subscribe((car) => {
+    this.carSub = this.circProv.getCar().subscribe((car) => {
       this.car = car;
     });
   }
@@ -86,7 +80,7 @@ export class GearboxPage implements OnInit, OnDestroy {
 
     this.subscribeToFormChanges();
 
-    this.gearSub = this.gearProv.getGB().subscribe(gb => {
+    this.gearSub = this.circProv.getGear().subscribe(gb => {
       if (gb.id != 0 && this.gearForm) {
         if (gb.id != this.gearForm.value.id) {
           this.gearForm.setValue(gb, {
@@ -107,7 +101,7 @@ export class GearboxPage implements OnInit, OnDestroy {
 
     formChanges$.subscribe((x) => {
       if (this.gearForm.valid) {
-        this.gearProv.setGB(x);
+        this.circProv.setGear(x);
       }
     });
   }
@@ -115,7 +109,7 @@ export class GearboxPage implements OnInit, OnDestroy {
     let popover = this.popCtrl.create(PopoverPageComponent, {
       titre: "Boîtes",
       select: (element) => {
-        this.gearProv.setGB(element);
+        this.circProv.setGear(element);
         this.gearForm.setValue(element, {
           onlySelf: true
         });
@@ -135,7 +129,7 @@ export class GearboxPage implements OnInit, OnDestroy {
   save(): void {
     let gb: Gearbox = this.gearForm.value;
 
-    this.gearProv.saveGB(gb).then((data) => {
+    this.circProv.saveGB(gb).then((data) => {
       this.toastsuccess.setMessage("Succès de la sauvegarde");
       this.toastsuccess.present();
 

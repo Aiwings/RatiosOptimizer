@@ -28,17 +28,18 @@ import{CircuitPage} from  '../circuit/circuit';
 export class AbacusPage implements OnDestroy{
 
   constructor(public navCtrl: NavController,
-    public calculProv: CalculProvider,
     public alertCtrl: AlertController,
     public popCtrl : PopoverController,
-    public modalCtrl : ModalController) {
-
-    this.calculSub = this.calculProv.getCalcul().subscribe(calcul => this.calcul = calcul);
-
+    public modalCtrl : ModalController,
+    public calculProv : CalculProvider) {
+      this.calculSub = this.calculProv.getCalcul().subscribe(calcul=>{
+        this.calcul = calcul;
+      });
   }
   @ViewChild('lineCanvas') lineCanvas;
 
   lineChart: any;
+  tire_diam : number =0;
 
   calculSub: Subscription;
   calcul: {
@@ -149,13 +150,16 @@ export class AbacusPage implements OnDestroy{
   }
 
    ionViewDidEnter() {
-    if (!this.calculProv.getDiam()) {
+    if (this.tire_diam==0) {
       this.tire();
     }
+    else{
       this.drawGraph();
+    }
   }
     ngOnDestroy(){
       this.calculSub.unsubscribe();
+
     }
 
 }

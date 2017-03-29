@@ -31,16 +31,9 @@ import {
   DBProvider
 } from '../providers/db-provider';
 import {CircuitProvider} from '../providers/circuit-provider';
-
-import {
-  CarProvider
-} from '../providers/car-provider';
 import {
   RatioPage
 } from '../pages/ratio/ratio';
-import {
-  RatioProvider
-} from '../providers/ratio-provider';
 import {CircuitPage} from '../pages/circuit/circuit';
 
 
@@ -77,8 +70,6 @@ export class MyApp {
   constructor(
     platform: Platform,
     private db: DBProvider,
-    private carProv: CarProvider,
-    public ratioProv: RatioProvider,
     public circProv : CircuitProvider,
     public alertCtrl : AlertController
   ) {
@@ -132,31 +123,30 @@ export class MyApp {
       }
     ];
     this.pagecircuit ={
-      title:"Nouveau",
+      title:"circuit...",
       component : CircuitPage,
       enabled:false,
       icon: "ios-infinite"
     }
 
-    this.carSub = this.carProv.isValid().subscribe((valid) => {
-      console.log("carvalid " + valid);
+    this.carSub = this.circProv.carValid().subscribe((valid) => {
       this.pages[2].enabled = valid;
       this.pages[3].enabled = valid;
       this.pages[4].enabled = valid && this.ratiosValid;
 
       this.carValid = valid;
     });
-    this.ratioSub = this.ratioProv.isValid().subscribe((valid) => {
+    this.ratioSub = this.circProv.ratioValid().subscribe((valid) => {
       this.ratiosValid = valid;
       this.pages[4].enabled = valid && this.carValid;
       this.pagecircuit.enabled = valid && this.carValid;
-      console.log("ratiovalid " + valid);
+
     });
 
-    this.circSub = this.circProv.getCircuit().subscribe(circ=>{
-      if (circ.name !='')
+    this.circSub = this.circProv.change.subscribe(circname=>{
+      if (circname !='')
       {
-        this.pagecircuit.title = circ.name;
+        this.pagecircuit.title = circname;
       }
     });
 
@@ -181,8 +171,8 @@ export class MyApp {
           {
             text: 'Ok',
             handler: data => {
-              console.log(data);
               this.circProv.setCircuit(data);
+            this.nav.setRoot(CircuitPage);
             }
           }
         ],

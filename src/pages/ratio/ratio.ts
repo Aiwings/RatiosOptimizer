@@ -10,8 +10,8 @@ import {
   Subscription
 } from 'rxjs/Subscription';
 import {
-  RatioProvider
-} from '../../providers/ratio-provider';
+  CircuitProvider
+} from '../../providers/circuit-provider';
 import {
   Ratio
 } from '../../app/ratio';
@@ -32,12 +32,17 @@ export class RatioPage {
   type: string;
   valid : boolean ;
   valid$ :Subscription;
-  constructor(public navCtrl: NavController, public navParams: NavParams, public ratioProvider: RatioProvider, public modalCtrl: ModalController) {
-    this.ratioSub = this.ratioProvider.getRatios().subscribe(ratios=>{
+  state: number = -1;
+  constructor(public navCtrl: NavController, public navParams: NavParams, public circProv: CircuitProvider, public modalCtrl: ModalController) {
+    this.ratioSub = this.circProv.getRatios().subscribe(ratios=>{
+      if(ratios.length!=0)
+      {
+        this.valid = true;
+      }
       this.ratios = ratios;
     });
 
-    this.valid$ = this.ratioProvider.isValid().subscribe(valid=>{
+    this.valid$ = this.circProv.ratioValid().subscribe(valid=>{
       this.valid == valid;
     });
   }
@@ -51,7 +56,7 @@ export class RatioPage {
   deleteRatio(ratio: Ratio) {
     let index = this.ratios.indexOf(ratio);
     this.ratios.splice(index, 1);
-    this.valid = this.ratioProvider.setRatios(this.ratios);
+    this.state = this.circProv.setRatios(this.ratios);
   }
 
 
@@ -63,7 +68,7 @@ export class RatioPage {
       this.enabled = true;
       if (data.ratio) {
         this.ratios.push(data.ratio);
-        this.valid = this.ratioProvider.setRatios(this.ratios);
+        this.state = this.circProv.setRatios(this.ratios);
       }
     });
   }
@@ -83,7 +88,7 @@ export class RatioPage {
       this.enabled = true;
       if (data.ratio) {
         this.ratios[index] = data.ratio;
-        this.valid = this.ratioProvider.setRatios(this.ratios);
+        this.state = this.circProv.setRatios(this.ratios);
       }
     });
   }
