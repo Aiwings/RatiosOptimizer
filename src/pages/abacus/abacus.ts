@@ -39,7 +39,7 @@ export class AbacusPage implements OnDestroy{
   @ViewChild('lineCanvas') lineCanvas;
 
   lineChart: any;
-  tire_diam : number =0;
+  tire_diam : number =this.calculProv.getDiam();
 
   calculSub: Subscription;
   calcul: {
@@ -96,8 +96,8 @@ export class AbacusPage implements OnDestroy{
     this.navCtrl.setRoot(CircuitPage);
   }
 
-  drawGraph(): void {
-       this.lineChart = new Chart(this.lineCanvas.nativeElement, {
+   drawGraph(): void {
+    this.lineChart = new Chart(this.lineCanvas.nativeElement, {
 
       type: 'line',
       data: {
@@ -116,31 +116,37 @@ export class AbacusPage implements OnDestroy{
             type: 'linear',
             position: 'bottom',
             gridLines: {
-              color: 'rgba(100,100,100,1)'
+              color: 'rgba(255,255,255,0.5)'
             },
             scaleLabel: {
               display: true,
-              labelString: 'V (km/h)'
+              labelString: 'V (km/h)',
+              fontColor: 'rgba(255,255,255,0.7)'
+            },
+            ticks: {
+              fontColor: 'rgba(255,255,255,0.5)'
             }
           }],
           yAxes: [{
             gridLines: {
-              color: 'rgba(100,100,100,1)'
+              color: 'rgba(255,255,255,0.5)'
             },
             ticks: {
               min: 4000,
-              stepSize: 500
+              stepSize: 500,
+              fontColor: 'rgba(255,255,255,0.5)'
             },
             scaleLabel: {
               display: true,
-              labelString: 'Δ(tr/min)'
+              labelString: 'Δ(tr/min)',
+              fontColor: 'rgba(255,255,255,0.7)'
             }
           }]
         },
         legend: {
           display: true,
           labels: {
-            fontColor: 'rgb(152, 151, 151)',
+            fontColor: 'rgba(255,255,255,0.7)',
             usePointStyle: true,
           }
         }

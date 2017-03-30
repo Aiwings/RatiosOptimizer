@@ -27,4 +27,12 @@ export class GearProvider {
     type: "",
     serial: 0
   });
+  reset(){
+    this.gearBox.next({
+    id: 0,
+    brand: "",
+    type: "",
+    serial: 0
+  });
+  }
 }

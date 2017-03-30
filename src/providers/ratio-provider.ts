@@ -20,4 +20,9 @@ export class RatioProvider {
   ratios = new BehaviorSubject < Ratio[] > ([]);
   valid = new BehaviorSubject < boolean > (false);
 
+  reset(){
+    this.valid.next(false);
+    this.ratios.next([]);
+  }
+
 }

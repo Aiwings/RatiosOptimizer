@@ -195,5 +195,8 @@ export class MyApp {
 
 
   }
+  nouveauCircuit(){
+    this.circProv.clear();
+  }
 
 }

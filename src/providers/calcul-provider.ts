@@ -21,7 +21,7 @@ export class CalculProvider {
   constructor(
     private circProv: CircuitProvider) {
     console.log('Hello CalculProvider Provider');
-
+    this.tire_diam = this.circProv.getCircuit().tire_diam;
     this.carSub = this.circProv.getCar().subscribe(car => {
       this.bevelgear = car.bevelgear;
       this.max_engine_speed = car.max_engine_speed;
@@ -44,6 +44,7 @@ export class CalculProvider {
       this.calculate();
     });
     this.calculate();
+  
   }
 
 

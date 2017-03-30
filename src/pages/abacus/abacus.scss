@@ -6,13 +6,13 @@
       color:ghostwhite;
     }
     ion-col {
-      border-right: 1px solid #646464;
+      border-right: 1px solid color($text,disabled);
       overflow: overlay;
     }
     ion-row {
-      border-bottom: 1px solid #646464;
-      border-left:1px solid #646464;
-      color: #989797;
+      border-bottom: 1px solid color($text,disabled);
+      border-left:1px solid color($text,disabled);
+      color: color($text,content);
     }
 
     

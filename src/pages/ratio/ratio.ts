@@ -1,5 +1,7 @@
 import {
-  Component, 
+  Component,
+  OnInit,
+  OnDestroy
 } from '@angular/core';
 import {
   NavController,
@@ -18,31 +20,32 @@ import {
 import {
   RatioAlertComponent
 } from '../../components/ratio-alert/ratio-alert';
-import {AbacusPage}  from '../abacus/abacus';
+import {
+  AbacusPage
+} from '../abacus/abacus';
 
 @Component({
   selector: 'page-ratio',
   templateUrl: 'ratio.html'
 })
-export class RatioPage {
+export class RatioPage implements OnInit, OnDestroy {
 
   ratioSub: Subscription;
   enabled: boolean = true;
   ratios: Ratio[];
   type: string;
-  valid : boolean ;
-  valid$ :Subscription;
+  valid: boolean;
+  valid$: Subscription;
   state: number = -1;
   constructor(public navCtrl: NavController, public navParams: NavParams, public circProv: CircuitProvider, public modalCtrl: ModalController) {
-    this.ratioSub = this.circProv.getRatios().subscribe(ratios=>{
-      if(ratios.length!=0)
-      {
+    this.ratioSub = this.circProv.getRatios().subscribe(ratios => {
+      if (ratios.length != 0) {
         this.valid = true;
       }
       this.ratios = ratios;
     });
 
-    this.valid$ = this.circProv.ratioValid().subscribe(valid=>{
+    this.valid$ = this.circProv.ratioValid().subscribe(valid => {
       this.valid == valid;
     });
   }
@@ -50,13 +53,21 @@ export class RatioPage {
   ngOnDestroy(): void {
     this.ratioSub.unsubscribe();
   }
- 
+  ngOnInit(): void {
+    this.state = this.circProv.setRatios(this.ratios);
+    if (this.state != 0) {
+      this.valid = false;
+    }
+  }
 
 
   deleteRatio(ratio: Ratio) {
     let index = this.ratios.indexOf(ratio);
     this.ratios.splice(index, 1);
     this.state = this.circProv.setRatios(this.ratios);
+    if (this.state != 0) {
+      this.valid = false;
+    }
   }
 
 
@@ -72,8 +83,7 @@ export class RatioPage {
       }
     });
   }
-  onValid()
-  {
+  onValid() {
     this.navCtrl.setRoot(AbacusPage);
   }
 

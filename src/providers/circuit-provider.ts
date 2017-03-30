@@ -52,7 +52,7 @@ export class CircuitProvider {
     gearbox_id: 0,
     name: '',
     tire_diam: 0,
-    event: '',
+    event: 'Essai',
     v_max: 0,
     ratios: [],
     weather: '',
@@ -108,19 +108,20 @@ export class CircuitProvider {
           bevelgear: JSON.parse(data.bevelgear),
           max_engine_speed: data.max_engine_speed
         };
-        this.carProv.car.next(car)
-        this.ratioProv.ratios.next(circuit.ratios);
+        this.setCar(car)
+        let stats = this.setRatios(circuit.ratios);
+        this.change.emit(this.circuit.name +' - ' + this.carProv.car.value.brand+ ' '+ this.carProv.car.value.type);
       }).catch(error => {
         console.error(error.message, error);
       });
 
       this.db.selectGearById(circuit.gearbox_id).then(data => {
-        this.gearProv.gearBox.next(data);
+        this.setGear(data);
       }).catch(error => {
         console.error(error.message, error);
       });
       this.tire_diam.next(circuit.tire_diam);
-      this.change.emit(this.circuit.name +' - ' + this.carProv.car.value.brand+ ' '+ this.carProv.car.value.type);
+      
     }
   }
   public getCar() {
@@ -217,6 +218,25 @@ export class CircuitProvider {
 
   public setVmax(vmax: number) {
     this.circuit.v_max = vmax;
+  }
+  public clear()
+  {
+   this.circuit = {
+    id: 0,
+    car_id: 0,
+    gearbox_id: 0,
+    name: '',
+    tire_diam: 0,
+    event: 'Essai',
+    v_max: 0,
+    ratios: [],
+    weather: '',
+    comments: '',
+  };
+
+  this.carProv.reset();
+  this.gearProv.reset();
+  this.ratioProv.reset();
   }
 
 

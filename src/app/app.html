@@ -14,14 +14,19 @@
     </ion-list>
     <h3>Circuit</h3>
     <ion-list>
-      <button menuClose ion-item (click)="circuit();">
-        <ion-icon name="{{pagecircuit.icon}}" ></ion-icon>
-        Selectionner...
-      </button>
       <button menuClose ion-item (click)="openPage(pagecircuit)" [disabled]="!pagecircuit.enabled">
         <ion-icon name="{{pagecircuit.icon}}" ></ion-icon>
         {{pagecircuit.title}}
       </button>
+      <button menuClose ion-item (click)="nouveauCircuit();">
+        <ion-icon name="{{pagecircuit.icon}}" ></ion-icon>
+        Nouveau...
+      </button>
+      <button menuClose ion-item (click)="circuit();">
+        <ion-icon name="{{pagecircuit.icon}}" ></ion-icon>
+        Selectionner...
+      </button>
+
     </ion-list>
   </ion-content>
 

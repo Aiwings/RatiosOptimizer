@@ -39,5 +39,23 @@ export class CarProvider {
   ) {
     console.log('Calling CarProvider Provider');
   }
+  reset()
+  {
+    this.valid.next(false);
+    this.car.next({
+    id: 0,
+    date_config: new Date(),
+    brand: "",
+    type: "",
+    fia_category: "",
+    weight: 0,
+    nb_speed: 3,
+    bevelgear: {
+      a: 0,
+      b: 0
+    },
+    max_engine_speed:0});
+
+  }
 
 }

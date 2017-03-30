@@ -20,7 +20,7 @@
     </ion-item>
   </ion-list>
   <ion-fab right bottom>
-    <button ion-fab *ngIf="(state ==-1)"  (click)="onCreate()" [disabled]="!enabled" color="danger"><ion-icon name="add"  ></ion-icon></button>
+    <button ion-fab *ngIf="(state ==-1) && (!valid)"  (click)="onCreate()" [disabled]="!enabled" color="danger"><ion-icon name="add"  ></ion-icon></button>
     <button ion-fab *ngIf="valid"  (click)="onValid()"  color="danger"><ion-icon name="ios-checkmark"  ></ion-icon></button>
   </ion-fab>
 </ion-content>

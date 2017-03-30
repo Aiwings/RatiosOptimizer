@@ -29,9 +29,9 @@ page-car {
     padding: 5px 5px;
   }
   .range-md .range-tick-active {
-    background-color: #8e2323;
+    background-color: color($colors,danger);
   }
   .range-md .range-tick {
-    background-color: #bdbdbd;
+    background-color: color($text,content);
   }
 }

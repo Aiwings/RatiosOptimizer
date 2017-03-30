@@ -55,14 +55,10 @@ export class CircuitPage implements OnInit, OnDestroy {
   gearSub: Subscription;
   gearbox: Gearbox;
 
-  ratioSub: Subscription;
   ratios: Ratio[];
 
-  tireSub: Subscription;
-  vMSub: Subscription;
 
   circForm: FormGroup;
-  circSub: Subscription;
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -142,7 +138,7 @@ export class CircuitPage implements OnInit, OnDestroy {
   });
 
   ngOnDestroy() {
-    this.ratioSub.unsubscribe();
+
     this.gearSub.unsubscribe();
     this.carSub.unsubscribe();
     this.afterSave.unsubscribe();
