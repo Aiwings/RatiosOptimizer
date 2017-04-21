@@ -18,7 +18,7 @@ import {
 import {
   Subscription
 } from 'rxjs/Subscription';
-import {PopoverPageComponent} from '../../components/popover-page/popover-page';
+
 
 import{CircuitPage} from  '../circuit/circuit';
 @Component({
@@ -39,7 +39,7 @@ export class AbacusPage implements OnDestroy{
   @ViewChild('lineCanvas') lineCanvas;
 
   lineChart: any;
-  tire_diam : number =this.calculProv.getDiam();
+  tire_diam : number;
 
   calculSub: Subscription;
   calcul: {
@@ -49,48 +49,6 @@ export class AbacusPage implements OnDestroy{
     gap:number[]
   }
 
-  tire(){
-
-      let prompt = this.alertCtrl.create({
-        title: "Diamètre du pneu",
-        message: "Veuillez saisir le diamètre de votre pneu en mm",
-        inputs: [{
-          name: "tire",
-          placeholder: "diametre",
-          type: 'number'
-        }],
-        buttons: [{
-            text: 'Annuler',
-            handler: data => {
-              console.log("Cancel clicked");
-            }
-          },
-          {
-            text: 'OK',
-            handler: data => {
-              this.calculProv.setDiam(data.tire);
-              this.drawGraph();
-            }
-          }
-        ]
-      })
-      prompt.present();
-  }
-    presentPopover(event) {
-    let popover = this.popCtrl.create(PopoverPageComponent, {
-
-      titre: 'Abaque',
-      tire:()=>{
-        this.tire();
-      },
-      circuit: () => {
-        this.circuit();
-      }
-    });
-    popover.present({
-      ev: event
-    });
-  }
   circuit()
   {
     this.navCtrl.setRoot(CircuitPage);
@@ -156,16 +114,10 @@ export class AbacusPage implements OnDestroy{
   }
 
    ionViewDidEnter() {
-    if (this.tire_diam==0) {
-      this.tire();
-    }
-    else{
       this.drawGraph();
-    }
   }
     ngOnDestroy(){
       this.calculSub.unsubscribe();
-
     }
 
 }

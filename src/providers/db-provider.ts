@@ -13,9 +13,7 @@ import {
 import {
   Gearbox
 } from '../app/gearbox';
-import {
-  Circuit
-} from '../app/circuit';
+
 import {
   Ratio
 } from '../app/ratio';
@@ -317,11 +315,11 @@ export class DBProvider {
     });
 
   }
-  public getCircuits(): Promise < Circuit[] > {
+  public getCircuits(): Promise <any> {
     return new Promise((resolve, reject) => {
       this.db.executeSql("SELECT * from circuit", []).then((data) => {
         if (data.rows.length > 0) {
-          let circuits: Circuit[] = []
+          let circuits = []
           for (let i = 0; i < data.rows.length; i++) {
             let el = data.rows.item(i);
             console.log(el)

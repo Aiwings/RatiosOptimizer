@@ -23,7 +23,7 @@ import {
   DBProvider
 } from '../providers/db-provider';
 import {
-  Services
+  CircuitProvider
 } from '../providers/circuit-provider';
 import {CalculProvider}
 from '../providers/calcul-provider';
@@ -95,6 +95,6 @@ const cloudSettings: CloudSettings = {
   providers: [{
     provide: ErrorHandler,
     useClass: IonicErrorHandler
-  }, DBProvider,Services, CalculProvider, HttpProvider, Storage],
+  }, DBProvider,CircuitProvider, CalculProvider, HttpProvider, Storage],
 })
 export class AppModule {}

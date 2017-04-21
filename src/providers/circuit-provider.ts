@@ -1,23 +1,13 @@
 import {
   Injectable,
-  EventEmitter
 } from '@angular/core';
-import {
-  Http
-} from '@angular/http';
 import {
   Circuit
 } from '../app/circuit';
 import {
   DBProvider
 } from './db-provider';
-import {
-  Subscription
-} from 'rxjs/Subscription'
 
-import {
-  BehaviorSubject
-} from 'rxjs/BehaviorSubject'
 import 'rxjs/add/operator/map';
 
 
@@ -28,20 +18,14 @@ export class CircuitProvider {
 
     this.circuit = new Circuit(db);
 
-    this.valSub = this.circuit.valid().subscribe((valid) => {
-      this.isValid = valid;
-    });
   }
-  public change: EventEmitter < any > = new EventEmitter();
+  
 
-   circuit: Circuit;
+   private circuit: Circuit;
 
   getCircuit() {
     return this.circuit;
   }
-  private isValid: boolean;
-  private valSub: Subscription;
-
   setCircuit(circuit) {
 
     this.circuit = new Circuit(this.db, circuit.id, circuit.name, circuit.ratios, circuit.event, circuit.v_max, circuit.weather, circuit.comments);
@@ -64,7 +48,7 @@ export class CircuitProvider {
     });
 
     this.db.selectGearById(circuit.gearbox_id).then(data => {
-      this.circuit.setGear(data.brand, data.type, data.serial, data.id)
+      this.circuit.setGear(data)
     }).catch(error => {
       console.error(error.message, error);
     });

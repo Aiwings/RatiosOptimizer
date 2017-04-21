@@ -15,36 +15,39 @@ import {
   CircuitProvider
 } from './circuit-provider';
 
+import {
+Circuit
+} from '../app/circuit';
+
 @Injectable()
 export class CalculProvider {
 
+  private circuit : Circuit;
+
   constructor(
     private circProv: CircuitProvider) {
+
+    this.circuit = this.circProv.getCircuit(); 
     console.log('Hello CalculProvider Provider');
-    this.tire_diam = this.circProv.getCircuit().tire_diam;
-    this.carSub = this.circProv.getCar().subscribe(car => {
+
+    this.carSub = this.circuit.$getCar().subscribe(data => {
+      let car = data.get();
       this.bevelgear = car.bevelgear;
       this.max_engine_speed = car.max_engine_speed;
       this.nb_speed = car.nb_speed;
+      this.tire_diam = car.tire_diam;
       this.calculate();
     });
 
-    this.ratioSub = this.circProv.getRatios().subscribe(ratios => {
+    this.ratioSub = this.circuit.$getRatios().subscribe(ratios => {
       this.ratios = ratios;
       this.calculate();
     });
-    this.ratioVSub = this.circProv.ratioValid().subscribe(valid => {
-      this.ratioValid = valid;
-      this.calculate();
-
-    });
-
-    this.carVSub = this.circProv.carValid().subscribe(valid => {
-      this.carValid = valid;
+    this.ratioVSub = this.circuit.valid().subscribe(valid => {
+      this.valid = valid;
       this.calculate();
     });
     this.calculate();
-  
   }
 
 
@@ -56,16 +59,12 @@ export class CalculProvider {
     a: number,
     b: number
   };
-  private carValid: boolean = false;
-  private ratioValid: boolean = false;
+  private valid: boolean = false;
+
 
   private carSub: Subscription;
   private ratioSub: Subscription;
   private ratioVSub: Subscription;
-  private carVSub: Subscription;
-
-
-
 
 
   calcul = new BehaviorSubject < {
@@ -89,7 +88,7 @@ export class CalculProvider {
       let speed = k * this.max_engine_speed * (ratio.a / ratio.b)
       max_speed.push(parseFloat((speed).toFixed(2)));
     }
-    this.circProv.setVmax(max_speed[max_speed.length - 1]);
+    this.circuit.setVmax(max_speed[max_speed.length - 1]);
     console.log("## Max Speed ##");
     console.log(max_speed);
     return max_speed;
@@ -114,7 +113,7 @@ export class CalculProvider {
 
   public calculate() {
 
-    if (this.carValid && this.ratioValid) {
+    if (this.valid) {
 
       let k = (Math.PI * this.tire_diam * 0.000001) * 60 * (this.bevelgear.a / this.bevelgear.b);
       let max_speed = this.calculateMaxSpeed(k);
@@ -159,14 +158,6 @@ export class CalculProvider {
     console.log(ratio_diff);
 
     return ratio_diff;
-  }
-  public setDiam(tire_diam: number): void {
-    this.tire_diam = tire_diam;
-    this.circProv.setDiam(tire_diam);
-    this.calculate();
-  }
-  public getDiam() {
-    return this.tire_diam;
   }
   getCalcul() {
     return this.calcul.asObservable();

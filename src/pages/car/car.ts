@@ -49,9 +49,11 @@ export class CarPage implements OnInit {
       private fb: FormBuilder,
       private popCtrl: PopoverController
     ) {
-
+      this.circuit = this.circProv.getCircuit();
 
     }
+
+   private circuit;  
   carForm: FormGroup;
 
   carSub: Subscription;
@@ -87,10 +89,11 @@ export class CarPage implements OnInit {
         b: ['', Validators.required]
       }),
       max_engine_speed: ['', Validators.required],
+      tire_diam : ['', Validators.required]
     });
     this.subcribeToFormChanges();
 
-    this.carSub = this.circProv.circuit.$getCar().subscribe(carobj => {
+    this.carSub = this.circuit.$getCar().subscribe(carobj => {
         let car = carobj.get();
       if (car.id != 0 && this.carForm) {
         if (this.carForm.value.id != car.id) {
@@ -109,7 +112,7 @@ export class CarPage implements OnInit {
     // subscribe to the stream 
     formChanges$.subscribe((x) => {
       if (this.carForm.valid) {
-        this.circProv.circuit.setCar(x);
+        this.circuit.setCar(x);
       } else {
 
       }
@@ -120,7 +123,7 @@ export class CarPage implements OnInit {
     let popover = this.popCtrl.create(PopoverPageComponent, {
       titre: 'Voitures',
       select: (x) => {
-        this.circProv.circuit.setCar(x);
+        this.circuit.setCar(x);
         this.carForm.setValue(x, {
           onlySelf: true
         });
@@ -142,7 +145,7 @@ export class CarPage implements OnInit {
 
   update(form: FormGroup): void {
 
-    this.circProv.circuit.getCar().save().then((data) => {
+    this.circuit.getCar().save().then((data) => {
       this.toastsuccess.setMessage("Votre Voiture a bien été sauvegardée");
       this.toastsuccess.present();
     }).catch((error) => {
@@ -153,7 +156,7 @@ export class CarPage implements OnInit {
 
   create(form: FormGroup): void {
 
-    this.circProv.circuit.getCar().add().then((data) => {
+    this.circuit.getCar().save().then((data) => {
       this.toastsuccess.setMessage("Votre Voiture a bien été ajoutée");
       this.toastsuccess.present();
     }).catch((error) => {

@@ -13,14 +13,11 @@ import {
   RatioPage
 } from '../ratio/ratio';
 import {
+  Circuit
+} from '../../app/circuit';
+import {
   PopoverPageComponent
 } from '../../components/popover-page/popover-page';
-import {
-  Gearbox
-} from '../../app/gearbox';
-import {
-  Car
-} from '../../app/car';
 import {
   Subscription
 } from 'rxjs/Subscription';
@@ -37,10 +34,10 @@ import {
 export class GearboxPage implements OnInit, OnDestroy {
 
   gearForm: FormGroup;
-  car: Car;
+  gearSub : Subscription;
   carSub: Subscription;
-  gearSub: Subscription;
-
+  car;
+  circuit : Circuit ;
   types = ["DG", "DGB", "FG400", "FGA", "FT1", "FT200", "LD", "LG400", "LG500", "MK5", "MK6", "MK8"];
 
 
@@ -52,9 +49,10 @@ export class GearboxPage implements OnInit, OnDestroy {
     private popCtrl: PopoverController,
     private fb: FormBuilder) {
 
-    this.carSub = this.circProv.getCar().subscribe((car) => {
-      this.car = car;
-    });
+    this.circuit = this.circProv.getCircuit();
+
+
+
   }
   toastsuccess = this.toastCtrl.create({
     message: '',
@@ -79,8 +77,11 @@ export class GearboxPage implements OnInit, OnDestroy {
     });
 
     this.subscribeToFormChanges();
+    this.carSub = this.circuit.$getCar().subscribe(obj=>{
+      this.car = obj.get();
+    });
 
-    this.gearSub = this.circProv.getGear().subscribe(gb => {
+    this.gearSub = this.circuit.$getGear().subscribe(gb => {
       if (gb.id != 0 && this.gearForm) {
         if (gb.id != this.gearForm.value.id) {
           this.gearForm.setValue(gb, {
@@ -93,6 +94,7 @@ export class GearboxPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.gearSub.unsubscribe();
     this.carSub.unsubscribe();
   }
 
@@ -101,7 +103,7 @@ export class GearboxPage implements OnInit, OnDestroy {
 
     formChanges$.subscribe((x) => {
       if (this.gearForm.valid) {
-        this.circProv.setGear(x);
+        this.circuit.setGear(x);
       }
     });
   }
@@ -109,7 +111,7 @@ export class GearboxPage implements OnInit, OnDestroy {
     let popover = this.popCtrl.create(PopoverPageComponent, {
       titre: "Boîtes",
       select: (element) => {
-        this.circProv.setGear(element);
+        this.circuit.setGear(element);
         this.gearForm.setValue(element, {
           onlySelf: true
         });
@@ -127,9 +129,7 @@ export class GearboxPage implements OnInit, OnDestroy {
 
 
   save(): void {
-    let gb: Gearbox = this.gearForm.value;
-
-    this.circProv.saveGB(gb).then((data) => {
+    this.circuit.getGear().save().then((data) => {
       this.toastsuccess.setMessage("Succès de la sauvegarde");
       this.toastsuccess.present();
 

@@ -9,9 +9,7 @@ import {
 import {
   DBProvider
 } from '../../providers/db-provider';
-import {
-  Car
-} from '../../app/car';
+
 
 @Component({
   selector: 'popover-page',
@@ -41,9 +39,9 @@ export class PopoverPageComponent implements OnInit {
 
       if (this.titre == "Voitures") {
         this.db.getCars().then(data => {
-          let cars: Car[] = [];
+          let cars= [];
           for (let i = 0; i < data.length; i++) {
-            let car: Car = {
+            let car = {
               id: data[i].id,
               date_config: data[i].date_config,
               brand: data[i].brand,

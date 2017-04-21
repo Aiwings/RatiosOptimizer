@@ -18,6 +18,10 @@ import {
 import {
   HomePage
 } from '../pages/home/home';
+
+import {
+  Circuit
+} from './circuit';
 import {
   CarPage
 } from '../pages/car/car';
@@ -58,15 +62,12 @@ export class MyApp {
     enabled: boolean,
     icon: string
   } = {title:'',component:{},enabled:false,icon:''}  ;
-
+  circuit: Circuit;
+  circSub : Subscription; 
   carSub: Subscription;
-  carValid: boolean = false;
-
-  ratioSub: Subscription;
-  ratiosValid: boolean;
+  valid: boolean = false;
+  valSub: Subscription; 
   
-  circSub : Subscription;
-
   constructor(
     platform: Platform,
     private db: DBProvider,
@@ -78,7 +79,10 @@ export class MyApp {
       // Here you can do any higher level native things you might need.
       StatusBar.styleDefault();
       Splashscreen.hide();
+      this.circuit = this.circProv.getCircuit();
       this.init();
+      
+
     });
   }
   init(): void {
@@ -129,21 +133,20 @@ export class MyApp {
       icon: "ios-infinite"
     }
 
-    this.carSub = this.circProv.carValid().subscribe((valid) => {
+    this.carSub = this.circuit.$getCar().subscribe((obj) => {
+      let car = obj.get();
+      let valid =(car.brand != "");
       this.pages[2].enabled = valid;
       this.pages[3].enabled = valid;
-      this.pages[4].enabled = valid && this.ratiosValid;
-
-      this.carValid = valid;
+      this.pages[4].enabled = valid && this.valid;
     });
-    this.ratioSub = this.circProv.ratioValid().subscribe((valid) => {
-      this.ratiosValid = valid;
-      this.pages[4].enabled = valid && this.carValid;
-      this.pagecircuit.enabled = valid && this.carValid;
-
+    this.valSub = this.circuit.valid().subscribe((valid) => {
+      this.valid = (valid ==0);
+      this.pages[4].enabled =  this.valid ;
+      this.pagecircuit.enabled =  this.valid ;
     });
 
-    this.circSub = this.circProv.change.subscribe(circname=>{
+    this.circSub = this.circuit.change.subscribe(circname=>{
       if (circname !='')
       {
         this.pagecircuit.title = circname;
@@ -156,7 +159,7 @@ export class MyApp {
     // we wouldn't want the back button to show in this scenario
     this.nav.setRoot(page.component);
   }
-   circuit(): void {
+   getCircuit(): void {
     this.db.getCircuits().then(data => {
       let options = {
         title: 'Circuit',

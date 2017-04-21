@@ -18,6 +18,9 @@ import {
   Ratio
 } from '../../app/ratio';
 import {
+  Circuit
+} from '../../app/circuit';
+import {
   RatioAlertComponent
 } from '../../components/ratio-alert/ratio-alert';
 import {
@@ -34,19 +37,22 @@ export class RatioPage implements OnInit, OnDestroy {
   enabled: boolean = true;
   ratios: Ratio[];
   type: string;
-  valid: boolean;
+
   valid$: Subscription;
   state: number = -1;
+  circuit : Circuit;
+
   constructor(public navCtrl: NavController, public navParams: NavParams, public circProv: CircuitProvider, public modalCtrl: ModalController) {
-    this.ratioSub = this.circProv.circuit.$getRatios().subscribe((ratios)=>{
+    
+    this.circuit = this.circProv.getCircuit();
+    this.ratioSub = this.circuit.$getRatios().subscribe((ratios)=>{
       if (ratios.length != 0) {
         this.valid = true;
       }
       this.ratios = ratios;
     });
-
-    this.valid$ = this.circProv.circuit.valid().subscribe(valid => {
-      this.valid == valid;
+    this.valid$ = this.circuit.valid().subscribe(valid => {
+      this.state = valid;
     });
   }
 
@@ -54,7 +60,7 @@ export class RatioPage implements OnInit, OnDestroy {
     this.ratioSub.unsubscribe();
   }
   ngOnInit(): void {
-    this.state = this.circProv.circuit.setRatios(this.ratios);
+    this.circuit.setRatios(this.ratios);
     if (this.state != 0) {
       this.valid = false;
     }
@@ -71,7 +77,7 @@ export class RatioPage implements OnInit, OnDestroy {
   deleteRatio(ratio: Ratio) {
     let index = this.ratios.indexOf(ratio);
     this.ratios.splice(index, 1);
-    this.state = this.circProv.circuit.setRatios(this.ratios);
+    this.circuit.setRatios(this.ratios);
     if (this.state != 0) {
       this.valid = false;
     }
@@ -88,7 +94,7 @@ export class RatioPage implements OnInit, OnDestroy {
       this.enabled = true;
       if (data.ratio) {
         this.ratios.push(data.ratio);
-        this.state = this.circProv.circuit.setRatios(this.ratios);
+        this.circuit.setRatios(this.ratios);
       }
     });
   }
@@ -108,7 +114,7 @@ export class RatioPage implements OnInit, OnDestroy {
       this.enabled = true;
       if (data.ratio) {
         this.ratios[index] = data.ratio;
-        this.state = this.circProv.circuit.setRatios(this.ratios);
+        this.circuit.setRatios(this.ratios);
       }
     });
   }

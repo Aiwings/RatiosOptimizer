@@ -24,21 +24,11 @@ import {
 import {
   Circuit
 } from '../../app/circuit';
-import {
-  Car
-} from '../../app/car';
-import {
-  Gearbox
-} from '../../app/gearbox';
-import {
-  Ratio
-} from '../../app/ratio';
+
 
 import {
   CircuitProvider
 } from '../../providers/circuit-provider';
-
-
 
 @Component({
   selector: 'page-circuit',
@@ -46,18 +36,11 @@ import {
 })
 export class CircuitPage implements OnInit, OnDestroy {
 
-  carSub: Subscription;
-  car: Car;
 
   @Output()
   onSave: EventEmitter < any > = new EventEmitter();
   afterSave: Subscription;
-  gearSub: Subscription;
-  gearbox: Gearbox;
-
-  ratios: Ratio[];
-
-
+  circuit : Circuit;
   circForm: FormGroup;
 
   constructor(public navCtrl: NavController,
@@ -66,63 +49,22 @@ export class CircuitPage implements OnInit, OnDestroy {
     private viewCtrl: ViewController,
     private fb: FormBuilder,
     private toastCtrl: ToastController) {
-
-    this.carSub = this.circProv.getCar().subscribe(car => {
-      this.car = car;
-    });
-    this.gearSub = this.circProv.getGear().subscribe(gb => {
-      this.gearbox = gb;
-    });
-
-    this.afterSave = this.onSave.subscribe(() => {
-
-      let circuit: Circuit = this.circForm.value;
-      if (circuit.car_id != 0 && circuit.gearbox_id != 0) {
-
-        console.log('pass !')
-        this.circProv.saveCircuit().then(data => {
-          this.toastsuccess.setMessage("Votre circuit a bien été enregistré");
-          this.toastsuccess.present();
-        }).catch(error => {
-          this.toasterror.setMessage("Il y a eu une erreur lors de la sauvegarde \n " + error.message);
-          this.toasterror.present();
-        });
-      }
-    });
+      this.circuit = this.circProv.getCircuit();
 
   }
   ionViewDidLoad() {
     console.log('ionViewDidLoad CircuitPage');
   }
 
-  save(formData) {
+  save() {
 
-    this.onSave.emit();
-
-    if (formData.car_id == 0) {
-      this.circProv.addCar(this.car).then((data) => {
-        this.circForm.patchValue({
-          car_id: this.car.id
+      this.circuit.save().then(data => {
+          this.toastsuccess.setMessage("Votre circuit a bien été enregistré");
+          this.toastsuccess.present();
+        }).catch(error => {
+          this.toasterror.setMessage("Il y a eu une erreur lors de la sauvegarde \n " + error.message);
+          this.toasterror.present();
         });
-        this.onSave.emit();
-      }).catch((error) => {
-        this.toasterror.setMessage("Il y a eu une erreur lors de la sauvegarde de la voiture \n " + error.message);
-        this.toasterror.present();
-      });
-    }
-    if (formData.gearbox_id == 0) {
-      this.circProv.saveGB(this.gearbox).then((data) => {
-
-        this.circForm.patchValue({
-          gearbox_id: this.gearbox.id
-        });
-        this.onSave.emit();
-      }).catch((error) => {
-        this.toasterror.setMessage("Il y a eu une erreur lors de la sauvegarde de la BV \n " + error.message);
-        this.toasterror.present();
-      });
-    }
-
   }
   toastsuccess = this.toastCtrl.create({
     message: '',
@@ -139,22 +81,15 @@ export class CircuitPage implements OnInit, OnDestroy {
 
   ngOnDestroy() {
 
-    this.gearSub.unsubscribe();
-    this.carSub.unsubscribe();
-    this.afterSave.unsubscribe();
   }
   ngOnInit() {
-    let circuit = this.circProv.getCircuit();
+    let circuit = this.circuit.get();
     this.circForm = this.fb.group({
       id: circuit.id,
       car_id: circuit.car_id,
       gearbox_id: circuit.gearbox_id,
       name: [circuit.name, Validators.required],
-      tire_diam: [{
-        value: circuit.tire_diam,
-        disabled: true
-      }],
-      event: [circuit.event, Validators.required],
+      events: [circuit.event, Validators.required],
       v_max: [{
         value: circuit.v_max,
         disabled: true
@@ -170,7 +105,7 @@ export class CircuitPage implements OnInit, OnDestroy {
 
     circChanges$.subscribe(circuit => {
       if (this.circForm.valid) {
-        this.circProv.updatecircuit(circuit);
+        this.circuit.updateInfos(circuit);
       }
     });
   }

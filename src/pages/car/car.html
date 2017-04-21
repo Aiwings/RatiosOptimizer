@@ -54,6 +54,10 @@
         <ion-label>Régime Max(tr/min)</ion-label>
         <ion-input type="number" formControlName="max_engine_speed" name="max_engine_speed"></ion-input>
       </ion-item>
+      <ion-item>
+        <ion-label>Diamètre des pneus</ion-label>
+        <ion-input type="number" formControlName="tire_diam" name="tire_diam"></ion-input>
+      </ion-item>
     </form>
   </ion-list>
   <button ion-button  [disabled]="!carForm.valid" (click)="togb();" color="danger" icon-right>
