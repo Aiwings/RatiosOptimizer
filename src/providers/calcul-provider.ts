@@ -43,10 +43,6 @@ export class CalculProvider {
       this.ratios = ratios;
       this.calculate();
     });
-    this.ratioVSub = this.circuit.valid().subscribe(valid => {
-      this.valid = (valid ==0);
-      this.calculate();
-    });
     this.calculate();
   }
 
@@ -59,7 +55,7 @@ export class CalculProvider {
     a: number,
     b: number
   };
-  private valid: boolean = false;
+
 
 
   private carSub: Subscription;
@@ -113,7 +109,7 @@ export class CalculProvider {
 
   public calculate() {
 
-    if (this.valid) {
+    if ( (this.ratios.length == this.nb_speed) && (this.ratios.length !=0) ) {
 
       let k = (Math.PI * this.tire_diam * 0.000001) * 60 * (this.bevelgear.a / this.bevelgear.b);
       let max_speed = this.calculateMaxSpeed(k);
