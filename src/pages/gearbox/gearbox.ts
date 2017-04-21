@@ -21,7 +21,9 @@ import {
 import {
   Subscription
 } from 'rxjs/Subscription';
-import {CircuitProvider} from '../../providers/circuit-provider';
+import {
+  CircuitProvider
+} from '../../providers/circuit-provider';
 import {
   FormGroup,
   FormBuilder,
@@ -34,10 +36,10 @@ import {
 export class GearboxPage implements OnInit, OnDestroy {
 
   gearForm: FormGroup;
-  gearSub : Subscription;
+
   carSub: Subscription;
   car;
-  circuit : Circuit ;
+  circuit: Circuit;
   types = ["DG", "DGB", "FG400", "FGA", "FT1", "FT200", "LD", "LG400", "LG500", "MK5", "MK6", "MK8"];
 
 
@@ -77,24 +79,18 @@ export class GearboxPage implements OnInit, OnDestroy {
     });
 
     this.subscribeToFormChanges();
-    this.carSub = this.circuit.$getCar().subscribe(obj=>{
+    this.carSub = this.circuit.$getCar().subscribe(obj => {
       this.car = obj.get();
     });
 
-    this.gearSub = this.circuit.$getGear().subscribe(gb => {
-      if (gb.id != 0 && this.gearForm) {
-        if (gb.id != this.gearForm.value.id) {
-          this.gearForm.setValue(gb, {
-            onlySelf: true
-          });
-        }
-      }
-
+    let gearbox = this.circuit.getGear().get();
+    this.gearForm.setValue(gearbox, {
+      onlySelf: true
     });
+
   }
 
   ngOnDestroy() {
-    this.gearSub.unsubscribe();
     this.carSub.unsubscribe();
   }
 

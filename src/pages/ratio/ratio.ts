@@ -47,7 +47,7 @@ export class RatioPage implements OnInit, OnDestroy {
     this.circuit = this.circProv.getCircuit();
     this.ratioSub = this.circuit.$getRatios().subscribe((ratios)=>{
       if (ratios.length != 0) {
-        this.valid = true;
+        this.state = 0;
       }
       this.ratios = ratios;
     });
@@ -61,9 +61,7 @@ export class RatioPage implements OnInit, OnDestroy {
   }
   ngOnInit(): void {
     this.circuit.setRatios(this.ratios);
-    if (this.state != 0) {
-      this.valid = false;
-    }
+        console.log(this.state);
   }
   getColor(index) {
     if (index % 2 != 0) {
@@ -78,9 +76,7 @@ export class RatioPage implements OnInit, OnDestroy {
     let index = this.ratios.indexOf(ratio);
     this.ratios.splice(index, 1);
     this.circuit.setRatios(this.ratios);
-    if (this.state != 0) {
-      this.valid = false;
-    }
+
   }
 
 

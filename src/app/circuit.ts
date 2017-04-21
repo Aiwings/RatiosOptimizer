@@ -96,7 +96,7 @@ export class Circuit {
     }
     this.$car.next(this.car);
 
-    this.isValid.next(obj.nb_speed - this.ratios.length);
+    this.isValid.next(this.ratios.length - obj.nb_speed);
   }
   public setGear(gear: {
     brand: string,
@@ -131,7 +131,7 @@ export class Circuit {
   }
 
   public setRatios(ratios: Ratio[]) {
-    let valid = this.car.get().nb_speed - ratios.length;
+    let valid = ratios.length - this.car.get().nb_speed;
     this.isValid.next(valid);
     if (valid == 0) {
       this.ratios = ratios;

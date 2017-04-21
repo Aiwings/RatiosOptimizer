@@ -44,7 +44,7 @@ export class CalculProvider {
       this.calculate();
     });
     this.ratioVSub = this.circuit.valid().subscribe(valid => {
-      this.valid = valid;
+      this.valid = (valid ==0);
       this.calculate();
     });
     this.calculate();

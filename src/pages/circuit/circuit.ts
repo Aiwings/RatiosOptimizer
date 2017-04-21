@@ -42,7 +42,7 @@ export class CircuitPage implements OnInit, OnDestroy {
   afterSave: Subscription;
   circuit : Circuit;
   circForm: FormGroup;
-
+  car;
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     private circProv: CircuitProvider,
@@ -89,7 +89,7 @@ export class CircuitPage implements OnInit, OnDestroy {
       car_id: circuit.car_id,
       gearbox_id: circuit.gearbox_id,
       name: [circuit.name, Validators.required],
-      events: [circuit.event, Validators.required],
+      event: [circuit.event, Validators.required],
       v_max: [{
         value: circuit.v_max,
         disabled: true
@@ -97,6 +97,7 @@ export class CircuitPage implements OnInit, OnDestroy {
       weather: circuit.weather,
       comments: circuit.comments
     });
+    this.car = this.circuit.getCar().get();
     this.subscribeToFormChange();
     
   }

@@ -37,6 +37,7 @@ export class Car {
                        ? car.date_config
                        : new Date();
       this.type = car.type;
+      this.brand = car.brand;
       this.fia_category = car.fia_category;
       this.weight = car.weight;
       this.nb_speed = car.nb_speed;

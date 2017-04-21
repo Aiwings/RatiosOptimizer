@@ -8,9 +8,7 @@ import {
   FormBuilder,
   Validators
 } from '@angular/forms';
-import {
-  Subscription
-} from 'rxjs/Subscription';
+
 
 import {
   NavController,
@@ -18,8 +16,12 @@ import {
   ToastController,
   PopoverController
 } from 'ionic-angular';
-import {CircuitProvider} from '../../providers/circuit-provider';
-
+import {
+  CircuitProvider
+} from '../../providers/circuit-provider';
+import {
+  Circuit
+} from '../../app/circuit';
 import {
   GearboxPage
 } from '../gearbox/gearbox';
@@ -53,10 +55,10 @@ export class CarPage implements OnInit {
 
     }
 
-   private circuit;  
+  private circuit: Circuit;
   carForm: FormGroup;
 
-  carSub: Subscription;
+
 
   toastsuccess = this.toastCtrl.create({
     message: '',
@@ -89,21 +91,18 @@ export class CarPage implements OnInit {
         b: ['', Validators.required]
       }),
       max_engine_speed: ['', Validators.required],
-      tire_diam : ['', Validators.required]
+      tire_diam: ['', Validators.required]
     });
     this.subcribeToFormChanges();
-
-    this.carSub = this.circuit.$getCar().subscribe(carobj => {
-        let car = carobj.get();
-      if (car.id != 0 && this.carForm) {
-        if (this.carForm.value.id != car.id) {
-          this.carForm.setValue(car, {
-            onlySelf: true
-          });
-        }
-      }
+    let car = this.circuit.getCar().get();
+    console.log(car);
+    if(car.brand != "")
+    {
+      this.carForm.setValue(car, {
+      onlySelf: true
     });
-
+    }
+    
   }
   subcribeToFormChanges() {
     // initialize stream
@@ -169,4 +168,3 @@ export class CarPage implements OnInit {
   }
 
 }
-
