@@ -128,7 +128,7 @@ export class DBProvider {
   }
 
 
-  public addCar(car: Car): Promise < any > {
+  public addCar(car): Promise < any > {
     return new Promise((resolve, reject) => {
 
       try {
@@ -155,8 +155,9 @@ export class DBProvider {
 
   }
 
-  public saveCar(car: Car): Promise < any > {
+  public saveCar(car): Promise < any > {
     return new Promise((resolve, reject) => {
+ 
       try {
         this.db.executeSql(
           "UPDATE car SET brand=?,type=?,fia_category=?,weight=?,nb_speed=?, bevelgear=?,max_engine_speed=?" +
@@ -261,7 +262,7 @@ export class DBProvider {
     });
   }
 
-  public saveGear(gear: Gearbox): Promise < any > {
+  public saveGear(gear): Promise < any > {
     return new Promise((resolve, reject) => {
 
       this.selectGearById(gear.id).then((data) => {
@@ -284,7 +285,7 @@ export class DBProvider {
     });
   }
 
-  private updateGear(gear: Gearbox): Promise < any > {
+  private updateGear(gear): Promise < any > {
 
     return new Promise((resolve, reject) => {
       try {
@@ -303,7 +304,7 @@ export class DBProvider {
 
   }
 
-  private addGear(gear: Gearbox): Promise < any > {
+  private addGear(gear): Promise < any > {
 
     return new Promise((resolve, reject) => {
       this.db.executeSql("INSERT INTO gear_box(brand,type,serial) " +
@@ -341,14 +342,15 @@ export class DBProvider {
     });
 
   }
-  public addCircuit(circuit: Circuit): Promise < any > {
+  public addCircuit(circuit): Promise < any > {
     return new Promise((resolve, reject) => {
+
+
       this.db.executeSql("INSERT INTO circuit" +
-        "(name,car_id,gearbox_id,tire_diam,ratios,v_max,event,weather,comments) " +
+        "(name,car_id,gearbox_id,ratios,v_max,event,weather,comments) " +
         "VALUES(?,?,?,?,?,?,?,?,?);", [circuit.name,
           circuit.car_id,
           circuit.gearbox_id,
-          circuit.tire_diam,
           JSON.stringify(circuit.ratios),
           circuit.v_max,
           circuit.event,
@@ -361,15 +363,15 @@ export class DBProvider {
       });
     });
   }
-  public saveCircuit(circuit: Circuit): Promise < any > {
+  public saveCircuit(circuit): Promise < any > {
     return new Promise((resolve, reject) => {
+
       this.db.executeSql('UPDATE circuit ' +
-        'SET name = ? , car_id = ?, gearbox_id = ?, tire_diam = ?, ratios = ?, v_max = ?, event = ?, weather = ? ,comments = ?'+
+        'SET name = ? , car_id = ?, gearbox_id = ?,  ratios = ?, v_max = ?, event = ?, weather = ? ,comments = ?'+
          'WHERE id = ?;', 
          [circuit.name,
           circuit.car_id,
           circuit.gearbox_id,
-          circuit.tire_diam,
           JSON.stringify(circuit.ratios),
           circuit.v_max,
           circuit.event,

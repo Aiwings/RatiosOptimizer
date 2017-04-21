@@ -1,10 +1,10 @@
 <ion-card>
-    <ion-card-header>
-      Ajouter un rapport
-      <ion-icon name="md-close" (click)="dismiss()"  ></ion-icon>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-list>
+  <ion-card-header>
+    Ajouter un rapport
+    <ion-icon name="md-close" (click)="dismiss()"></ion-icon>
+  </ion-card-header>
+  <ion-card-content>
+    <ion-list>
       <form [formGroup]="ratioForm">
         <ion-item>
           <ion-label>Type de rapport</ion-label>
@@ -16,15 +16,14 @@
         </ion-item>
         <ion-item class="r1">
           <ion-label>Rapport</ion-label>
-          <ion-input type="number" formControlName="a" name="a" placeholder="M"></ion-input> 
-         </ion-item>
-         <ion-item class="r2">
-           <ion-label>/</ion-label>
-          <ion-input type="number" formControlName="b" name="b"placeholder="m"></ion-input>
+          <ion-input type="number" formControlName="a" name="a" placeholder="M"></ion-input>
         </ion-item>
-          <button   [disabled]="!ratioForm.valid" color="danger" (click)="onSave(ratioForm.value)"   ion-button block>Sauvegarder</button>
+        <ion-item class="r2">
+          <ion-label>/</ion-label>
+          <ion-input type="number" formControlName="b" name="b" placeholder="m"></ion-input>
+        </ion-item>
+        <button [disabled]="!ratioForm.valid" color="danger" (click)="onSave(ratioForm.value)" ion-button block>{{button}}</button>
       </form>
-      </ion-list>
-    </ion-card-content>
-  </ion-card>
-
+    </ion-list>
+  </ion-card-content>
+</ion-card>

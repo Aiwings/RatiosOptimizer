@@ -14,13 +14,13 @@
 </ion-header>
 <ion-content padding>
   <ion-list *ngIf="ratios">
-    <ion-item *ngFor="let ratio of ratios" (click)="modify(ratio);">
-      {{ratio.type}} - {{ratio.a}} / {{ratio.b}} - {{(ratio.a / ratio.b).toFixed(3)}}
+    <ion-item *ngFor="let ratio of ratios" (click)="modify(ratio);" [ngStyle]="{'background-color':getColor(ratios.indexOf(ratio))}">
+      <span style="color:rgba(255,255,255,0.7);"> {{ratio.type}}</span> - {{ratio.a}} / {{ratio.b}} - <span style="color:rgba(255,255,255,0.7);"> {{(ratio.a / ratio.b).toFixed(3)}}</span>
       <ion-icon (click)="deleteRatio(ratio);" name="ios-close-circle" item-right> </ion-icon>
     </ion-item>
   </ion-list>
   <ion-fab right bottom>
-    <button ion-fab *ngIf="(state ==-1) && (!valid)"  (click)="onCreate()" [disabled]="!enabled" color="danger"><ion-icon name="add"  ></ion-icon></button>
-    <button ion-fab *ngIf="valid"  (click)="onValid()"  color="danger"><ion-icon name="ios-checkmark"  ></ion-icon></button>
+    <button ion-fab *ngIf="(state ==-1) && (!valid)" (click)="onCreate()" [disabled]="!enabled" color="danger"><ion-icon name="add"  ></ion-icon></button>
+    <button ion-fab *ngIf="valid" (click)="onValid()" color="danger"><ion-icon name="ios-checkmark"  ></ion-icon></button>
   </ion-fab>
 </ion-content>

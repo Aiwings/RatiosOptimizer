@@ -11,69 +11,25 @@
         <ion-icon name="{{p.icon}}" ></ion-icon>
         {{p.title}}
       </button>
-    </ion-list>
-    <h3>Circuit</h3>
-    <ion-list>
-      <button menuClose ion-item (click)="openPage(pagecircuit)" [disabled]="!pagecircuit.enabled">
-        <ion-icon name="{{pagecircuit.icon}}" ></ion-icon>
+      <ion-item>
+        <h3>
+          <ion-icon name="{{pagecircuit.icon}}"></ion-icon><span  padding>Circuit</span></h3>
+        <ion-list inset>
+          <button menuClose ion-item (click)="openPage(pagecircuit)" [disabled]="!pagecircuit.enabled">    
         {{pagecircuit.title}}
       </button>
-      <button menuClose ion-item (click)="nouveauCircuit();">
-        <ion-icon name="{{pagecircuit.icon}}" ></ion-icon>
+          <button menuClose ion-item (click)="nouveauCircuit();" [disabled]="!pagecircuit.enabled">
         Nouveau...
       </button>
-      <button menuClose ion-item (click)="circuit();">
-        <ion-icon name="{{pagecircuit.icon}}" ></ion-icon>
+          <button menuClose ion-item (click)="circuit();">
         Selectionner...
       </button>
-
+        </ion-list>
+      </ion-item>
     </ion-list>
   </ion-content>
 
 </ion-menu>
 
-<!-- Disable swipe-to-go-back because it's poor UX to combine STGB w
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-ith side menus -->
+<!-- Disable swipe-to-go-back because it's poor UX to combine STGB with side menus -->
 <ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>

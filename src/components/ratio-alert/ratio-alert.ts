@@ -5,6 +5,7 @@ import {
 import {
   FormGroup,
   FormControl,
+  FormBuilder,
   Validators
 } from '@angular/forms';
 import {
@@ -19,11 +20,14 @@ import {
 
 export class RatioAlertComponent implements OnInit {
 
-  constructor(private viewCtrl: ViewController, public params: NavParams) {
+  constructor(private viewCtrl: ViewController, public params: NavParams, public fb : FormBuilder) {
     console.log('Calling RatioAlert Component');
 
   }
   ratio;
+  index:number=0;
+  readOnly:boolean = false;
+  button:string="Ajouter"
   public ratioForm = new FormGroup({
     type: new FormControl("1re", Validators.required),
     a: new FormControl("", Validators.required),
@@ -31,6 +35,10 @@ export class RatioAlertComponent implements OnInit {
   });
 
   onSave(form: any): void {
+     if(!form.type)
+      {
+        form.type='Std';
+      }
     let data = {
       ratio: form
     };
@@ -49,9 +57,38 @@ export class RatioAlertComponent implements OnInit {
 
   ngOnInit() {
     this.ratio = this.params.get('ratio');
+    this.index = this.params.get('index');
+    if (this.index > 2) {
+      this.readOnly = true;
+    }
+
+    this.ratioForm = this.fb.group({
+      type: [{
+        value: "Std",
+        disabled: this.readOnly
+      }, Validators.required],
+      a: ["", Validators.required],
+      b: ["", Validators.required]
+    });
+
+
     if (this.ratio) {
+      this.button = "Modifier";
       this.ratioForm.setValue(this.ratio, {
         onlySelf: true
+      });
+    }
+    if (this.index == 1) {
+      this.ratioForm.patchValue({
+        type: "1re"
+      });
+    } else if (this.index == 2) {
+      this.ratioForm.patchValue({
+        type: "2e"
+      });
+    } else {
+      this.ratioForm.patchValue({
+        type: "Std"
       });
     }
   }

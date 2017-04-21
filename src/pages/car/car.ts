@@ -90,7 +90,8 @@ export class CarPage implements OnInit {
     });
     this.subcribeToFormChanges();
 
-    this.carSub = this.circProv.getCar().subscribe(car => {
+    this.carSub = this.circProv.circuit.$getCar().subscribe(carobj => {
+        let car = carobj.get();
       if (car.id != 0 && this.carForm) {
         if (this.carForm.value.id != car.id) {
           this.carForm.setValue(car, {
@@ -108,9 +109,9 @@ export class CarPage implements OnInit {
     // subscribe to the stream 
     formChanges$.subscribe((x) => {
       if (this.carForm.valid) {
-        this.circProv.setCar(x);
+        this.circProv.circuit.setCar(x);
       } else {
-        this.circProv.setCarValid(false);
+
       }
     });
   }
@@ -118,9 +119,9 @@ export class CarPage implements OnInit {
   presentPopover(event) {
     let popover = this.popCtrl.create(PopoverPageComponent, {
       titre: 'Voitures',
-      select: (element) => {
-        this.circProv.setCar(element);
-        this.carForm.setValue(element, {
+      select: (x) => {
+        this.circProv.circuit.setCar(x);
+        this.carForm.setValue(x, {
           onlySelf: true
         });
       },
@@ -141,7 +142,7 @@ export class CarPage implements OnInit {
 
   update(form: FormGroup): void {
 
-    this.circProv.saveCar(form.value).then((data) => {
+    this.circProv.circuit.getCar().save().then((data) => {
       this.toastsuccess.setMessage("Votre Voiture a bien été sauvegardée");
       this.toastsuccess.present();
     }).catch((error) => {
@@ -152,7 +153,7 @@ export class CarPage implements OnInit {
 
   create(form: FormGroup): void {
 
-    this.circProv.addCar(form.value).then((data) => {
+    this.circProv.circuit.getCar().add().then((data) => {
       this.toastsuccess.setMessage("Votre Voiture a bien été ajoutée");
       this.toastsuccess.present();
     }).catch((error) => {

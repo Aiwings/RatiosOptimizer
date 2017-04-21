@@ -38,14 +38,14 @@ export class RatioPage implements OnInit, OnDestroy {
   valid$: Subscription;
   state: number = -1;
   constructor(public navCtrl: NavController, public navParams: NavParams, public circProv: CircuitProvider, public modalCtrl: ModalController) {
-    this.ratioSub = this.circProv.getRatios().subscribe(ratios => {
+    this.ratioSub = this.circProv.circuit.$getRatios().subscribe((ratios)=>{
       if (ratios.length != 0) {
         this.valid = true;
       }
       this.ratios = ratios;
     });
 
-    this.valid$ = this.circProv.ratioValid().subscribe(valid => {
+    this.valid$ = this.circProv.circuit.valid().subscribe(valid => {
       this.valid == valid;
     });
   }
@@ -54,9 +54,16 @@ export class RatioPage implements OnInit, OnDestroy {
     this.ratioSub.unsubscribe();
   }
   ngOnInit(): void {
-    this.state = this.circProv.setRatios(this.ratios);
+    this.state = this.circProv.circuit.setRatios(this.ratios);
     if (this.state != 0) {
       this.valid = false;
+    }
+  }
+  getColor(index) {
+    if (index % 2 != 0) {
+      return "#303030";
+    } else {
+      return "#424242";
     }
   }
 
@@ -64,7 +71,7 @@ export class RatioPage implements OnInit, OnDestroy {
   deleteRatio(ratio: Ratio) {
     let index = this.ratios.indexOf(ratio);
     this.ratios.splice(index, 1);
-    this.state = this.circProv.setRatios(this.ratios);
+    this.state = this.circProv.circuit.setRatios(this.ratios);
     if (this.state != 0) {
       this.valid = false;
     }
@@ -73,13 +80,15 @@ export class RatioPage implements OnInit, OnDestroy {
 
   onCreate(): void {
     this.enabled = false;
-    let modal = this.modalCtrl.create(RatioAlertComponent);
+    let modal = this.modalCtrl.create(RatioAlertComponent, {
+      index: this.ratios.length + 1
+    });
     modal.present();
     modal.onDidDismiss((data) => {
       this.enabled = true;
       if (data.ratio) {
         this.ratios.push(data.ratio);
-        this.state = this.circProv.setRatios(this.ratios);
+        this.state = this.circProv.circuit.setRatios(this.ratios);
       }
     });
   }
@@ -91,14 +100,15 @@ export class RatioPage implements OnInit, OnDestroy {
     this.enabled = false;
     let index = this.ratios.indexOf(ratio);
     let modal = this.modalCtrl.create(RatioAlertComponent, {
-      ratio: ratio
+      ratio: ratio,
+      index : index+1
     });
     modal.present();
     modal.onDidDismiss((data) => {
       this.enabled = true;
       if (data.ratio) {
         this.ratios[index] = data.ratio;
-        this.state = this.circProv.setRatios(this.ratios);
+        this.state = this.circProv.circuit.setRatios(this.ratios);
       }
     });
   }
